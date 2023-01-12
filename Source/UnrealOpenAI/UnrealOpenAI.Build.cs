@@ -25,7 +25,7 @@ public class UnrealOpenAI : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core",
+				"Core", "Engine", "Json", "JsonUtilities", "HTTP", "CoreUObject", "Sockets", "Networking"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -37,7 +37,7 @@ public class UnrealOpenAI : ModuleRules
 				"CoreUObject",
 				"Engine",
 				"Slate",
-				"SlateCore",
+				"SlateCore", "OpenAI",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
