@@ -31,8 +31,6 @@ void UUnrealOpenAIHTTPCompletionRequest::Activate()
 			
 			if (TSharedPtr<FJsonObject> JSONObject; FJsonSerializer::Deserialize(Reader, JSONObject))
 			{
-				PrintDebugLog(Response->GetContentAsString());
-				
 				if (FString IdPayload = ""; JSONObject->TryGetStringField("id", IdPayload))
 				{
 					Id = IdPayload;
@@ -61,16 +59,16 @@ void UUnrealOpenAIHTTPCompletionRequest::Activate()
 				const TSharedPtr<FJsonObject> UsageObject = JSONObject->GetObjectField("usage");
 				FJsonObjectConverter::JsonObjectToUStruct(UsageObject.ToSharedRef(), &UsagePayload, 0, 0);
 
-				OnCompletionRequestComplete.Broadcast(Id, Object, Created, Model, Choices, Usage);
+				OnCompletionRequestComplete.Broadcast(Id, Object, Created, Model, Choices, Usage, Response->GetContentAsString());
 			}
 			else
 			{
-				OnCompletionRequestFailed.Broadcast(TEXT(""), TEXT(""), TEXT(""), TEXT(""), FChoice(), FUsage());
+				OnCompletionRequestFailed.Broadcast(TEXT(""), TEXT(""), TEXT(""), TEXT(""), FChoice(), FUsage(), TEXT(""));
 			}
 		}
 		else
 		{
-			OnCompletionRequestFailed.Broadcast(TEXT(""), TEXT(""), TEXT(""), TEXT(""), FChoice(), FUsage());
+			OnCompletionRequestFailed.Broadcast(TEXT(""), TEXT(""), TEXT(""), TEXT(""), FChoice(), FUsage(), TEXT(""));
 		}
 	});
 
@@ -87,19 +85,19 @@ void UUnrealOpenAIHTTPCompletionRequest::Activate()
 
 	FString JSONPayload;
 	const TSharedPtr<FJsonObject> JSONRequest = MakeShareable(new FJsonObject());
-	JSONRequest->SetStringField("prompt", Prompt);
-	JSONRequest->SetNumberField("max_tokens", 128);
-	JSONRequest->SetStringField("model", CompletionModels[static_cast<int>(CompletionModel)]);
-	JSONRequest->SetNumberField("temperature", 0.f);
-	const TSharedRef< TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&JSONPayload);
-	FJsonSerializer::Serialize(JSONRequest.ToSharedRef(), Writer);
+	FCreateCompletionRequest RequestPayload;
+	RequestPayload.prompt = Prompt;
+	RequestPayload.max_tokens = 1000;
+	RequestPayload.model = CompletionModels[static_cast<int>(CompletionModel)];
+	RequestPayload.temperature = 0.f;
+	FJsonObjectConverter::UStructToJsonObjectString(RequestPayload, JSONPayload, 0, 0);
 	
 	HTTPRequest->SetContentAsString(JSONPayload);
 	
 
 	if (!HTTPRequest->ProcessRequest())
 	{
-		OnCompletionRequestFailed.Broadcast(TEXT(""), TEXT(""), TEXT(""), TEXT(""), FChoice(), FUsage());
+		OnCompletionRequestFailed.Broadcast(TEXT(""), TEXT(""), TEXT(""), TEXT(""), FChoice(), FUsage(), TEXT(""));
 	}
 }
 

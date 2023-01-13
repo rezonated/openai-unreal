@@ -2,7 +2,7 @@
 
 #include "UnrealOpenAI.h"
 
-#include "ISettingsModule.h"
+#include "Developer/Settings/Public/ISettingsModule.h"
 #include "Config/UnrealOpenAIConfig.h"
 
 #define LOCTEXT_NAMESPACE "FUnrealOpenAIModule"

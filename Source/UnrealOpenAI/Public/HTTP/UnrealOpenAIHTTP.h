@@ -52,7 +52,7 @@ struct FCreateCompletionRequest
 	FString suffix;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	int max_tokens = 128;
+	int max_tokens = 1000;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	float temperature = 0;
@@ -102,7 +102,7 @@ enum class ECompletionModel : uint8
 	ECM_MAX UMETA(Hidden)
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FCompletionRequestCallbackSignature, FString, Id, FString, Object, FString, Created, FString, Model, FChoice, Choices, FUsage, Usage);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_SevenParams(FCompletionRequestCallbackSignature, FString, Id, FString, Object, FString, Created, FString, Model, FChoice, Choices, FUsage, Usage, FString, JSONString);
 
 UCLASS()
 class UNREALOPENAI_API UUnrealOpenAIHTTPCompletionRequest : public UOnlineBlueprintCallProxyBase
@@ -138,4 +138,5 @@ public:
 	FString Model;
 	FChoice Choices;
 	FUsage Usage;
+	FString JSONString;
 };
