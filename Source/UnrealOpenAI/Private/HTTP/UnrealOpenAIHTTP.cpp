@@ -63,7 +63,6 @@ void UUnrealOpenAIHTTPCompletionRequest::Activate()
 	RequestPayload.prompt = Prompt;
 	RequestPayload.max_tokens = 1000;
 	RequestPayload.model = CompletionModels[static_cast<int>(CompletionModel)];
-	RequestPayload.temperature = 0.f;
 	FJsonObjectConverter::UStructToJsonObjectString(RequestPayload, JSONPayload, 0, 0);
 	
 	HTTPRequest->SetContentAsString(JSONPayload);
