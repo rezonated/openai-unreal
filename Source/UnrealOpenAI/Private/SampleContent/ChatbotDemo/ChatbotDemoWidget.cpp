@@ -12,7 +12,7 @@
 #include "HTTP/UnrealOpenAIHTTP.h"
 #include "SampleContent/ChatbotDemo/ChatbotDemoAIResponse.h"
 #include "SampleContent/ChatbotDemo/ChatbotDemoUserQuery.h"
-#include "UnrealOpenAI/Public/Utils.h"
+#include "UnrealOpenAI/Public/Utils/Utils.h"
 
 void UChatbotDemoWidget::NativeConstruct()
 {
