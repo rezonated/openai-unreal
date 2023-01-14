@@ -12,7 +12,7 @@ void UUnrealOpenAIHTTPCompletionRequest::Activate()
 {
 	Super::Activate();
 
-	if (!WorldContextObject) return;	
+	if (!WorldContextObject) return;
 
 	FString JSONPayload;
 	const FCreateCompletionRequest RequestPayload

@@ -26,9 +26,9 @@ static void PrintDebugLogAndOnScreen(const FString& Message, const float Duratio
 static FString SanitizeString(const FString& String)
 {
 	FString SanitizedString = String;
-	SanitizedString.ReplaceInline(TEXT("\n"), TEXT(" "));
-	SanitizedString.ReplaceInline(TEXT("\r"), TEXT(" "));
-	SanitizedString.ReplaceInline(TEXT("\t"), TEXT(" "));
+	SanitizedString.ReplaceInline(TEXT("\n"), TEXT(""));
+	SanitizedString.ReplaceInline(TEXT("\r"), TEXT(""));
+	SanitizedString.ReplaceInline(TEXT("\t"), TEXT(""));
 	return SanitizedString;
 }
 

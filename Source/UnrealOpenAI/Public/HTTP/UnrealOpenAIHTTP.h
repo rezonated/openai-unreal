@@ -15,17 +15,18 @@ class UNREALOPENAI_API UUnrealOpenAIHTTPCompletionRequest : public UOnlineBluepr
 {
 	GENERATED_BODY()
 
+public:
+	virtual void Activate() override;
+
 	UPROPERTY(BlueprintAssignable)
 	FCompletionRequestCallbackSignature OnCompletionRequestComplete;
 	UPROPERTY(BlueprintAssignable)
 	FCompletionRequestCallbackSignature OnCompletionRequestFailed;
 
-public:
-	virtual void Activate() override;
-
 	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI - Completion")
 	static UUnrealOpenAIHTTPCompletionRequest* CreateCompletion(UObject* WorldContextObject, FString Prompt, ECompletionModel CompletionModel);
 
+private:
 	TArray<FString> CompletionModels =
 	{
 		"text-davinci-003",
