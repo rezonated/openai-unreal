@@ -27,48 +27,22 @@ void UUnrealOpenAIHTTPCompletionRequest::Activate()
 		{
 			FString ResponseString = Response->GetContentAsString();
 			ResponseString = ResponseString.Replace(TEXT("\n"), TEXT(""));
-			const TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(ResponseString);
+			ResponseString = ResponseString.Replace(TEXT("\r"), TEXT(""));
+			ResponseString = ResponseString.Replace(TEXT("\t"), TEXT(""));
+			FCreateCompletionResponse CompletionResponse;
 			
-			if (TSharedPtr<FJsonObject> JSONObject; FJsonSerializer::Deserialize(Reader, JSONObject))
+			if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &CompletionResponse, 0, 0))
 			{
-				if (FString IdPayload = ""; JSONObject->TryGetStringField("id", IdPayload))
-				{
-					Id = IdPayload;
-				}
-				if (FString ObjectPayload = ""; JSONObject->TryGetStringField("object", ObjectPayload))
-				{
-					Object = ObjectPayload;
-				}
-				if (uint64 CreatedPayload; JSONObject->TryGetNumberField("created", CreatedPayload))
-				{
-					Created = FString::FromInt(CreatedPayload);
-				}
-
-				if (FString ModelPayload = ""; JSONObject->TryGetStringField("model", ModelPayload))
-				{
-					Model = ModelPayload;
-				}
-
-				FChoice ChoicePayload;
-				const TSharedPtr<FJsonObject> ChoiceObject = 
-				JSONObject->GetArrayField("choices")[0]->AsObject();
-				FJsonObjectConverter::JsonObjectToUStruct(ChoiceObject.ToSharedRef(), &ChoicePayload, 0, 0);
-				Choices = ChoicePayload;
-
-				FUsage UsagePayload;
-				const TSharedPtr<FJsonObject> UsageObject = JSONObject->GetObjectField("usage");
-				FJsonObjectConverter::JsonObjectToUStruct(UsageObject.ToSharedRef(), &UsagePayload, 0, 0);
-
-				OnCompletionRequestComplete.Broadcast(Id, Object, Created, Model, Choices, Usage, Response->GetContentAsString());
+				OnCompletionRequestComplete.Broadcast(CompletionResponse, Response->GetContentAsString());
 			}
 			else
 			{
-				OnCompletionRequestFailed.Broadcast(TEXT(""), TEXT(""), TEXT(""), TEXT(""), FChoice(), FUsage(), TEXT(""));
+				OnCompletionRequestFailed.Broadcast(FCreateCompletionResponse(), TEXT(""));
 			}
 		}
 		else
 		{
-			OnCompletionRequestFailed.Broadcast(TEXT(""), TEXT(""), TEXT(""), TEXT(""), FChoice(), FUsage(), TEXT(""));
+			OnCompletionRequestFailed.Broadcast(FCreateCompletionResponse(), TEXT(""));
 		}
 	});
 
@@ -97,7 +71,7 @@ void UUnrealOpenAIHTTPCompletionRequest::Activate()
 
 	if (!HTTPRequest->ProcessRequest())
 	{
-		OnCompletionRequestFailed.Broadcast(TEXT(""), TEXT(""), TEXT(""), TEXT(""), FChoice(), FUsage(), TEXT(""));
+		OnCompletionRequestFailed.Broadcast(FCreateCompletionResponse(), TEXT(""));
 	}
 }
 

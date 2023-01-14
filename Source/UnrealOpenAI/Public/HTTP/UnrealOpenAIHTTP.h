@@ -91,6 +91,29 @@ struct FCreateCompletionRequest
 	FString user;
 };
 
+USTRUCT(BlueprintType)
+struct FCreateCompletionResponse
+{
+	GENERATED_BODY()
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	FString id;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	FString object;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	int32 created;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	FString model;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	FChoice choices;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	FUsage usage;
+};
+
 UENUM(BlueprintType)
 enum class ECompletionModel : uint8
 {
@@ -102,7 +125,7 @@ enum class ECompletionModel : uint8
 	ECM_MAX UMETA(Hidden)
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_SevenParams(FCompletionRequestCallbackSignature, FString, Id, FString, Object, FString, Created, FString, Model, FChoice, Choices, FUsage, Usage, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCompletionRequestCallbackSignature, FCreateCompletionResponse, Response, FString, JSONString);
 
 UCLASS()
 class UNREALOPENAI_API UUnrealOpenAIHTTPCompletionRequest : public UOnlineBlueprintCallProxyBase
@@ -131,12 +154,7 @@ public:
 	UObject* WorldContextObject;
 	FString Prompt;
 	ECompletionModel CompletionModel;
-
-	FString Id;
-	FString Object;
-	FString Created;
-	FString Model;
-	FChoice Choices;
-	FUsage Usage;
+	
+	FCreateCompletionResponse Response;
 	FString JSONString;
 };
