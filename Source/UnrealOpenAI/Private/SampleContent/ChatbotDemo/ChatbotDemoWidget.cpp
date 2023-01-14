@@ -12,6 +12,7 @@
 #include "HTTP/UnrealOpenAIHTTP.h"
 #include "SampleContent/ChatbotDemo/ChatbotDemoAIResponse.h"
 #include "SampleContent/ChatbotDemo/ChatbotDemoUserQuery.h"
+#include "UnrealOpenAI/Public/Utils.h"
 
 void UChatbotDemoWidget::NativeConstruct()
 {
@@ -123,6 +124,11 @@ void UChatbotDemoWidget::OnCompletionResponse(FCreateCompletionResponse Response
 	AddAIResponse(Response.choices.text);
 	Instruction += Response.choices.text + LINE_TERMINATOR + "Q: ";
 	ToggleUserInput(true);
+
+	if (SB_ChatLog)
+	{
+		SB_ChatLog->ScrollToEnd();
+	}
 }
 
 void UChatbotDemoWidget::OnCompletionFailed(FCreateCompletionResponse Response, FString JSONString)
@@ -132,11 +138,11 @@ void UChatbotDemoWidget::OnCompletionFailed(FCreateCompletionResponse Response, 
 
 void UChatbotDemoWidget::OnUserInputChanged(const FText& Text)
 {
-	if (Text.ToString().EndsWith(TEXT("\n")))
+	if (Text.ToString().EndsWith(LINE_TERMINATOR))
 	{
 		auto TextBoxString = MLETB_User_Input->GetText().ToString();
 
-		TextBoxString.ReplaceInline(TEXT("\n"), TEXT(""), ESearchCase::IgnoreCase);
+		TextBoxString = SanitizeString(TextBoxString);
 
 		MLETB_User_Input->SetText(FText::FromString(TextBoxString));
 
