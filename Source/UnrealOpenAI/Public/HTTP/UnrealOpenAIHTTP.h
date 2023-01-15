@@ -43,12 +43,12 @@ class UNREALOPENAI_API UUnrealOpenAIHTTPImageRequestURL : public UOnlineBlueprin
 {
 	GENERATED_BODY()
 
+public:
 	UPROPERTY(BlueprintAssignable)
 	FCreateImageRequestCallbackSignatureURL OnImageRequestCompleteURL;
 	UPROPERTY(BlueprintAssignable)
 	FCreateImageRequestCallbackSignatureURL OnImageRequestFailedURL;
-
-public:
+	
 	virtual void Activate() override;
 
 	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI - Images")
@@ -70,13 +70,12 @@ class UNREALOPENAI_API UUnrealOpenAIHTTPImageRequestBase64JSON : public UOnlineB
 {
 	GENERATED_BODY()
 
+public:
 	UPROPERTY(BlueprintAssignable)
 	FCreateImageRequestCallbackSignatureBase64JSON OnImageRequestCompleteBase64JSON;
 	UPROPERTY(BlueprintAssignable)
 	FCreateImageRequestCallbackSignatureBase64JSON OnImageRequestFailedBase64JSON;
-
-public:
-
+	
 	virtual void Activate() override;
 
 	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI - Images")
@@ -125,12 +124,12 @@ class UNREALOPENAI_API UUnrealOpenAIHTTPImageVariationRequestBase64JSON : public
 {
 	GENERATED_BODY()
 
+public:
 	UPROPERTY(BlueprintAssignable)
 	FCreateImageVariationRequestCallbackSignatureBase64JSON OnImageVariationRequestCompleteBase64JSON;
 	UPROPERTY(BlueprintAssignable)
 	FCreateImageVariationRequestCallbackSignatureBase64JSON OnImageVariationRequestFailedBase64JSON;
-
-public:
+	
 	virtual void Activate() override;
 
 	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI - Images")
@@ -151,13 +150,12 @@ class UNREALOPENAI_API UUnrealOpenAIHTTPImageEditRequestURL : public UOnlineBlue
 {
 	GENERATED_BODY()
 
+public:
 	UPROPERTY(BlueprintAssignable)
 	FCreateImageEditRequestCallbackSignatureURL OnImageEditRequestCompleteURL;
 	UPROPERTY(BlueprintAssignable)
 	FCreateImageEditRequestCallbackSignatureURL OnImageEditRequestFailedURL;
 	
-
-public:
 	virtual void Activate() override;
 
 	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI - Images")
@@ -180,12 +178,12 @@ class UNREALOPENAI_API UUnrealOpenAIHTTPImageEditRequestBase64JSON : public UOnl
 {
 	GENERATED_BODY()
 
+public:
 	UPROPERTY(BlueprintAssignable)
 	FCreateImageEditRequestCallbackSignatureBase64JSON OnImageEditRequestCompleteBase64JSON;
 	UPROPERTY(BlueprintAssignable)
 	FCreateImageEditRequestCallbackSignatureBase64JSON OnImageEditRequestFailedBase64JSON;
-
-public:
+	
 	virtual void Activate() override;
 
 	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI - Images")

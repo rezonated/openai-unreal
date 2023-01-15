@@ -30,21 +30,21 @@ class UNREALOPENAI_API UUnrealOpenAIUtilsGetImageFromURL : public UOnlineBluepri
 {
 	GENERATED_BODY()
 
+public:
 	UPROPERTY(BlueprintAssignable)
 	FGetImageFromURLRequestCallbackSignature OnSuccess;
-
 	UPROPERTY(BlueprintAssignable)
 	FGetImageFromURLRequestCallbackSignature OnFailure;
-
-public:
-	void OnProcessRequestComplete(TSharedPtr<class IHttpRequest, ESPMode::ThreadSafe> HttpRequest, TSharedPtr<class IHttpResponse, ESPMode::ThreadSafe> HttpResponse, bool bArg);
+	
 	virtual void Activate() override;
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAIUtils - GetImageFromURL")
 	static UUnrealOpenAIUtilsGetImageFromURL* GetImageFromURL(UObject* WorldContextObject, FString URL);
 
 private:
-
+	
+	void OnProcessRequestComplete(TSharedPtr<class IHttpRequest, ESPMode::ThreadSafe> HttpRequest, TSharedPtr<class IHttpResponse, ESPMode::ThreadSafe> HttpResponse, bool bArg);
+	
 	UObject* WorldContextObject;
 	FString URL;
 
