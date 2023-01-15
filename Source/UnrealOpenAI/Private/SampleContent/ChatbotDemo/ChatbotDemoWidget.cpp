@@ -48,8 +48,8 @@ void UChatbotDemoWidget::OnSendInput()
 
 	const auto CreateCompletionRequest = UCreateCompletionProxies::CreateCompletion(this, Instruction, ECompletionModel::ECM_Davinci);
 	
-	CreateCompletionRequest->OnCompletionRequestComplete.AddDynamic(this, &UChatbotDemoWidget::OnCompletionResponse);
-	CreateCompletionRequest->OnCompletionRequestFailed.AddDynamic(this, &UChatbotDemoWidget::OnCompletionFailed);
+	CreateCompletionRequest->OnSuccess.AddDynamic(this, &UChatbotDemoWidget::OnCompletionResponse);
+	CreateCompletionRequest->OnFailure.AddDynamic(this, &UChatbotDemoWidget::OnCompletionFailed);
 
 	CreateCompletionRequest->Activate();
 

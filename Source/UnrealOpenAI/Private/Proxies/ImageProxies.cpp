@@ -26,21 +26,21 @@ void UCreateImageRequestURL::Activate()
 	if (!WorldContextObject)
 	{
 		PrintDebugLogAndOnScreen("WorldContextObject is null");
-		OnImageRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+		OnFailure.Broadcast(FCreateImageResponseURL(), TEXT(""));
 		return;
 	}
 
 	if (Prompt.IsEmpty())
 	{
 		PrintDebugLogAndOnScreen("Prompt is empty");
-		OnImageRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+		OnFailure.Broadcast(FCreateImageResponseURL(), TEXT(""));
 		return;
 	}
 
 	if (ImageSize == EImageSize::EIS_MAX)
 	{
 		PrintDebugLogAndOnScreen("Image size is invalid");
-		OnImageRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+		OnFailure.Broadcast(FCreateImageResponseURL(), TEXT(""));
 		return;
 	}
 
@@ -52,7 +52,7 @@ void UCreateImageRequestURL::Activate()
 	FString JSONPayload;
 	FJsonObjectConverter::UStructToJsonObjectString(RequestPayload, JSONPayload, 0, 0);
 
-	SendPayload(TEXT("images/generations"), JSONPayload, EHTTPMethod::ECM_POST,
+	SendPayload(TEXT("images/generations"), JSONPayload, EHTTPMethod::EHP_POST,
 		[this](FHttpRequestPtr, const FHttpResponsePtr Response, const bool bWasSuccessful){
 			if (bWasSuccessful)
 			{
@@ -63,22 +63,22 @@ void UCreateImageRequestURL::Activate()
 				
 				if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &ImageResponse, 0, 0))
 				{
-					OnImageRequestCompleteURL.Broadcast(ImageResponse, Response->GetContentAsString());
+					OnSuccess.Broadcast(ImageResponse, Response->GetContentAsString());
 				}
 				else
 				{
 					PrintDebugLogAndOnScreen("Failed to convert image JSON response to struct");
-					OnImageRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+					OnFailure.Broadcast(FCreateImageResponseURL(), TEXT(""));
 				}
 			}
 			else
 			{
 				PrintDebugLogAndOnScreen("Failed to complete image request");
-				OnImageRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+				OnFailure.Broadcast(FCreateImageResponseURL(), TEXT(""));
 			}
 	}, [this]
 	{
-		PrintDebugLogAndOnScreen("Failed to complete image request");OnImageRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+		PrintDebugLogAndOnScreen("Failed to complete image request");OnFailure.Broadcast(FCreateImageResponseURL(), TEXT(""));
 	});
 }
 
@@ -100,21 +100,21 @@ void UCreateImageRequestBase64JSON::Activate()
 	if (!WorldContextObject)
 	{
 		PrintDebugLogAndOnScreen("WorldContextObject is null");
-		OnImageRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+		OnFailure.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
 		return;
 	}
 
 	if (Prompt.IsEmpty())
 	{
 		PrintDebugLogAndOnScreen("Prompt is empty");
-		OnImageRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+		OnFailure.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
 		return;
 	}
 
 	if (ImageSize == EImageSize::EIS_MAX)
 	{
 		PrintDebugLogAndOnScreen("Image size is invalid");
-		OnImageRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+		OnFailure.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
 		return;
 	}
 
@@ -126,7 +126,7 @@ void UCreateImageRequestBase64JSON::Activate()
 	FString JSONPayload;
 	FJsonObjectConverter::UStructToJsonObjectString(RequestPayload, JSONPayload, 0, 0);
 
-	SendPayload(TEXT("images/generations"), JSONPayload, EHTTPMethod::ECM_POST,
+	SendPayload(TEXT("images/generations"), JSONPayload, EHTTPMethod::EHP_POST,
 		[this](FHttpRequestPtr, const FHttpResponsePtr Response, const bool bWasSuccessful){
 			if (bWasSuccessful)
 			{
@@ -137,22 +137,22 @@ void UCreateImageRequestBase64JSON::Activate()
 				
 				if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &ImageResponse, 0, 0))
 				{
-					OnImageRequestCompleteBase64JSON.Broadcast(ImageResponse, Response->GetContentAsString());
+					OnSuccess.Broadcast(ImageResponse, Response->GetContentAsString());
 				}
 				else
 				{
 					PrintDebugLogAndOnScreen("Failed to convert image JSON response to struct");
-					OnImageRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+					OnFailure.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
 				}
 			}
 			else
 			{
 				PrintDebugLogAndOnScreen("Failed to complete image request");
-				OnImageRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+				OnFailure.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
 			}
 	}, [this]
 	{
-		PrintDebugLogAndOnScreen("Failed to complete image request");OnImageRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+		PrintDebugLogAndOnScreen("Failed to complete image request");OnFailure.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
 	});
 }
 
@@ -180,7 +180,7 @@ void UCreateImageEditRequestURL::Activate()
 	{
 		PrintDebugLogAndOnScreen("WorldContextObject is null");
 
-		OnImageEditRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+		OnFailure.Broadcast(FCreateImageResponseURL(), TEXT(""));
 		return;
 	}
 
@@ -188,7 +188,7 @@ void UCreateImageEditRequestURL::Activate()
 	{
 		PrintDebugLogAndOnScreen(InvalidReason);
 
-		OnImageEditRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+		OnFailure.Broadcast(FCreateImageResponseURL(), TEXT(""));
 		return;
 	}
 
@@ -196,7 +196,7 @@ void UCreateImageEditRequestURL::Activate()
 	{
 		PrintDebugLogAndOnScreen(InvalidReason);
 
-		OnImageEditRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+		OnFailure.Broadcast(FCreateImageResponseURL(), TEXT(""));
 		return;
 	}
 
@@ -225,7 +225,7 @@ void UCreateImageEditRequestURL::Activate()
 	
 	CombinedContent.Append(FStringToUInt8(BoundaryEnd));
 
-	SendPayloadMultipartFormData("images/edits", CombinedContent, EHTTPMethod::ECM_POST, [this] (FHttpRequestPtr Request, const FHttpResponsePtr Response, const bool bWasSuccessful)
+	SendPayloadMultipartFormData("images/edits", CombinedContent, EHTTPMethod::EHP_POST, [this] (FHttpRequestPtr Request, const FHttpResponsePtr Response, const bool bWasSuccessful)
 	{
 		if(bWasSuccessful)
 		{
@@ -236,22 +236,22 @@ void UCreateImageEditRequestURL::Activate()
 
 			if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &CreateImageVariationResponseURL, 0, 0))
 			{
-				OnImageEditRequestCompleteURL.Broadcast(CreateImageVariationResponseURL, Response->GetContentAsString());
+				OnSuccess.Broadcast(CreateImageVariationResponseURL, Response->GetContentAsString());
 			}else
 			{
 				PrintDebugLogAndOnScreen("Failed to parse response to URL struct.");
-				OnImageEditRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+				OnFailure.Broadcast(FCreateImageResponseURL(), TEXT(""));
 			}
 		}
 		else
 		{
 			PrintDebugLogAndOnScreen("Failed to complete image edit request");
-			OnImageEditRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+			OnFailure.Broadcast(FCreateImageResponseURL(), TEXT(""));
 		}
 	}, [this]
 	{
 		PrintDebugLogAndOnScreen("Failed to process image edit request");
-		OnImageEditRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+		OnFailure.Broadcast(FCreateImageResponseURL(), TEXT(""));
 	});
 }
 
@@ -275,7 +275,7 @@ void UCreateImageEditRequestBase64JSON::Activate()
 	{
 		PrintDebugLogAndOnScreen("WorldContextObject is null");
 
-		OnImageEditRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+		OnFailure.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
 		return;
 	}
 
@@ -283,7 +283,7 @@ void UCreateImageEditRequestBase64JSON::Activate()
 	{
 		PrintDebugLogAndOnScreen(InvalidReason);
 
-		OnImageEditRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+		OnFailure.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
 		return;
 	}
 
@@ -291,7 +291,7 @@ void UCreateImageEditRequestBase64JSON::Activate()
 	{
 		PrintDebugLogAndOnScreen(InvalidReason);
 
-		OnImageEditRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+		OnFailure.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
 		return;
 	}
 
@@ -320,7 +320,7 @@ void UCreateImageEditRequestBase64JSON::Activate()
 	
 	CombinedContent.Append(FStringToUInt8(BoundaryEnd));
 
-	SendPayloadMultipartFormData("images/edits", CombinedContent, EHTTPMethod::ECM_POST, [this] (FHttpRequestPtr Request, const FHttpResponsePtr Response, const bool bWasSuccessful)
+	SendPayloadMultipartFormData("images/edits", CombinedContent, EHTTPMethod::EHP_POST, [this] (FHttpRequestPtr Request, const FHttpResponsePtr Response, const bool bWasSuccessful)
 	{
 		if(bWasSuccessful)
 		{
@@ -331,22 +331,22 @@ void UCreateImageEditRequestBase64JSON::Activate()
 
 			if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &CreateImageResponseBase64JSON, 0, 0))
 			{
-				OnImageEditRequestCompleteBase64JSON.Broadcast(CreateImageResponseBase64JSON, Response->GetContentAsString());
+				OnSuccess.Broadcast(CreateImageResponseBase64JSON, Response->GetContentAsString());
 			}else
 			{
 				PrintDebugLogAndOnScreen("Failed to parse response to URL struct.");
-				OnImageEditRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+				OnFailure.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
 			}
 		}
 		else
 		{
 			PrintDebugLogAndOnScreen("Failed to complete image edit request");
-			OnImageEditRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+			OnFailure.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
 		}
 	}, [this]
 	{
 		PrintDebugLogAndOnScreen("Failed to process image edit request");
-		OnImageEditRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+		OnFailure.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
 	});
 }
 
@@ -372,7 +372,7 @@ void UCreateImageVariationRequestURL::Activate()
 	{
 		PrintDebugLogAndOnScreen("WorldContextObject is null");
 
-		OnImageVariationRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+		OnFailure.Broadcast(FCreateImageResponseURL(), TEXT(""));
 		return;
 	}
 
@@ -380,7 +380,7 @@ void UCreateImageVariationRequestURL::Activate()
 	{
 		PrintDebugLogAndOnScreen(InvalidReason);
 
-		OnImageVariationRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+		OnFailure.Broadcast(FCreateImageResponseURL(), TEXT(""));
 		return;
 	}
 
@@ -401,7 +401,7 @@ void UCreateImageVariationRequestURL::Activate()
 	
 	CombinedContent.Append(FStringToUInt8(BoundaryEnd));
 
-	SendPayloadMultipartFormData("images/variations", CombinedContent, EHTTPMethod::ECM_POST, [this] (FHttpRequestPtr Request, const FHttpResponsePtr Response, const bool bWasSuccessful)
+	SendPayloadMultipartFormData("images/variations", CombinedContent, EHTTPMethod::EHP_POST, [this] (FHttpRequestPtr Request, const FHttpResponsePtr Response, const bool bWasSuccessful)
 	{
 		if(bWasSuccessful)
 		{
@@ -412,22 +412,22 @@ void UCreateImageVariationRequestURL::Activate()
 
 			if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &CreateImageVariationResponseURL, 0, 0))
 			{
-				OnImageVariationRequestCompleteURL.Broadcast(CreateImageVariationResponseURL, Response->GetContentAsString());
+				OnSuccess.Broadcast(CreateImageVariationResponseURL, Response->GetContentAsString());
 			}else
 			{
 				PrintDebugLogAndOnScreen("Failed to parse response to URL struct.");
-				OnImageVariationRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+				OnFailure.Broadcast(FCreateImageResponseURL(), TEXT(""));
 			}
 		}
 		else
 		{
 			PrintDebugLogAndOnScreen("Failed to complete image variation request");
-			OnImageVariationRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+			OnFailure.Broadcast(FCreateImageResponseURL(), TEXT(""));
 		}
 	}, [this]
 	{
 		PrintDebugLogAndOnScreen("Failed to process image variation request");
-		OnImageVariationRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+		OnFailure.Broadcast(FCreateImageResponseURL(), TEXT(""));
 	});
 }
 
@@ -449,7 +449,7 @@ void UCreateImageVariationRequestBase64JSON::Activate()
 	{
 		PrintDebugLogAndOnScreen("WorldContextObject is null");
 
-		OnImageVariationRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+		OnFailure.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
 		return;
 	}
 
@@ -457,7 +457,7 @@ void UCreateImageVariationRequestBase64JSON::Activate()
 	{
 		PrintDebugLogAndOnScreen(ReasonInvalid);
 
-		OnImageVariationRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+		OnFailure.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
 		return;
 	}
 	
@@ -478,7 +478,7 @@ void UCreateImageVariationRequestBase64JSON::Activate()
 	
 	CombinedContent.Append(FStringToUInt8(BoundaryEnd));
 
-	SendPayloadMultipartFormData("images/variations", CombinedContent, EHTTPMethod::ECM_POST, [this] (FHttpRequestPtr Request, const FHttpResponsePtr Response, const bool bWasSuccessful)
+	SendPayloadMultipartFormData("images/variations", CombinedContent, EHTTPMethod::EHP_POST, [this] (FHttpRequestPtr Request, const FHttpResponsePtr Response, const bool bWasSuccessful)
 	{
 		if(bWasSuccessful)
 		{
@@ -489,22 +489,22 @@ void UCreateImageVariationRequestBase64JSON::Activate()
 
 			if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &CreateImageVariationResponseBase64JSON, 0, 0))
 			{
-				OnImageVariationRequestCompleteBase64JSON.Broadcast(CreateImageVariationResponseBase64JSON, Response->GetContentAsString());
+				OnSuccess.Broadcast(CreateImageVariationResponseBase64JSON, Response->GetContentAsString());
 			}else
 			{
 				PrintDebugLogAndOnScreen("Failed to parse response to JSON struct.");
-				OnImageVariationRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+				OnFailure.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
 			}
 		}
 		else
 		{
 			PrintDebugLogAndOnScreen("Failed to complete image variation request");
-			OnImageVariationRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+			OnFailure.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
 		}
 	}, [this]
 	{
 		PrintDebugLogAndOnScreen("Failed to process image variation request");
-		OnImageVariationRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+		OnFailure.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
 	});
 }
 

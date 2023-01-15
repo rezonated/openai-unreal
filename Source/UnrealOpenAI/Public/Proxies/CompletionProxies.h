@@ -17,9 +17,9 @@ class UNREALOPENAI_API UCreateCompletionProxies : public UOnlineBlueprintCallPro
 
 public:
 	UPROPERTY(BlueprintAssignable)
-	FCreateCompletionRequestCallbackSignature OnCompletionRequestComplete;
+	FCreateCompletionRequestCallbackSignature OnSuccess;
 	UPROPERTY(BlueprintAssignable)
-	FCreateCompletionRequestCallbackSignature OnCompletionRequestFailed;
+	FCreateCompletionRequestCallbackSignature OnFailure;
 
 	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI - Completion")
 	static UCreateCompletionProxies* CreateCompletion(UObject* WorldContextObject, FString Prompt, ECompletionModel CompletionModel);

@@ -23,7 +23,7 @@ struct FCreateCompletionRequest
 	int max_tokens = 1000;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	float temperature = 0;
+	float temperature = 0.f;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	float top_p = 1.f;

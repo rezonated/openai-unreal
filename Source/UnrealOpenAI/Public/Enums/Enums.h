@@ -19,17 +19,17 @@ enum class ECompletionModel : uint8
 UENUM(BlueprintType)
 enum class EHTTPMethod : uint8
 {
-	ECM_GET UMETA(DisplayName = "GET"),
-	ECM_POST UMETA(DisplayName = "POST"),
-	ECM_PUT UMETA(DisplayName = "PUT"),
-	ECM_DELETE UMETA(DisplayName = "DELETE"),
-	ECM_PATCH UMETA(DisplayName = "PATCH"),
-	ECM_HEAD UMETA(DisplayName = "HEAD"),
-	ECM_OPTIONS UMETA(DisplayName = "OPTIONS"),
-	ECM_TRACE UMETA(DisplayName = "TRACE"),
-	ECM_CONNECT UMETA(DisplayName = "CONNECT"),
+	EHP_GET UMETA(DisplayName = "GET"),
+	EHP_POST UMETA(DisplayName = "POST"),
+	EHP_PUT UMETA(DisplayName = "PUT"),
+	EHP_DELETE UMETA(DisplayName = "DELETE"),
+	EHP_PATCH UMETA(DisplayName = "PATCH"),
+	EHP_HEAD UMETA(DisplayName = "HEAD"),
+	EHP_OPTIONS UMETA(DisplayName = "OPTIONS"),
+	EHP_TRACE UMETA(DisplayName = "TRACE"),
+	EHP_CONNECT UMETA(DisplayName = "CONNECT"),
 	
-	ECM_MAX UMETA(Hidden)
+	EHP_MAX UMETA(Hidden)
 };
 
 UENUM(BlueprintType)

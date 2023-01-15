@@ -18,9 +18,9 @@ class UNREALOPENAI_API UCreateImageRequestURL : public UOnlineBlueprintCallProxy
 
 public:
 	UPROPERTY(BlueprintAssignable)
-	FCreateImageRequestCallbackSignatureURL OnImageRequestCompleteURL;
+	FCreateImageRequestCallbackSignatureURL OnSuccess;
 	UPROPERTY(BlueprintAssignable)
-	FCreateImageRequestCallbackSignatureURL OnImageRequestFailedURL;
+	FCreateImageRequestCallbackSignatureURL OnFailure;
 
 	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI - Images")
 	static UCreateImageRequestURL* CreateImageURL(UObject* WorldContextObject, FString Prompt, EImageSize ImageSize);
@@ -45,9 +45,9 @@ class UNREALOPENAI_API UCreateImageRequestBase64JSON : public UOnlineBlueprintCa
 
 public:
 	UPROPERTY(BlueprintAssignable)
-	FCreateImageRequestCallbackSignatureBase64JSON OnImageRequestCompleteBase64JSON;
+	FCreateImageRequestCallbackSignatureBase64JSON OnSuccess;
 	UPROPERTY(BlueprintAssignable)
-	FCreateImageRequestCallbackSignatureBase64JSON OnImageRequestFailedBase64JSON;
+	FCreateImageRequestCallbackSignatureBase64JSON OnFailure;
 
 	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI - Images")
 	static UCreateImageRequestBase64JSON* CreateImageBase64JSON(UObject* WorldContextObject, FString Prompt, EImageSize ImageSize);
@@ -76,9 +76,9 @@ class UNREALOPENAI_API UCreateImageEditRequestURL : public UOnlineBlueprintCallP
 
 public:
 	UPROPERTY(BlueprintAssignable)
-	FCreateImageEditRequestCallbackSignatureURL OnImageEditRequestCompleteURL;
+	FCreateImageEditRequestCallbackSignatureURL OnSuccess;
 	UPROPERTY(BlueprintAssignable)
-	FCreateImageEditRequestCallbackSignatureURL OnImageEditRequestFailedURL;
+	FCreateImageEditRequestCallbackSignatureURL OnFailure;
 	
 	virtual void Activate() override;
 
@@ -104,9 +104,9 @@ class UNREALOPENAI_API UCreateImageEditRequestBase64JSON : public UOnlineBluepri
 
 public:
 	UPROPERTY(BlueprintAssignable)
-	FCreateImageEditRequestCallbackSignatureBase64JSON OnImageEditRequestCompleteBase64JSON;
+	FCreateImageEditRequestCallbackSignatureBase64JSON OnSuccess;
 	UPROPERTY(BlueprintAssignable)
-	FCreateImageEditRequestCallbackSignatureBase64JSON OnImageEditRequestFailedBase64JSON;
+	FCreateImageEditRequestCallbackSignatureBase64JSON OnFailure;
 	
 	virtual void Activate() override;
 
@@ -135,9 +135,9 @@ class UNREALOPENAI_API UCreateImageVariationRequestURL : public UOnlineBlueprint
 	GENERATED_BODY()
 
 	UPROPERTY(BlueprintAssignable)
-	FCreateImageVariationRequestCallbackSignatureURL OnImageVariationRequestCompleteURL;
+	FCreateImageVariationRequestCallbackSignatureURL OnSuccess;
 	UPROPERTY(BlueprintAssignable)
-	FCreateImageVariationRequestCallbackSignatureURL OnImageVariationRequestFailedURL;
+	FCreateImageVariationRequestCallbackSignatureURL OnFailure;
 	
 
 public:
@@ -163,9 +163,9 @@ class UNREALOPENAI_API UCreateImageVariationRequestBase64JSON : public UOnlineBl
 
 public:
 	UPROPERTY(BlueprintAssignable)
-	FCreateImageVariationRequestCallbackSignatureBase64JSON OnImageVariationRequestCompleteBase64JSON;
+	FCreateImageVariationRequestCallbackSignatureBase64JSON OnSuccess;
 	UPROPERTY(BlueprintAssignable)
-	FCreateImageVariationRequestCallbackSignatureBase64JSON OnImageVariationRequestFailedBase64JSON;
+	FCreateImageVariationRequestCallbackSignatureBase64JSON OnFailure;
 	
 	virtual void Activate() override;
 

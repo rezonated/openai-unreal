@@ -47,7 +47,7 @@ void UCreateImageWidget::OnSendInput()
 	{
 		const auto ImageRequestURL = UCreateImageRequestURL::CreateImageURL(this, MLETB_User_Input->GetText().ToString(), ImageSize);
 
-		ImageRequestURL->OnImageRequestCompleteURL.AddDynamic(this, &UCreateImageWidget::OnImageRequestCompleteURL);
+		ImageRequestURL->OnSuccess.AddDynamic(this, &UCreateImageWidget::OnImageRequestCompleteURL);
 
 		ImageRequestURL->Activate();
 

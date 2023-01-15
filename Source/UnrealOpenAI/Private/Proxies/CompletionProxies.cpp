@@ -25,7 +25,7 @@ void UCreateCompletionProxies::Activate()
 	if (!WorldContextObject)
 	{
 		PrintDebugLogAndOnScreen("WorldContextObject is null");
-		OnCompletionRequestFailed.Broadcast(FCreateCompletionResponse(), TEXT(""));
+		OnFailure.Broadcast(FCreateCompletionResponse(), TEXT(""));
 		return;
 	}
 
@@ -39,7 +39,7 @@ void UCreateCompletionProxies::Activate()
 	
 	SendPayload(
 		TEXT("completions"),
-		JSONPayload, EHTTPMethod::ECM_POST,
+		JSONPayload, EHTTPMethod::EHP_POST,
 			[this](FHttpRequestPtr, const FHttpResponsePtr Response, const bool bWasSuccessful){
 			if (bWasSuccessful)
 			{
@@ -50,24 +50,24 @@ void UCreateCompletionProxies::Activate()
 				
 				if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &CompletionResponse, 0, 0))
 				{
-					OnCompletionRequestComplete.Broadcast(CompletionResponse, Response->GetContentAsString());
+					OnSuccess.Broadcast(CompletionResponse, Response->GetContentAsString());
 				}
 				else
 				{
 					PrintDebugLogAndOnScreen("Failed to convert completion JSON response to struct");
-					OnCompletionRequestFailed.Broadcast(FCreateCompletionResponse(), TEXT(""));
+					OnFailure.Broadcast(FCreateCompletionResponse(), TEXT(""));
 				}
 			}
 			else
 			{
 				PrintDebugLogAndOnScreen("Failed to complete completion request");
-				OnCompletionRequestFailed.Broadcast(FCreateCompletionResponse(), TEXT(""));
+				OnFailure.Broadcast(FCreateCompletionResponse(), TEXT(""));
 			}
 	},
 	[this]
 	{
 			PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnCompletionRequestFailed.Broadcast(FCreateCompletionResponse(), TEXT(""));
+			OnFailure.Broadcast(FCreateCompletionResponse(), TEXT(""));
 		}
 	);
 }
