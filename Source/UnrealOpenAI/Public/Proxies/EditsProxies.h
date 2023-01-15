@@ -13,7 +13,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateEditsRequestCallbackSignature, FCreateEditsResponse, Response, FString, JSONString);
 UCLASS()
-class UNREALOPENAI_API UCreateEditsProxies : public UOnlineBlueprintCallProxyBase
+class UNREALOPENAI_API UCreateEditsRequestProxy : public UOnlineBlueprintCallProxyBase
 {
 	GENERATED_BODY()
 
@@ -24,7 +24,7 @@ public:
 	FCreateEditsRequestCallbackSignature OnFailure;
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI - Edits")
-	static UCreateEditsProxies* CreateEdits(UObject* WorldContextObject, FString Input, FString Instruction);
+	static UCreateEditsRequestProxy* CreateEdits(UObject* WorldContextObject, FString Input, FString Instruction);
 
 	virtual void Activate() override;
 

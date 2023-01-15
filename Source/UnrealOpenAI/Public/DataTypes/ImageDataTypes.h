@@ -3,8 +3,8 @@
 
 #pragma once
 #include "CoreMinimal.h"
-#include "Constants/Constants.h"
-#include "Enums/Enums.h"
+#include "Constants/ImageConstants.h"
+#include "Enums/ImageEnums.h"
 #include "ImageDataTypes.generated.h"
 
 USTRUCT(BlueprintType)

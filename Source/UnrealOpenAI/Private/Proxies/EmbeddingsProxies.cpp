@@ -7,15 +7,15 @@
 #include "Interfaces/IHttpResponse.h"
 #include "Utils/Utils.h"
 
-UCreateEmbeddingsProxies* UCreateEmbeddingsProxies::CreateEmbeddings(UObject* WorldContextObject, FString Input)
+UCreateEmbeddingsRequestProxy* UCreateEmbeddingsRequestProxy::CreateEmbeddings(UObject* WorldContextObject, FString Input)
 {
-	UCreateEmbeddingsProxies* Proxy = NewObject<UCreateEmbeddingsProxies>();
+	UCreateEmbeddingsRequestProxy* Proxy = NewObject<UCreateEmbeddingsRequestProxy>();
 	Proxy->WorldContextObject = WorldContextObject;
 	Proxy->Input = Input;
 	return Proxy;
 }
 
-void UCreateEmbeddingsProxies::Activate()
+void UCreateEmbeddingsRequestProxy::Activate()
 {
 	Super::Activate();
 

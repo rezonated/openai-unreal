@@ -7,16 +7,16 @@
 #include "Interfaces/IHttpResponse.h"
 #include "Utils/Utils.h"
 
-UCreateEditsProxies* UCreateEditsProxies::CreateEdits(UObject* WorldContextObject, FString Input, FString Instruction)
+UCreateEditsRequestProxy* UCreateEditsRequestProxy::CreateEdits(UObject* WorldContextObject, FString Input, FString Instruction)
 {
-	UCreateEditsProxies* Proxy = NewObject<UCreateEditsProxies>();
+	UCreateEditsRequestProxy* Proxy = NewObject<UCreateEditsRequestProxy>();
 	Proxy->WorldContextObject = WorldContextObject;
 	Proxy->Input = Input;
 	Proxy->Instruction = Instruction;
 	return Proxy;
 }
 
-void UCreateEditsProxies::Activate()
+void UCreateEditsRequestProxy::Activate()
 {
 	Super::Activate();
 

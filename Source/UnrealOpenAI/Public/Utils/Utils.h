@@ -6,8 +6,8 @@
 #include "ImageUtils.h"
 #include "UnrealOpenAI.h"
 #include "Config/UnrealOpenAIConfig.h"
-#include "Constants/Constants.h"
-#include "Enums/Enums.h"
+#include "Constants/UtilsConstants.h"
+#include "Enums/UtilsEnums.h"
 #include "Interfaces/IHttpRequest.h"
 
 static void PrintDebugOnScreen(const FString& Message, const float Duration = 2.f, const FColor& Color = FColor::White)

@@ -22,18 +22,3 @@ static const TArray<FString> HTTPMethods
 	TEXT("TRACE"),
 	TEXT("CONNECT")
 };
-
-static const TArray<FString> CompletionModels =
-{
-	"text-davinci-003",
-	"text-curie-001",
-	"text-babbage-001",
-	"text-ada-001"
-};
-
-static const TArray<FString> ImageSizes =
-{
-	"256x256",
-	"512x512",
-	"1024x1024",
-};

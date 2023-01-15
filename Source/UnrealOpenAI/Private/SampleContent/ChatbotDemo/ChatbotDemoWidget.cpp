@@ -46,7 +46,7 @@ void UChatbotDemoWidget::OnSendInput()
 
 	Instruction += MLETB_User_Input->GetText().ToString() + LINE_TERMINATOR + "A: ";
 
-	const auto CreateCompletionRequest = UCreateCompletionProxies::CreateCompletion(this, Instruction, ECompletionModel::ECM_Davinci);
+	const auto CreateCompletionRequest = UCreateCompletionRequestProxy::CreateCompletion(this, Instruction, ECompletionModel::ECM_Davinci);
 	
 	CreateCompletionRequest->OnSuccess.AddDynamic(this, &UChatbotDemoWidget::OnCompletionResponse);
 	CreateCompletionRequest->OnFailure.AddDynamic(this, &UChatbotDemoWidget::OnCompletionFailed);

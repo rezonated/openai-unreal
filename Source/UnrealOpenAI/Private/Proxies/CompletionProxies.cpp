@@ -4,21 +4,22 @@
 #include "Proxies/CompletionProxies.h"
 
 #include "JsonObjectConverter.h"
+#include "Constants/CompletionConstants.h"
 #include "Interfaces/IHttpResponse.h"
 #include "Utils/Utils.h"
 
 #pragma region Create Completion Proxy
 
-UCreateCompletionProxies* UCreateCompletionProxies::CreateCompletion(UObject* WorldContextObject, FString Prompt, ECompletionModel CompletionModel)
+UCreateCompletionRequestProxy* UCreateCompletionRequestProxy::CreateCompletion(UObject* WorldContextObject, FString Prompt, ECompletionModel CompletionModel)
 {
-	UCreateCompletionProxies* CompletionRequest = NewObject<UCreateCompletionProxies>();
+	UCreateCompletionRequestProxy* CompletionRequest = NewObject<UCreateCompletionRequestProxy>();
 	CompletionRequest->WorldContextObject = WorldContextObject;
 	CompletionRequest->Prompt = Prompt;
 	CompletionRequest->CompletionModel = CompletionModel;
 	return CompletionRequest;
 }
 
-void UCreateCompletionProxies::Activate()
+void UCreateCompletionRequestProxy::Activate()
 {
 	Super::Activate();
 

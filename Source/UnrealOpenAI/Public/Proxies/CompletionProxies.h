@@ -11,7 +11,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateCompletionRequestCallbackSignature, FCreateCompletionResponse, Response, FString, JSONString);
 UCLASS()
-class UNREALOPENAI_API UCreateCompletionProxies : public UOnlineBlueprintCallProxyBase
+class UNREALOPENAI_API UCreateCompletionRequestProxy : public UOnlineBlueprintCallProxyBase
 {
 	GENERATED_BODY()
 
@@ -22,7 +22,7 @@ public:
 	FCreateCompletionRequestCallbackSignature OnFailure;
 
 	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI - Completion")
-	static UCreateCompletionProxies* CreateCompletion(UObject* WorldContextObject, FString Prompt, ECompletionModel CompletionModel);
+	static UCreateCompletionRequestProxy* CreateCompletion(UObject* WorldContextObject, FString Prompt, ECompletionModel CompletionModel);
 
 	virtual void Activate() override;
 

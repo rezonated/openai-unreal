@@ -49,8 +49,7 @@ bool UUnrealOpenAIUtils::ConvertToTexture2D(TArray<uint8> FileData, UTexture2D*&
 	if(!ImageWrapper.IsValid()) return false;
 
 	if(!ImageWrapper->SetCompressed(FileData.GetData(), FileData.Num())) return false;
-
-
+	
 	TArray64<uint8> RawData;
 	if(!ImageWrapper->GetRaw(ERGBFormat::BGRA, 8, RawData)) return false;
 
@@ -71,9 +70,9 @@ bool UUnrealOpenAIUtils::ConvertToTexture2D(TArray<uint8> FileData, UTexture2D*&
 
 void UUnrealOpenAIUtilsGetImageFromURL::OnProcessRequestComplete(
 	TSharedPtr<IHttpRequest, ESPMode::ThreadSafe> HttpRequest,
-	TSharedPtr<IHttpResponse, ESPMode::ThreadSafe> HttpResponse, bool bArg)
+	TSharedPtr<IHttpResponse, ESPMode::ThreadSafe> HttpResponse, bool bSuccessful)
 {
-	if(!bArg)
+	if(!bSuccessful)
 	{
 		OnFailure.Broadcast(nullptr);
 		return;
