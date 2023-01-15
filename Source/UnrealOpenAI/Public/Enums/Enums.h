@@ -1,4 +1,7 @@
-﻿#pragma once
+﻿// Created, maintained by Vanan A. - rezonated @ github.com
+
+
+#pragma once
 #include "CoreMinimal.h"
 #include "Enums.generated.h"
 

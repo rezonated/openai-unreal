@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Created, maintained by Vanan A. - rezonated @ github.com
 
 
 #include "Config/UnrealOpenAIConfig.h"

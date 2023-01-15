@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Created, maintained by Vanan A. - rezonated @ github.com
 
 #pragma once
 

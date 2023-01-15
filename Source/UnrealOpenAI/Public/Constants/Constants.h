@@ -1,4 +1,7 @@
-﻿#pragma once
+﻿// Created, maintained by Vanan A. - rezonated @ github.com
+
+
+#pragma once
 
 #define OPENAI_FILE_SIZE_LIMIT 4194304
 
