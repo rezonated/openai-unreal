@@ -30,9 +30,7 @@ void UChatbotDemoWidget::NativeConstruct()
 		MLETB_User_Input->OnTextChanged.AddDynamic(this, &UChatbotDemoWidget::OnUserInputChanged);
 	}
 
-	Instruction.Append(TEXT("Act as a random stranger in a chat room and reply to the questions."));
-	Instruction.Append(LINE_TERMINATOR);
-	Instruction.Append(TEXT("Q: "));
+	
 }
 
 
@@ -117,6 +115,15 @@ void UChatbotDemoWidget::ToggleUserInput(const bool bFlag) const
 	}
 
 	bFlag ? MLETB_User_Input->SetKeyboardFocus() : UWidgetBlueprintLibrary::SetFocusToGameViewport();
+}
+
+void UChatbotDemoWidget::SetInstruction(FString NewInstruction)
+{
+	Instruction = NewInstruction;
+
+	Instruction.Append(NewInstruction);
+	Instruction.Append(LINE_TERMINATOR);
+	Instruction.Append(TEXT("Q: "));
 }
 
 void UChatbotDemoWidget::OnCompletionResponse(FCreateCompletionResponse Response, FString JSONString)

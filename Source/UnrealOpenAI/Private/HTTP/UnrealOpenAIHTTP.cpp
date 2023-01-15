@@ -72,6 +72,153 @@ UUnrealOpenAIHTTPCompletionRequest* UUnrealOpenAIHTTPCompletionRequest::CreateCo
 	return CompletionRequest;
 }
 
+void UUnrealOpenAIHTTPImageRequestURL::Activate()
+{
+	Super::Activate();
+
+	if (!WorldContextObject)
+	{
+		PrintDebugLogAndOnScreen("WorldContextObject is null");
+		OnImageRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+		return;
+	}
+
+	if (Prompt.IsEmpty())
+	{
+		PrintDebugLogAndOnScreen("Prompt is empty");
+		OnImageRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+		return;
+	}
+
+	if (ImageSize == EImageSize::EIS_MAX)
+	{
+		PrintDebugLogAndOnScreen("Image size is invalid");
+		OnImageRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+		return;
+	}
+
+	FCreateImageRequest RequestPayload;
+	RequestPayload.prompt = Prompt;
+	RequestPayload.size = ImageSizes[static_cast<int>(ImageSize)];
+	RequestPayload.response_format = TEXT("url");
+		
+	FString JSONPayload;
+	FJsonObjectConverter::UStructToJsonObjectString(RequestPayload, JSONPayload, 0, 0);
+
+	SendPayload(TEXT("images/generations"), JSONPayload, EHTTPMethod::ECM_POST,
+		[this](FHttpRequestPtr, const FHttpResponsePtr Response, const bool bWasSuccessful){
+			if (bWasSuccessful)
+			{
+				FString ResponseString = Response->GetContentAsString();
+				ResponseString = SanitizeString(ResponseString);
+				
+				FCreateImageResponseURL ImageResponse;
+				
+				if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &ImageResponse, 0, 0))
+				{
+					OnImageRequestCompleteURL.Broadcast(ImageResponse, Response->GetContentAsString());
+				}
+				else
+				{
+					PrintDebugLogAndOnScreen("Failed to convert image JSON response to struct");
+					OnImageRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+				}
+			}
+			else
+			{
+				PrintDebugLogAndOnScreen("Failed to complete image request");
+				OnImageRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+			}
+	}, [this]
+	{
+		PrintDebugLogAndOnScreen("Failed to complete image request");OnImageRequestFailedURL.Broadcast(FCreateImageResponseURL(), TEXT(""));
+	});
+	
+}
+
+UUnrealOpenAIHTTPImageRequestURL* UUnrealOpenAIHTTPImageRequestURL::CreateImageURL(UObject* WorldContextObject,
+	FString Prompt, EImageSize ImageSize)
+{
+	UUnrealOpenAIHTTPImageRequestURL* ImageRequestURL = NewObject<UUnrealOpenAIHTTPImageRequestURL>();
+	ImageRequestURL->WorldContextObject = WorldContextObject;
+	ImageRequestURL->Prompt = Prompt;
+	ImageRequestURL->ImageSize = ImageSize;
+	return ImageRequestURL;
+}
+
+void UUnrealOpenAIHTTPImageRequestBase64JSON::Activate()
+{
+	Super::Activate();
+
+	if (!WorldContextObject)
+	{
+		PrintDebugLogAndOnScreen("WorldContextObject is null");
+		OnImageRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+		return;
+	}
+
+	if (Prompt.IsEmpty())
+	{
+		PrintDebugLogAndOnScreen("Prompt is empty");
+		OnImageRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+		return;
+	}
+
+	if (ImageSize == EImageSize::EIS_MAX)
+	{
+		PrintDebugLogAndOnScreen("Image size is invalid");
+		OnImageRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+		return;
+	}
+
+	FCreateImageRequest RequestPayload;
+	RequestPayload.prompt = Prompt;
+	RequestPayload.size = ImageSizes[static_cast<int>(ImageSize)];
+	RequestPayload.response_format = TEXT("b64_json");
+		
+	FString JSONPayload;
+	FJsonObjectConverter::UStructToJsonObjectString(RequestPayload, JSONPayload, 0, 0);
+
+	SendPayload(TEXT("images/generations"), JSONPayload, EHTTPMethod::ECM_POST,
+		[this](FHttpRequestPtr, const FHttpResponsePtr Response, const bool bWasSuccessful){
+			if (bWasSuccessful)
+			{
+				FString ResponseString = Response->GetContentAsString();
+				ResponseString = SanitizeString(ResponseString);
+				
+				FCreateImageResponseBase64JSON ImageResponse;
+				
+				if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &ImageResponse, 0, 0))
+				{
+					OnImageRequestCompleteBase64JSON.Broadcast(ImageResponse, Response->GetContentAsString());
+				}
+				else
+				{
+					PrintDebugLogAndOnScreen("Failed to convert image JSON response to struct");
+					OnImageRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+				}
+			}
+			else
+			{
+				PrintDebugLogAndOnScreen("Failed to complete image request");
+				OnImageRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+			}
+	}, [this]
+	{
+		PrintDebugLogAndOnScreen("Failed to complete image request");OnImageRequestFailedBase64JSON.Broadcast(FCreateImageResponseBase64JSON(), TEXT(""));
+	});
+}
+
+UUnrealOpenAIHTTPImageRequestBase64JSON* UUnrealOpenAIHTTPImageRequestBase64JSON::CreateImageBase64JSON(
+	UObject* WorldContextObject, FString Prompt, EImageSize ImageSize)
+{
+	UUnrealOpenAIHTTPImageRequestBase64JSON* ImageRequestBase64JSON = NewObject<UUnrealOpenAIHTTPImageRequestBase64JSON>();
+	ImageRequestBase64JSON->WorldContextObject = WorldContextObject;
+	ImageRequestBase64JSON->Prompt = Prompt;
+	ImageRequestBase64JSON->ImageSize = ImageSize;
+	return ImageRequestBase64JSON;
+}
+
 void UUnrealOpenAIHTTPImageVariationRequestURL::Activate()
 {
 	Super::Activate();

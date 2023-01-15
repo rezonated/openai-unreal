@@ -36,16 +36,72 @@ private:
 	FString JSONString;
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FImageVariationRequestCallbackSignatureURL, FCreateImageResponseURL, ResponseURL, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateImageRequestCallbackSignatureURL, FCreateImageResponseURL, Response, FString, JSONString);
+
+UCLASS()
+class UNREALOPENAI_API UUnrealOpenAIHTTPImageRequestURL : public UOnlineBlueprintCallProxyBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintAssignable)
+	FCreateImageRequestCallbackSignatureURL OnImageRequestCompleteURL;
+	UPROPERTY(BlueprintAssignable)
+	FCreateImageRequestCallbackSignatureURL OnImageRequestFailedURL;
+
+public:
+	virtual void Activate() override;
+
+	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI - Images")
+	static UUnrealOpenAIHTTPImageRequestURL* CreateImageURL(UObject* WorldContextObject, FString Prompt, EImageSize ImageSize);
+
+private:
+	UObject* WorldContextObject;
+	FString Prompt;
+	EImageSize ImageSize;
+
+	FCreateImageResponseURL ResponseURL;
+	FString JSONString;
+};
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateImageRequestCallbackSignatureBase64JSON, FCreateImageResponseBase64JSON, Response, FString, JSONString);
+
+UCLASS()
+class UNREALOPENAI_API UUnrealOpenAIHTTPImageRequestBase64JSON : public UOnlineBlueprintCallProxyBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintAssignable)
+	FCreateImageRequestCallbackSignatureBase64JSON OnImageRequestCompleteBase64JSON;
+	UPROPERTY(BlueprintAssignable)
+	FCreateImageRequestCallbackSignatureBase64JSON OnImageRequestFailedBase64JSON;
+
+public:
+
+	virtual void Activate() override;
+
+	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI - Images")
+	static UUnrealOpenAIHTTPImageRequestBase64JSON* CreateImageBase64JSON(UObject* WorldContextObject, FString Prompt, EImageSize ImageSize);
+
+private:
+	UObject* WorldContextObject;
+	FString Prompt;
+	EImageSize ImageSize;
+
+	FCreateImageResponseBase64JSON ResponseBase64JSON;
+	FString JSONString;
+	
+};
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateImageVariationRequestCallbackSignatureURL, FCreateImageResponseURL, ResponseURL, FString, JSONString);
 UCLASS()
 class UNREALOPENAI_API UUnrealOpenAIHTTPImageVariationRequestURL : public UOnlineBlueprintCallProxyBase
 {
 	GENERATED_BODY()
 
 	UPROPERTY(BlueprintAssignable)
-	FImageVariationRequestCallbackSignatureURL OnImageVariationRequestCompleteURL;
+	FCreateImageVariationRequestCallbackSignatureURL OnImageVariationRequestCompleteURL;
 	UPROPERTY(BlueprintAssignable)
-	FImageVariationRequestCallbackSignatureURL OnImageVariationRequestFailedURL;
+	FCreateImageVariationRequestCallbackSignatureURL OnImageVariationRequestFailedURL;
 	
 
 public:
@@ -63,16 +119,16 @@ private:
 	FString JSONString;
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FImageVariationRequestCallbackSignatureBase64JSON, FCreateImageResponseBase64JSON, ResponseBase64JSON, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateImageVariationRequestCallbackSignatureBase64JSON, FCreateImageResponseBase64JSON, ResponseBase64JSON, FString, JSONString);
 UCLASS()
 class UNREALOPENAI_API UUnrealOpenAIHTTPImageVariationRequestBase64JSON : public UOnlineBlueprintCallProxyBase
 {
 	GENERATED_BODY()
 
 	UPROPERTY(BlueprintAssignable)
-	FImageVariationRequestCallbackSignatureBase64JSON OnImageVariationRequestCompleteBase64JSON;
+	FCreateImageVariationRequestCallbackSignatureBase64JSON OnImageVariationRequestCompleteBase64JSON;
 	UPROPERTY(BlueprintAssignable)
-	FImageVariationRequestCallbackSignatureBase64JSON OnImageVariationRequestFailedBase64JSON;
+	FCreateImageVariationRequestCallbackSignatureBase64JSON OnImageVariationRequestFailedBase64JSON;
 
 public:
 	virtual void Activate() override;
@@ -89,16 +145,16 @@ private:
 	FString JSONString;
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FImageEditRequestCallbackSignatureURL, FCreateImageResponseURL, ResponseURL, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateImageEditRequestCallbackSignatureURL, FCreateImageResponseURL, ResponseURL, FString, JSONString);
 UCLASS()
 class UNREALOPENAI_API UUnrealOpenAIHTTPImageEditRequestURL : public UOnlineBlueprintCallProxyBase
 {
 	GENERATED_BODY()
 
 	UPROPERTY(BlueprintAssignable)
-	FImageEditRequestCallbackSignatureURL OnImageEditRequestCompleteURL;
+	FCreateImageEditRequestCallbackSignatureURL OnImageEditRequestCompleteURL;
 	UPROPERTY(BlueprintAssignable)
-	FImageEditRequestCallbackSignatureURL OnImageEditRequestFailedURL;
+	FCreateImageEditRequestCallbackSignatureURL OnImageEditRequestFailedURL;
 	
 
 public:
@@ -118,16 +174,16 @@ private:
 	FString JSONString;
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FImageEditRequestCallbackSignatureBase64JSON, FCreateImageResponseBase64JSON, ResponseBase64JSON, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateImageEditRequestCallbackSignatureBase64JSON, FCreateImageResponseBase64JSON, ResponseBase64JSON, FString, JSONString);
 UCLASS()
 class UNREALOPENAI_API UUnrealOpenAIHTTPImageEditRequestBase64JSON : public UOnlineBlueprintCallProxyBase
 {
 	GENERATED_BODY()
 
 	UPROPERTY(BlueprintAssignable)
-	FImageEditRequestCallbackSignatureBase64JSON OnImageEditRequestCompleteBase64JSON;
+	FCreateImageEditRequestCallbackSignatureBase64JSON OnImageEditRequestCompleteBase64JSON;
 	UPROPERTY(BlueprintAssignable)
-	FImageEditRequestCallbackSignatureBase64JSON OnImageEditRequestFailedBase64JSON;
+	FCreateImageEditRequestCallbackSignatureBase64JSON OnImageEditRequestFailedBase64JSON;
 
 public:
 	virtual void Activate() override;

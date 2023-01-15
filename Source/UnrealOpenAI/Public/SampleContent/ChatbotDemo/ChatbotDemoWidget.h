@@ -33,9 +33,11 @@ private:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(AllowPrivateAccess="true"))
 	const UClass* ChatbotAIResponseWidgetClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	
 	FString Instruction;
+
+	UFUNCTION(BlueprintCallable)
+	void SetInstruction(FString NewInstruction);
 
 	UFUNCTION()
 	void OnCompletionResponse(FCreateCompletionResponse Response, FString JSONString);
