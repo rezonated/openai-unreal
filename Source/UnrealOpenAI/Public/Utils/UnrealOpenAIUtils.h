@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Net/OnlineBlueprintCallProxyBase.h"
+
 #include "UnrealOpenAIUtils.generated.h"
 /**
  * 
@@ -12,6 +14,40 @@ class UNREALOPENAI_API UUnrealOpenAIUtils : public UObject
 {
 	GENERATED_BODY()
 public:
+
 	UFUNCTION(BlueprintCallable)
-	static TArray<uint8> OpenFileDialog();
+	static bool OpenImageDialog(FString DialogTitle, TArray<uint8>& OutFileData);
+
+
+	UFUNCTION(BlueprintCallable)
+	static bool ConvertToTexture2D(TArray<uint8>FileData, UTexture2D*& OutTexture);
+};
+
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FGetImageFromURLRequestCallbackSignature, UTexture2D*, Texture2D);
+UCLASS()
+class UNREALOPENAI_API UUnrealOpenAIUtilsGetImageFromURL : public UOnlineBlueprintCallProxyBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintAssignable)
+	FGetImageFromURLRequestCallbackSignature OnSuccess;
+
+	UPROPERTY(BlueprintAssignable)
+	FGetImageFromURLRequestCallbackSignature OnFailure;
+
+public:
+	void OnProcessRequestComplete(TSharedPtr<class IHttpRequest, ESPMode::ThreadSafe> HttpRequest, TSharedPtr<class IHttpResponse, ESPMode::ThreadSafe> HttpResponse, bool bArg);
+	virtual void Activate() override;
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAIUtils - GetImageFromURL")
+	static UUnrealOpenAIUtilsGetImageFromURL* GetImageFromURL(UObject* WorldContextObject, FString URL);
+
+private:
+
+	UObject* WorldContextObject;
+	FString URL;
+
+	UPROPERTY(Transient)
+	UTexture2D* Texture2D;
 };

@@ -30,7 +30,7 @@ void UUnrealOpenAIHTTPCompletionRequest::Activate()
 	SendPayload(
 		TEXT("completions"),
 		JSONPayload, EHTTPMethod::ECM_POST,
-		[this](FHttpRequestPtr, const FHttpResponsePtr Response, const bool bWasSuccessful){
+			[this](FHttpRequestPtr, const FHttpResponsePtr Response, const bool bWasSuccessful){
 			if (bWasSuccessful)
 			{
 				FString ResponseString = Response->GetContentAsString();
