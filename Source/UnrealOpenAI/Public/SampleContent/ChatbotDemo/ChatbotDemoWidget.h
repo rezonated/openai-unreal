@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "DataTypes/DataTypes.h"
 #include "ChatbotDemoWidget.generated.h"
 
 /**

@@ -35,14 +35,13 @@ public:
 	FGetImageFromURLRequestCallbackSignature OnSuccess;
 	UPROPERTY(BlueprintAssignable)
 	FGetImageFromURLRequestCallbackSignature OnFailure;
-	
-	virtual void Activate() override;
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAIUtils - GetImageFromURL")
 	static UUnrealOpenAIUtilsGetImageFromURL* GetImageFromURL(UObject* WorldContextObject, FString URL);
 
+	virtual void Activate() override;
+
 private:
-	
 	void OnProcessRequestComplete(TSharedPtr<class IHttpRequest, ESPMode::ThreadSafe> HttpRequest, TSharedPtr<class IHttpResponse, ESPMode::ThreadSafe> HttpResponse, bool bArg);
 	
 	UObject* WorldContextObject;

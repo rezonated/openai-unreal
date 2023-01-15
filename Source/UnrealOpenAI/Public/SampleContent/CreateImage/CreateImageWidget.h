@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "DataTypes/DataTypes.h"
 #include "Enums/Enums.h"
 #include "CreateImageWidget.generated.h"
 

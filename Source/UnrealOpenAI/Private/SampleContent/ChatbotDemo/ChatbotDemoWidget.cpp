@@ -9,7 +9,7 @@
 #include "Components/MultiLineEditableTextBox.h"
 #include "Components/ScrollBox.h"
 #include "Components/ScrollBoxSlot.h"
-#include "HTTP/UnrealOpenAIHTTP.h"
+#include "Proxies/CompletionProxies.h"
 #include "SampleContent/ChatbotDemo/ChatbotDemoAIResponse.h"
 #include "SampleContent/ChatbotDemo/ChatbotDemoUserQuery.h"
 #include "UnrealOpenAI/Public/Utils/Utils.h"
@@ -46,7 +46,7 @@ void UChatbotDemoWidget::OnSendInput()
 
 	Instruction += MLETB_User_Input->GetText().ToString() + LINE_TERMINATOR + "A: ";
 
-	const auto CreateCompletionRequest = UUnrealOpenAIHTTPCompletionRequest::CreateCompletion(this, Instruction, ECompletionModel::ECM_Davinci);
+	const auto CreateCompletionRequest = UCreateCompletionProxies::CreateCompletion(this, Instruction, ECompletionModel::ECM_Davinci);
 	
 	CreateCompletionRequest->OnCompletionRequestComplete.AddDynamic(this, &UChatbotDemoWidget::OnCompletionResponse);
 	CreateCompletionRequest->OnCompletionRequestFailed.AddDynamic(this, &UChatbotDemoWidget::OnCompletionFailed);

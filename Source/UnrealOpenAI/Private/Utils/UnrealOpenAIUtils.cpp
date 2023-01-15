@@ -127,6 +127,15 @@ void UUnrealOpenAIUtilsGetImageFromURL::OnProcessRequestComplete(
 	OnSuccess.Broadcast(Texture2D);
 }
 
+UUnrealOpenAIUtilsGetImageFromURL* UUnrealOpenAIUtilsGetImageFromURL::GetImageFromURL(UObject* WorldContextObject,
+	FString URL)
+{
+	UUnrealOpenAIUtilsGetImageFromURL* Proxy = NewObject<UUnrealOpenAIUtilsGetImageFromURL>();
+	Proxy->URL = URL;
+	Proxy->WorldContextObject = WorldContextObject;
+	return Proxy;
+}
+
 void UUnrealOpenAIUtilsGetImageFromURL::Activate()
 {
 	Super::Activate();
@@ -156,13 +165,4 @@ void UUnrealOpenAIUtilsGetImageFromURL::Activate()
 	{
 		OnFailure.Broadcast(nullptr);
 	}
-}
-
-UUnrealOpenAIUtilsGetImageFromURL* UUnrealOpenAIUtilsGetImageFromURL::GetImageFromURL(UObject* WorldContextObject,
-	FString URL)
-{
-	UUnrealOpenAIUtilsGetImageFromURL* Proxy = NewObject<UUnrealOpenAIUtilsGetImageFromURL>();
-	Proxy->URL = URL;
-	Proxy->WorldContextObject = WorldContextObject;
-	return Proxy;
 }

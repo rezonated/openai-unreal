@@ -7,7 +7,7 @@
 #include "Components/Button.h"
 #include "Components/Image.h"
 #include "Components/MultiLineEditableTextBox.h"
-#include "HTTP/UnrealOpenAIHTTP.h"
+#include "Proxies/ImageProxies.h"
 #include "Utils/UnrealOpenAIUtils.h"
 #include "Utils/Utils.h"
 
@@ -45,7 +45,7 @@ void UCreateImageWidget::OnSendInput()
 {
 	if (MLETB_User_Input && MLETB_User_Input->GetText().ToString().Len() > 0)
 	{
-		const auto ImageRequestURL = UUnrealOpenAIHTTPImageRequestURL::CreateImageURL(this, MLETB_User_Input->GetText().ToString(), ImageSize);
+		const auto ImageRequestURL = UCreateImageRequestURL::CreateImageURL(this, MLETB_User_Input->GetText().ToString(), ImageSize);
 
 		ImageRequestURL->OnImageRequestCompleteURL.AddDynamic(this, &UCreateImageWidget::OnImageRequestCompleteURL);
 
