@@ -11,7 +11,7 @@
 #include "Interfaces/IHttpResponse.h"
 #include "Utils/Utils.h"
 
-bool UUnrealOpenAIUtils::OpenImageDialog(FString DialogTitle, FFileToLoad& OutFileData)
+bool UUnrealOpenAIUtils::OpenLoadImageDialog(FString DialogTitle, int32 SizeLimitInMB, FFileToLoad& OutFileData)
 {
 	OutFileData = FFileToLoad();
 	
@@ -36,10 +36,94 @@ bool UUnrealOpenAIUtils::OpenImageDialog(FString DialogTitle, FFileToLoad& OutFi
 
 	TArray<uint8> FileData;
 	if(!FFileHelper::LoadFileToArray(FileData, *FilePath)) return false;
+	
+	if (SizeLimitInMB > 0 && FileData.Num() > SizeLimitInMB * 1024 * 1024)
+	{
+		PrintDebugLogAndOnScreen("File size is too big. Max size is " + FString::FromInt(SizeLimitInMB) + " MB");
+		return false;
+	}
 
 	OutFileData.FileData = FileData;
 	OutFileData.FileName = FPaths::GetCleanFilename(FilePath);
 	OutFileData.FileExtension = FPaths::GetExtension(FilePath);
+	
+	return true;
+}
+
+bool UUnrealOpenAIUtils::OpenLoadFileDialog(FString DialogTitle, FString FileExtension,  int32 SizeLimitInMB, FFileToLoad& OutFileData)
+{
+	OutFileData = FFileToLoad();
+	
+	const auto DesktopPlatform = FDesktopPlatformModule::Get();
+
+	if(!DesktopPlatform) return false;
+
+	TArray<FString> FilePaths;
+
+
+	if (FileExtension.IsEmpty())
+	{
+		FileExtension = TEXT("All Files (*.*)|*.*");
+	}
+	else
+	{
+		FileExtension = FString::Printf(TEXT("%s Files (*.%s)|*.%s"), *FileExtension, *FileExtension, *FileExtension);
+	}
+
+	if(const auto FileDialog = DesktopPlatform->OpenFileDialog(
+		nullptr,
+		DialogTitle,
+		TEXT(""),
+		TEXT(""),
+		*FileExtension,
+		EFileDialogFlags::None,
+		FilePaths
+	); !FileDialog) return false;
+
+	const FString FilePath = FilePaths[0];
+	if(!FPaths::FileExists(FilePath)) return false;
+
+	TArray<uint8> FileData;
+	if(!FFileHelper::LoadFileToArray(FileData, *FilePath)) return false;
+	
+	if (SizeLimitInMB > 0 && FileData.Num() > SizeLimitInMB * 1024 * 1024)
+	{
+		PrintDebugLogAndOnScreen("File size is too big. Max size is " + FString::FromInt(SizeLimitInMB) + " MB");
+		return false;
+	}
+
+	OutFileData.FileData = FileData;
+	OutFileData.FileName = FPaths::GetCleanFilename(FilePath);
+	OutFileData.FileExtension = FPaths::GetExtension(FilePath);
+	
+	return true;
+}
+
+bool UUnrealOpenAIUtils::OpenSaveFileDialog(FString DialogTitle, TArray<uint8> FileData, FString FileName,
+                                            FString FileExtension, FString& OutFilePath)
+{
+	OutFilePath = FString();
+	
+	const auto DesktopPlatform = FDesktopPlatformModule::Get();
+
+	if(!DesktopPlatform) return false;
+
+	TArray<FString> FilePaths;
+
+	if(const auto FileDialog = DesktopPlatform->SaveFileDialog(
+		nullptr,
+		DialogTitle,
+		TEXT(""),
+		*FileName,
+		FString::Printf(TEXT(" (*.%s)|*.%s"), *FileExtension, *FileExtension),
+		EFileDialogFlags::None,
+		FilePaths
+	); !FileDialog) return false;
+
+	const FString FilePath = FilePaths[0];
+	if(!FFileHelper::SaveArrayToFile(FileData, *FilePath)) return false;
+
+	OutFilePath = FilePath;
 	
 	return true;
 }
@@ -83,56 +167,82 @@ void UUnrealOpenAIUtilsGetImageFromURL::OnProcessRequestComplete(
 		return;
 	}
 
+	if (const TArray<uint8> ResponseData = HttpResponse->GetContent(); UUnrealOpenAIUtils::ConvertToTexture2D(ResponseData, Texture2D))
+	{
+		OnSuccess.Broadcast(Texture2D);
+	}
+	else
+	{
+		OnFailure.Broadcast(nullptr);
+	}
+}
+
+UUnrealOpenAIUtilsDownloadFileFromURL* UUnrealOpenAIUtilsDownloadFileFromURL::DownloadFileFromURL(
+	UObject* WorldContextObject, FString URL)
+{
+	UUnrealOpenAIUtilsDownloadFileFromURL* Proxy = NewObject<UUnrealOpenAIUtilsDownloadFileFromURL>();
+	Proxy->WorldContextObject = WorldContextObject;
+	Proxy->URL = URL;
+	return Proxy;
+}
+
+void UUnrealOpenAIUtilsDownloadFileFromURL::OnProcessRequestComplete(
+	TSharedPtr<IHttpRequest, ESPMode::ThreadSafe> HttpRequest,
+	TSharedPtr<IHttpResponse, ESPMode::ThreadSafe> HttpResponse, bool bSuccessful)
+{
+	FileData = FFileToLoad();
+	if(!bSuccessful)
+	{
+		OnFailure.Broadcast(FileData);
+		return;
+	}
+	
 	const TArray<uint8> ResponseData = HttpResponse->GetContent();
 	if(ResponseData.Num() == 0)
 	{
-		OnFailure.Broadcast(nullptr);
+		OnFailure.Broadcast(FileData);
 		return;
 	}
 
-	IImageWrapperModule& ImageWrapperModule = FModuleManager::LoadModuleChecked<IImageWrapperModule>(FName("ImageWrapper"));
-	const TSharedPtr<IImageWrapper> ImageWrapper = ImageWrapperModule.CreateImageWrapper(EImageFormat::PNG);
-	if(!ImageWrapper.IsValid())
-	{
-		OnFailure.Broadcast(nullptr);
-		return;
-	}
-
-	if(!ImageWrapper->SetCompressed(ResponseData.GetData(), ResponseData.Num()))
-	{
-		OnFailure.Broadcast(nullptr);
-		return;
-	}
-
-	TArray64<uint8> RawData;
-	if(!ImageWrapper->GetRaw(ERGBFormat::BGRA, 8, RawData))
-	{
-		OnFailure.Broadcast(nullptr);
-		return;
-	}
-
-	const int32 Width = ImageWrapper->GetWidth();
-	const int32 Height = ImageWrapper->GetHeight();
-
-	Texture2D = UTexture2D::CreateTransient(Width, Height, PF_B8G8R8A8);
-	if(!Texture2D)
-	{
-		OnFailure.Broadcast(nullptr);
-		return;
-	}
-
-	void* TextureData = Texture2D->GetPlatformData()->Mips[0].BulkData.Lock(LOCK_READ_WRITE);
-	FMemory::Memcpy(TextureData,
-					RawData.GetData(), RawData.Num());
-	Texture2D->GetPlatformData()->Mips[0].BulkData.Unlock();
-
-	Texture2D->UpdateResource();
-
-	OnSuccess.Broadcast(Texture2D);
+	FileData.FileData = ResponseData;
+	FileData.FileName = FPaths::GetCleanFilename(URL);
+	FileData.FileExtension = FPaths::GetExtension(URL);
+	
+	OnSuccess.Broadcast(FileData);
 }
 
-UUnrealOpenAIUtilsGetImageFromURL* UUnrealOpenAIUtilsGetImageFromURL::GetImageFromURL(UObject* WorldContextObject,
-	FString URL)
+void UUnrealOpenAIUtilsDownloadFileFromURL::Activate()
+{
+	Super::Activate();
+
+	if(!WorldContextObject)
+	{
+		PrintDebugLogAndOnScreen("WorldContextObject is null", true);
+		OnFailure.Broadcast(FFileToLoad());
+		return;
+	}
+
+	const auto HTTP = &FHttpModule::Get();
+
+	if (!HTTP)
+	{
+		OnFailure.Broadcast(FFileToLoad());
+		return;
+	}
+	const auto HTTPRequest = HTTP->CreateRequest();
+
+	HTTPRequest->SetURL(URL);
+	HTTPRequest->SetVerb("GET");
+	HTTPRequest->OnProcessRequestComplete().BindUObject(this, &UUnrealOpenAIUtilsDownloadFileFromURL::OnProcessRequestComplete);
+
+
+	if (!HTTPRequest->ProcessRequest())
+	{
+		OnFailure.Broadcast(FFileToLoad());
+	}
+}
+
+UUnrealOpenAIUtilsGetImageFromURL* UUnrealOpenAIUtilsGetImageFromURL::GetImageFromURL(UObject* WorldContextObject,FString URL)
 {
 	UUnrealOpenAIUtilsGetImageFromURL* Proxy = NewObject<UUnrealOpenAIUtilsGetImageFromURL>();
 	Proxy->URL = URL;

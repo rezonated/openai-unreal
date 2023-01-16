@@ -16,11 +16,16 @@ class UNREALOPENAI_API UUnrealOpenAIUtils : public UObject
 	GENERATED_BODY()
 public:
 
-	UFUNCTION(BlueprintCallable)
-	static bool OpenImageDialog(FString DialogTitle, FFileToLoad& OutFileData);
+	UFUNCTION(BlueprintCallable, Category = "UnrealOpenAIUtils", meta=(ExpandBoolAsExecs="ReturnValue"))
+	static bool OpenLoadImageDialog(FString DialogTitle, int32 SizeLimitInMB, FFileToLoad& OutFileData);
 
+	UFUNCTION(BlueprintCallable, Category = "UnrealOpenAIUtils", meta=(ExpandBoolAsExecs="ReturnValue"))
+	static bool OpenLoadFileDialog(FString DialogTitle, FString FileExtension, int32 SizeLimitInMB, FFileToLoad& OutFileData);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "UnrealOpenAIUtils", meta=(ExpandBoolAsExecs="ReturnValue"))
+	static bool OpenSaveFileDialog(FString DialogTitle, TArray<uint8> FileData, FString FileName, FString FileExtension, FString& OutFilePath);
+	
+	UFUNCTION(BlueprintCallable, Category = "UnrealOpenAIUtils", meta=(ExpandBoolAsExecs="ReturnValue"))
 	static bool ConvertToTexture2D(TArray<uint8>FileData, UTexture2D*& OutTexture);
 };
 
@@ -37,7 +42,7 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FGetImageFromURLRequestCallbackSignature OnFailure;
 
-	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAIUtils - GetImageFromURL")
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAIUtils | GetImageFromURL")
 	static UUnrealOpenAIUtilsGetImageFromURL* GetImageFromURL(UObject* WorldContextObject, FString URL);
 
 	virtual void Activate() override;
@@ -50,4 +55,29 @@ private:
 
 	UPROPERTY(Transient)
 	UTexture2D* Texture2D;
+};
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDownloadFileFromURLRequestCallbackSignature, FFileToLoad, FileData);
+UCLASS()
+class UNREALOPENAI_API UUnrealOpenAIUtilsDownloadFileFromURL : public UOnlineBlueprintCallProxyBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(BlueprintAssignable)
+	FDownloadFileFromURLRequestCallbackSignature OnSuccess;
+	UPROPERTY(BlueprintAssignable)
+	FDownloadFileFromURLRequestCallbackSignature OnFailure;
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAIUtils | DownloadFileFromURL")
+	static UUnrealOpenAIUtilsDownloadFileFromURL* DownloadFileFromURL(UObject* WorldContextObject, FString URL);
+
+	void OnProcessRequestComplete(TSharedPtr<IHttpRequest, ESPMode::ThreadSafe> HttpRequest, TSharedPtr<IHttpResponse, ESPMode::ThreadSafe> HttpResponse, bool bSuccessful);
+	virtual void Activate() override;
+
+private:
+	UObject* WorldContextObject;
+	FString URL;
+
+	FFileToLoad FileData;
 };

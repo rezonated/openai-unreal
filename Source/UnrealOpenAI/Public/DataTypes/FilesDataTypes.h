@@ -3,41 +3,53 @@
 
 #pragma once
 #include "CoreMinimal.h"
-#include "CommonDataTypes.generated.h"
+#include "CommonDataTypes.h"
+#include "FilesDataTypes.generated.h"
+
 
 USTRUCT(BlueprintType)
-struct FChoice
+struct FListFilesResponse
 {
 	GENERATED_BODY()
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	FString text;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	int index;
+	FString object;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	int logprobs;
+	TArray<FOpenAIFile> data;
+};
+
+
+USTRUCT(BlueprintType)
+struct FFileDeleteResponse
+{
+	GENERATED_BODY()
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	FString finish_reason;
+	FString id;
+	
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	FString object;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	bool deleted;
+};
+
+
+USTRUCT(BlueprintType)
+struct FCreateFileRequest
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	FFileToLoad file;
+	
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	FString purpose;
 };
 
 USTRUCT(BlueprintType)
-struct FUsage
-{
-	GENERATED_BODY()
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	FString prompt_tokens;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	FString completion_tokens;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	FString total_tokens;
-};
-
-USTRUCT(BlueprintType)
-struct FOpenAIFile
+struct FFileResponse
 {
 	GENERATED_BODY()
 
@@ -52,28 +64,10 @@ struct FOpenAIFile
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	int32 created_at;
-
+	
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	FString filename;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	FString purpose;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	FString status_details;
-};
-
-USTRUCT(BlueprintType)
-struct FFileToLoad
-{
-	GENERATED_BODY()
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	TArray<uint8> FileData;
-	
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	FString FileName;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	FString FileExtension;
 };
