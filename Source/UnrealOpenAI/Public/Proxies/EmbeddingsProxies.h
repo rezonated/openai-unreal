@@ -11,6 +11,8 @@
  * 
  */
 
+#pragma region Create Embedding Proxies
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateEmbeddingsRequestCallbackSignature, FCreateEmbeddingsResponse, Response, FString, JSONString);
 UCLASS()
 class UNREALOPENAI_API UCreateEmbeddingsRequestProxy : public UOnlineBlueprintCallProxyBase
@@ -24,7 +26,7 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FCreateEmbeddingsRequestCallbackSignature OnFailure;
 
-	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "Unreal Open AI - Embeddings")
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "Unreal Open AI | Embeddings")
 	static UCreateEmbeddingsRequestProxy* CreateEmbeddings(UObject* WorldContextObject, FString Input);
 
 	virtual void Activate() override;
@@ -36,3 +38,5 @@ private:
 	FCreateEmbeddingsResponse Response;
 	FString JSONString;
 };
+
+#pragma endregion

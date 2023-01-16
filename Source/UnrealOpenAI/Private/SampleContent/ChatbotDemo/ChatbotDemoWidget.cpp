@@ -9,6 +9,7 @@
 #include "Components/MultiLineEditableTextBox.h"
 #include "Components/ScrollBox.h"
 #include "Components/ScrollBoxSlot.h"
+#include "Enums/CompletionEnums.h"
 #include "Proxies/CompletionProxies.h"
 #include "SampleContent/ChatbotDemo/ChatbotDemoAIResponse.h"
 #include "SampleContent/ChatbotDemo/ChatbotDemoUserQuery.h"

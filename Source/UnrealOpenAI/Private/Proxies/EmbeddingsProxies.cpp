@@ -7,6 +7,8 @@
 #include "Interfaces/IHttpResponse.h"
 #include "Utils/Utils.h"
 
+#pragma region Create Embedding Proxies
+
 UCreateEmbeddingsRequestProxy* UCreateEmbeddingsRequestProxy::CreateEmbeddings(UObject* WorldContextObject, FString Input)
 {
 	UCreateEmbeddingsRequestProxy* Proxy = NewObject<UCreateEmbeddingsRequestProxy>();
@@ -63,3 +65,5 @@ void UCreateEmbeddingsRequestProxy::Activate()
 			OnFailure.Broadcast(FCreateEmbeddingsResponse(), TEXT(""));
 	});
 }
+
+#pragma endregion

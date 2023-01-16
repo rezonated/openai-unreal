@@ -10,6 +10,7 @@
 /**
  * 
  */
+#pragma region Create Edits Proxies
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateEditsRequestCallbackSignature, FCreateEditsResponse, Response, FString, JSONString);
 UCLASS()
@@ -23,7 +24,7 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FCreateEditsRequestCallbackSignature OnFailure;
 
-	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI - Edits")
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI | Edits")
 	static UCreateEditsRequestProxy* CreateEdits(UObject* WorldContextObject, FString Input, FString Instruction);
 
 	virtual void Activate() override;
@@ -36,3 +37,5 @@ private:
 	FCreateEditsResponse Response;
 	FString JSONString;	
 };
+
+#pragma endregion

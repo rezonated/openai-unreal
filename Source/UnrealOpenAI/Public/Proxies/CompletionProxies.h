@@ -21,7 +21,7 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FCreateCompletionRequestCallbackSignature OnFailure;
 
-	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI - Completion")
+	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI | Completion")
 	static UCreateCompletionRequestProxy* CreateCompletion(UObject* WorldContextObject, FString Prompt, ECompletionModel CompletionModel);
 
 	virtual void Activate() override;

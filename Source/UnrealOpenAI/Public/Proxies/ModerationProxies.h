@@ -10,6 +10,7 @@
 /**
  * 
  */
+#pragma region Create Moderation Proxies
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateModerationRequestCallbackSignature, FCreateModerationResponse, Response, FString, JSONString);
 UCLASS()
@@ -24,7 +25,7 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FCreateModerationRequestCallbackSignature OnFailure;
 
-	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI")
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI | Moderation")
 		static UCreateModerationRequestProxy* CreateModerationRequest(UObject* WorldContextObject, FString Input, EModerationModels Model);
 
 	virtual void Activate() override;
@@ -37,3 +38,5 @@ private:
 	FCreateModerationResponse Response;
 	FString JSONString;
 };
+
+#pragma endregion

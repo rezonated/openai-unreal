@@ -7,6 +7,8 @@
 #include "Interfaces/IHttpResponse.h"
 #include "Utils/Utils.h"
 
+#pragma region Create Moderation Proxies
+
 UCreateModerationRequestProxy* UCreateModerationRequestProxy::CreateModerationRequest(UObject* WorldContextObject, FString Input, EModerationModels Model)
 {
 	UCreateModerationRequestProxy* Proxy = NewObject<UCreateModerationRequestProxy>();
@@ -68,3 +70,5 @@ void UCreateModerationRequestProxy::Activate()
 		}
 	);
 }
+
+#pragma endregion

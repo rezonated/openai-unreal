@@ -7,6 +7,8 @@
 #include "Interfaces/IHttpResponse.h"
 #include "Utils/Utils.h"
 
+#pragma region Create Edits Proxies
+
 UCreateEditsRequestProxy* UCreateEditsRequestProxy::CreateEdits(UObject* WorldContextObject, FString Input, FString Instruction)
 {
 	UCreateEditsRequestProxy* Proxy = NewObject<UCreateEditsRequestProxy>();
@@ -64,3 +66,5 @@ void UCreateEditsRequestProxy::Activate()
 			OnFailure.Broadcast(FCreateEditsResponse(), TEXT(""));
 	});
 }
+
+#pragma endregion
