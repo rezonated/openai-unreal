@@ -35,3 +35,18 @@ struct FUsage
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	FString total_tokens;
 };
+
+USTRUCT(BlueprintType)
+struct FFileToLoad
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	TArray<uint8> FileData;
+	
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	FString FileName;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	FString FileExtension;
+};

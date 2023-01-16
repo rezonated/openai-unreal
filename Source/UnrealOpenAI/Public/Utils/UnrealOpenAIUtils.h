@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DataTypes/CommonDataTypes.h"
 #include "Net/OnlineBlueprintCallProxyBase.h"
 
 #include "UnrealOpenAIUtils.generated.h"
@@ -16,7 +17,7 @@ class UNREALOPENAI_API UUnrealOpenAIUtils : public UObject
 public:
 
 	UFUNCTION(BlueprintCallable)
-	static bool OpenImageDialog(FString DialogTitle, TArray<uint8>& OutFileData);
+	static bool OpenImageDialog(FString DialogTitle, FFileToLoad& OutFileData);
 
 
 	UFUNCTION(BlueprintCallable)

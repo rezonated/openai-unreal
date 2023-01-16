@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DataTypes/CommonDataTypes.h"
 #include "DataTypes/ImageDataTypes.h"
 #include "Net/OnlineBlueprintCallProxyBase.h"
 #include "ImageProxies.generated.h"
@@ -83,12 +84,12 @@ public:
 	virtual void Activate() override;
 
 	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI | Image")
-	static UCreateImageEditRequestURL* CreateImageEditURL(UObject* WorldContextObject, TArray<uint8> Image, TArray<uint8> Mask, FString Prompt, EImageSize ImageSize);
+	static UCreateImageEditRequestURL* CreateImageEditURL(UObject* WorldContextObject, FFileToLoad ImageFile, FFileToLoad MaskImageFile, FString Prompt, EImageSize ImageSize);
 
 private:
 	UObject* WorldContextObject;
-	TArray<uint8> Image;
-	TArray<uint8> Mask;
+	FFileToLoad ImageFile;
+	FFileToLoad MaskImageFile;
 	FString Prompt;
 	EImageSize ImageSize;
 
@@ -111,12 +112,12 @@ public:
 	virtual void Activate() override;
 
 	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI | Image")
-	static UCreateImageEditRequestBase64JSON* CreateImageEditJSON(UObject* WorldContextObject, TArray<uint8> Image, TArray<uint8> Mask, FString Prompt, EImageSize ImageSize);
+	static UCreateImageEditRequestBase64JSON* CreateImageEditJSON(UObject* WorldContextObject, FFileToLoad ImageFile, FFileToLoad MaskImageFile, FString Prompt, EImageSize ImageSize);
 
 private:
 	UObject* WorldContextObject;
-	TArray<uint8> Image;
-	TArray<uint8> Mask;
+	FFileToLoad ImageFile;
+	FFileToLoad MaskImageFile;
 	FString Prompt;
 	EImageSize ImageSize;
 	
@@ -144,11 +145,11 @@ public:
 	virtual void Activate() override;
 
 	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI | Image")
-	static UCreateImageVariationRequestURL* CreateImageVariationURL(UObject* WorldContextObject, TArray<uint8> Image, EImageSize ImageSize);
+	static UCreateImageVariationRequestURL* CreateImageVariationURL(UObject* WorldContextObject, FFileToLoad ImageFile, EImageSize ImageSize);
 
 private:
 	UObject* WorldContextObject;
-	TArray<uint8> Image;
+	FFileToLoad ImageFile;
 	EImageSize ImageSize;
 
 	FCreateImageResponseURL ResponseURL;
@@ -170,11 +171,11 @@ public:
 	virtual void Activate() override;
 
 	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI | Image")
-	static UCreateImageVariationRequestBase64JSON* CreateImageVariationJSON(UObject* WorldContextObject, TArray<uint8> Image, EImageSize ImageSize);
+	static UCreateImageVariationRequestBase64JSON* CreateImageVariationJSON(UObject* WorldContextObject, FFileToLoad ImageFile, EImageSize ImageSize);
 
 private:
 	UObject* WorldContextObject;
-	TArray<uint8> Image;
+	FFileToLoad ImageFile;
 	EImageSize ImageSize;
 	
 	FCreateImageResponseBase64JSON ResponseBase64JSON;

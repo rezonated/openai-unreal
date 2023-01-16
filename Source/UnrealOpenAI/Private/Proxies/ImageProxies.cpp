@@ -160,13 +160,12 @@ void UCreateImageRequestBase64JSON::Activate()
 
 #pragma region Create Image Edit Proxies
 
-UCreateImageEditRequestURL* UCreateImageEditRequestURL::CreateImageEditURL(
-	UObject* WorldContextObject, TArray<uint8> Image, TArray<uint8> Mask, FString Prompt, EImageSize ImageSize)
+UCreateImageEditRequestURL* UCreateImageEditRequestURL::CreateImageEditURL(UObject* WorldContextObject, FFileToLoad ImageFile, FFileToLoad MaskImageFile, FString Prompt, EImageSize ImageSize)
 {
 	UCreateImageEditRequestURL* ImageEditRequest = NewObject<UCreateImageEditRequestURL>();
 	ImageEditRequest->WorldContextObject = WorldContextObject;
-	ImageEditRequest->Image = Image;
-	ImageEditRequest->Mask = Mask;
+	ImageEditRequest->ImageFile = ImageFile;
+	ImageEditRequest->MaskImageFile = MaskImageFile;
 	ImageEditRequest->Prompt = Prompt;
 	ImageEditRequest->ImageSize = ImageSize;
 	return ImageEditRequest;
@@ -184,7 +183,7 @@ void UCreateImageEditRequestURL::Activate()
 		return;
 	}
 
-	if (FString InvalidReason; !ValidateImageForOpenAI(Image, InvalidReason))
+	if (FString InvalidReason; !ValidateImageForOpenAI(ImageFile.FileData, InvalidReason))
 	{
 		PrintDebugLogAndOnScreen(InvalidReason);
 
@@ -192,7 +191,7 @@ void UCreateImageEditRequestURL::Activate()
 		return;
 	}
 
-	if (FString InvalidReason; !ValidateImageForOpenAI(Mask, InvalidReason))
+	if (FString InvalidReason; !ValidateImageForOpenAI(MaskImageFile.FileData, InvalidReason))
 	{
 		PrintDebugLogAndOnScreen(InvalidReason);
 
@@ -201,23 +200,23 @@ void UCreateImageEditRequestURL::Activate()
 	}
 
 	FCreateImageEditRequest RequestPayload;
-	RequestPayload.image = Image;
-	RequestPayload.mask = Mask;
+	RequestPayload.image = ImageFile.FileData;
+	RequestPayload.mask = MaskImageFile.FileData;
 	RequestPayload.response_format = "url";
 	RequestPayload.size = ImageSizes[static_cast<int>(ImageSize)];
 	RequestPayload.prompt = Prompt;
 	
 	TArray<uint8> CombinedContent;
 
-	const FString ImageBoundary = FString(TEXT("\r\n")) + BoundaryBegin + "Content-Disposition: form-data; name=\"image\";  filename=\"image.png\"\r\n\r\n";
+	const FString ImageBoundary = FString(TEXT("\r\n")) + BoundaryBegin + "Content-Disposition: form-data; name=\"image\";  " + FString::Printf(TEXT("filename=\"%s\""), *ImageFile.FileName) + "\r\n\r\n";
 
-	const FString MaskBoundary = FString(TEXT("\r\n")) + BoundaryBegin + "Content-Disposition: form-data; name=\"mask\";  filename=\"mask.png\"\r\n\r\n";
+	const FString MaskBoundary = FString(TEXT("\r\n")) + BoundaryBegin + "Content-Disposition: form-data; name=\"mask\";  " + FString::Printf(TEXT("filename=\"%s\""), *MaskImageFile.FileName) + "\r\n\r\n";
 	
 	CombinedContent.Append(FStringToUInt8(ImageBoundary));
-	CombinedContent.Append(Image);
+	CombinedContent.Append(ImageFile.FileData);
 
 	CombinedContent.Append(FStringToUInt8(MaskBoundary));
-	CombinedContent.Append(Mask);
+	CombinedContent.Append(MaskImageFile.FileData);
 
 	CombinedContent.Append(FStringToUInt8(AddData("response_format", RequestPayload.response_format)));
 	CombinedContent.Append(FStringToUInt8(AddData("size", RequestPayload.size)));
@@ -256,12 +255,12 @@ void UCreateImageEditRequestURL::Activate()
 }
 
 UCreateImageEditRequestBase64JSON* UCreateImageEditRequestBase64JSON::CreateImageEditJSON(
-	UObject* WorldContextObject, TArray<uint8> Image, TArray<uint8> Mask, FString Prompt, EImageSize ImageSize)
+	UObject* WorldContextObject, FFileToLoad ImageFile, FFileToLoad MaskImageFile, FString Prompt, EImageSize ImageSize)
 {
 	UCreateImageEditRequestBase64JSON* ImageEditRequest = NewObject<UCreateImageEditRequestBase64JSON>();
 	ImageEditRequest->WorldContextObject = WorldContextObject;
-	ImageEditRequest->Image = Image;
-	ImageEditRequest->Mask = Mask;
+	ImageEditRequest->ImageFile = ImageFile;
+	ImageEditRequest->MaskImageFile = MaskImageFile;
 	ImageEditRequest->Prompt = Prompt;
 	ImageEditRequest->ImageSize = ImageSize;
 	return ImageEditRequest;
@@ -279,7 +278,7 @@ void UCreateImageEditRequestBase64JSON::Activate()
 		return;
 	}
 
-	if (FString InvalidReason; !ValidateImageForOpenAI(Image, InvalidReason))
+	if (FString InvalidReason; !ValidateImageForOpenAI(ImageFile.FileData, InvalidReason))
 	{
 		PrintDebugLogAndOnScreen(InvalidReason);
 
@@ -287,7 +286,7 @@ void UCreateImageEditRequestBase64JSON::Activate()
 		return;
 	}
 
-	if (FString InvalidReason; !ValidateImageForOpenAI(Mask, InvalidReason))
+	if (FString InvalidReason; !ValidateImageForOpenAI(MaskImageFile.FileData, InvalidReason))
 	{
 		PrintDebugLogAndOnScreen(InvalidReason);
 
@@ -296,23 +295,23 @@ void UCreateImageEditRequestBase64JSON::Activate()
 	}
 
 	FCreateImageEditRequest RequestPayload;
-	RequestPayload.image = Image;
-	RequestPayload.mask = Mask;
+	RequestPayload.image = ImageFile.FileData;
+	RequestPayload.mask = MaskImageFile.FileData;
 	RequestPayload.response_format = "b64_json";
 	RequestPayload.size = ImageSizes[static_cast<int>(ImageSize)];
 	RequestPayload.prompt = Prompt;
 	
 	TArray<uint8> CombinedContent;
 
-	const FString ImageBoundary = FString(TEXT("\r\n")) + BoundaryBegin + "Content-Disposition: form-data; name=\"image\";  filename=\"image.png\"\r\n\r\n";
+	const FString ImageBoundary = FString(TEXT("\r\n")) + BoundaryBegin + "Content-Disposition: form-data; name=\"image\";  " + FString::Printf(TEXT("filename=\"%s\""), *ImageFile.FileName) + "\r\n\r\n";
 
-	const FString MaskBoundary = FString(TEXT("\r\n")) + BoundaryBegin + "Content-Disposition: form-data; name=\"mask\";  filename=\"mask.png\"\r\n\r\n";
+	const FString MaskBoundary = FString(TEXT("\r\n")) + BoundaryBegin + "Content-Disposition: form-data; name=\"mask\";  " + FString::Printf(TEXT("filename=\"%s\""), *MaskImageFile.FileName) + "\r\n\r\n";
 	
 	CombinedContent.Append(FStringToUInt8(ImageBoundary));
-	CombinedContent.Append(Image);
+	CombinedContent.Append(ImageFile.FileData);
 
 	CombinedContent.Append(FStringToUInt8(MaskBoundary));
-	CombinedContent.Append(Mask);
+	CombinedContent.Append(MaskImageFile.FileData);
 
 	CombinedContent.Append(FStringToUInt8(AddData("response_format", RequestPayload.response_format)));
 	CombinedContent.Append(FStringToUInt8(AddData("size", RequestPayload.size)));
@@ -355,11 +354,11 @@ void UCreateImageEditRequestBase64JSON::Activate()
 #pragma region Create Image Variation Proxies
 
 UCreateImageVariationRequestURL* UCreateImageVariationRequestURL::CreateImageVariationURL(
-	UObject* WorldContextObject, TArray<uint8> Image, EImageSize ImageSize)
+	UObject* WorldContextObject, FFileToLoad ImageFile, EImageSize ImageSize)
 {
 	UCreateImageVariationRequestURL* ImageVariationRequest = NewObject<UCreateImageVariationRequestURL>();
 	ImageVariationRequest->WorldContextObject = WorldContextObject;
-	ImageVariationRequest->Image = Image;
+	ImageVariationRequest->ImageFile = ImageFile;
 	ImageVariationRequest->ImageSize = ImageSize;
 	return ImageVariationRequest;
 }
@@ -376,7 +375,7 @@ void UCreateImageVariationRequestURL::Activate()
 		return;
 	}
 
-	if (FString InvalidReason; !ValidateImageForOpenAI(Image, InvalidReason))
+	if (FString InvalidReason; !ValidateImageForOpenAI(ImageFile.FileData, InvalidReason))
 	{
 		PrintDebugLogAndOnScreen(InvalidReason);
 
@@ -385,16 +384,16 @@ void UCreateImageVariationRequestURL::Activate()
 	}
 
 	FCreateImageVariationRequest RequestPayload;
-	RequestPayload.image = Image;
+	RequestPayload.image = ImageFile.FileData;
 	RequestPayload.response_format = "url";
 	RequestPayload.size = ImageSizes[static_cast<int>(ImageSize)];
 	
 	TArray<uint8> CombinedContent;
 
-	const FString ImageBoundary = FString(TEXT("\r\n")) + BoundaryBegin + "Content-Disposition: form-data; name=\"image\";  filename=\"image.png\"\r\n\r\n";
+	const FString ImageBoundary = FString(TEXT("\r\n")) + BoundaryBegin + "Content-Disposition: form-data; name=\"image\";  " + FString::Printf(TEXT("filename=\"%s\""), *ImageFile.FileName) + "\r\n\r\n";
 	
 	CombinedContent.Append(FStringToUInt8(ImageBoundary));
-	CombinedContent.Append(Image);
+	CombinedContent.Append(ImageFile.FileData);
 
 	CombinedContent.Append(FStringToUInt8(AddData("response_format", RequestPayload.response_format)));
 	CombinedContent.Append(FStringToUInt8(AddData("size", RequestPayload.size)));
@@ -432,11 +431,11 @@ void UCreateImageVariationRequestURL::Activate()
 }
 
 UCreateImageVariationRequestBase64JSON* UCreateImageVariationRequestBase64JSON::
-CreateImageVariationJSON(UObject* WorldContextObject, TArray<uint8> Image, EImageSize ImageSize)
+CreateImageVariationJSON(UObject* WorldContextObject, FFileToLoad ImageFile, EImageSize ImageSize)
 {
 	UCreateImageVariationRequestBase64JSON* ImageVariationRequest = NewObject<UCreateImageVariationRequestBase64JSON>();
 	ImageVariationRequest->WorldContextObject = WorldContextObject;
-	ImageVariationRequest->Image = Image;
+	ImageVariationRequest->ImageFile = ImageFile;
 	ImageVariationRequest->ImageSize = ImageSize;
 	return ImageVariationRequest;
 }
@@ -453,7 +452,7 @@ void UCreateImageVariationRequestBase64JSON::Activate()
 		return;
 	}
 
-	if(FString ReasonInvalid; !ValidateImageForOpenAI(Image, ReasonInvalid))
+	if(FString ReasonInvalid; !ValidateImageForOpenAI(ImageFile.FileData, ReasonInvalid))
 	{
 		PrintDebugLogAndOnScreen(ReasonInvalid);
 
@@ -462,16 +461,16 @@ void UCreateImageVariationRequestBase64JSON::Activate()
 	}
 	
 	FCreateImageVariationRequest RequestPayload;
-	RequestPayload.image = Image;
+	RequestPayload.image = ImageFile.FileData;
 	RequestPayload.response_format = "b64_json";
 	RequestPayload.size = ImageSizes[static_cast<int>(ImageSize)];
 	
 	TArray<uint8> CombinedContent;
 
-	const FString ImageBoundary = FString(TEXT("\r\n")) + BoundaryBegin + "Content-Disposition: form-data; name=\"image\";  filename=\"image.png\"\r\n\r\n";
+	const FString ImageBoundary = FString(TEXT("\r\n")) + BoundaryBegin + "Content-Disposition: form-data; name=\"image\";  " + FString::Printf(TEXT("filename=\"%s\""), *ImageFile.FileName) + "\r\n\r\n";
 	
 	CombinedContent.Append(FStringToUInt8(ImageBoundary));
-	CombinedContent.Append(Image);
+	CombinedContent.Append(ImageFile.FileData);
 
 	CombinedContent.Append(FStringToUInt8(AddData("response_format", RequestPayload.response_format)));
 	CombinedContent.Append(FStringToUInt8(AddData("size", RequestPayload.size)));

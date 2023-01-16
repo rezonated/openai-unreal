@@ -6,13 +6,15 @@
 #include "HttpModule.h"
 #include "IImageWrapper.h"
 #include "IImageWrapperModule.h"
+#include "DataTypes/CommonDataTypes.h"
 #include "Developer/DesktopPlatform/Public/DesktopPlatformModule.h"
 #include "Interfaces/IHttpResponse.h"
 #include "Utils/Utils.h"
 
-bool UUnrealOpenAIUtils::OpenImageDialog(FString DialogTitle, TArray<uint8>& OutFileData)
+bool UUnrealOpenAIUtils::OpenImageDialog(FString DialogTitle, FFileToLoad& OutFileData)
 {
-	OutFileData = TArray<uint8>();
+	OutFileData = FFileToLoad();
+	
 	const auto DesktopPlatform = FDesktopPlatformModule::Get();
 
 	if(!DesktopPlatform) return false;
@@ -30,12 +32,15 @@ bool UUnrealOpenAIUtils::OpenImageDialog(FString DialogTitle, TArray<uint8>& Out
 	); !FileDialog) return false;
 
 	const FString FilePath = FilePaths[0];
-	if( !FPaths::FileExists(FilePath)) return false;
+	if(!FPaths::FileExists(FilePath)) return false;
 
 	TArray<uint8> FileData;
 	if(!FFileHelper::LoadFileToArray(FileData, *FilePath)) return false;
 
-	OutFileData = FileData;
+	OutFileData.FileData = FileData;
+	OutFileData.FileName = FPaths::GetCleanFilename(FilePath);
+	OutFileData.FileExtension = FPaths::GetExtension(FilePath);
+	
 	return true;
 }
 
