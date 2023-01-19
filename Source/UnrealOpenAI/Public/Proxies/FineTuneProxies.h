@@ -87,3 +87,75 @@ private:
 	FFineTune Response;
 	FString JSONString;
 };
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCancelFineTuneRequestCallbackSignature, FFineTune, Response, FString, JSONString);
+UCLASS()
+class UNREALOPENAI_API UCancelFineTuneProxy : public UOnlineBlueprintCallProxyBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(BlueprintAssignable)
+	FCancelFineTuneRequestCallbackSignature OnSuccess;
+
+	UPROPERTY(BlueprintAssignable)
+	FCancelFineTuneRequestCallbackSignature OnFailure;
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "OpenAI|FineTune") static UCancelFineTuneProxy* CancelFineTune(UObject* WorldContextObject, FString FineTuneID);
+
+	virtual void Activate() override;
+
+private:
+	UObject* WorldContextObject;
+	FString FineTuneID;
+
+	FFineTune Response;
+	FString JSONString;
+};
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FListFineTuneEventsResultsRequestCallbackSignature, FListFineTuneEventsResponse, Response, FString, JSONString);
+UCLASS()
+class UNREALOPENAI_API UListFineTuneEventsProxy : public UOnlineBlueprintCallProxyBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(BlueprintAssignable)
+	FListFineTuneEventsResultsRequestCallbackSignature OnSuccess;
+
+	UPROPERTY(BlueprintAssignable)
+	FListFineTuneEventsResultsRequestCallbackSignature OnFailure;
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "OpenAI|FineTune") static UListFineTuneEventsProxy* ListFineTuneEvents(UObject* WorldContextObject, FString FineTuneID);
+
+	virtual void Activate() override;
+
+private:
+	UObject* WorldContextObject;
+	FString FineTuneID;
+
+	FListFineTuneEventsResponse Response;
+	FString JSONString;
+};
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDeleteFineTuneModelResultsRequestCallbackSignature, FDeleteResponse, Response, FString, JSONString);
+UCLASS()
+class UNREALOPENAI_API UDeleteFineTuneModelProxy : public UOnlineBlueprintCallProxyBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(BlueprintAssignable)
+	FDeleteFineTuneModelResultsRequestCallbackSignature OnSuccess;
+
+	UPROPERTY(BlueprintAssignable)
+	FDeleteFineTuneModelResultsRequestCallbackSignature OnFailure;
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "OpenAI|FineTune") static UDeleteFineTuneModelProxy* DeleteFineTuneModel(UObject* WorldContextObject, FString FineTuneID);
+
+	virtual void Activate() override;
+
+private:
+	UObject* WorldContextObject;
+	FString FineTuneID;
+
+	FDeleteResponse Response;
+	FString JSONString;
+};

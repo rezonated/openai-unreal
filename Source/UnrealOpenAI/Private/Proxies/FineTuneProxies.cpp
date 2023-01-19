@@ -179,6 +179,157 @@ void URetrieveFineTuneProxy::Activate()
 	});
 }
 
+UCancelFineTuneProxy* UCancelFineTuneProxy::CancelFineTune(UObject* WorldContextObject, FString FineTuneID)
+{
+	UCancelFineTuneProxy* Proxy = NewObject<UCancelFineTuneProxy>();
+	Proxy->WorldContextObject = WorldContextObject;
+	Proxy->FineTuneID = FineTuneID;
+	return Proxy;
+}
+
+void UCancelFineTuneProxy::Activate()
+{
+	Super::Activate();
+
+	if (!WorldContextObject)
+	{
+		PrintDebugLogAndOnScreen("WorldContextObject is null");
+		OnFailure.Broadcast(FFineTune(), TEXT(""));
+		return;
+	}
+
+	SendPayload(FString::Printf(TEXT("fine-tunes/%s/cancel"), *FineTuneID), TEXT(""), EHTTPMethod::EHP_POST, [this](FHttpRequestPtr, const FHttpResponsePtr Response, const bool bWasSuccessful)
+	{
+		if (bWasSuccessful)
+		{
+			FString ResponseString = Response->GetContentAsString();
+			ResponseString = SanitizeString(ResponseString);
+				
+			FFineTune FineTuneResponse;
+				
+			if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &FineTuneResponse, 0, 0))
+			{
+				OnSuccess.Broadcast(FineTuneResponse, Response->GetContentAsString());
+			}
+			else
+			{
+				PrintDebugLogAndOnScreen("Failed to convert completion JSON response to struct");
+				OnFailure.Broadcast(FFineTune(), TEXT(""));
+			}
+		}
+		else
+		{
+			PrintDebugLogAndOnScreen("Failed to complete completion request");
+			OnFailure.Broadcast(FFineTune(), TEXT(""));
+		}
+	}, [this]
+	{
+		PrintDebugLogAndOnScreen("Failed to complete completion request");
+			OnFailure.Broadcast(FFineTune(), TEXT(""));
+	});
+}
+
+UListFineTuneEventsProxy* UListFineTuneEventsProxy::ListFineTuneEvents(UObject* WorldContextObject,
+	FString FineTuneID)
+{ 
+	UListFineTuneEventsProxy* Proxy = NewObject<UListFineTuneEventsProxy>();
+	Proxy->WorldContextObject = WorldContextObject;
+	Proxy->FineTuneID = FineTuneID;
+	return Proxy;
+}
+
+void UListFineTuneEventsProxy::Activate()
+{
+	Super::Activate();
+
+	if (!WorldContextObject)
+	{
+		PrintDebugLogAndOnScreen("WorldContextObject is null");
+		OnFailure.Broadcast(FListFineTuneEventsResponse(), TEXT(""));
+		return;
+	}
+
+	SendPayload(FString::Printf(TEXT("fine-tunes/%s/events?stream=false"), *FineTuneID), TEXT(""), EHTTPMethod::EHP_GET, [this](FHttpRequestPtr, const FHttpResponsePtr Response, const bool bWasSuccessful)
+	{
+		if (bWasSuccessful)
+		{
+			FString ResponseString = Response->GetContentAsString();
+			ResponseString = SanitizeString(ResponseString);
+				
+			FListFineTuneEventsResponse ListFineTuneEventsResponse;
+				
+			if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &ListFineTuneEventsResponse, 0, 0))
+			{
+				OnSuccess.Broadcast(ListFineTuneEventsResponse, Response->GetContentAsString());
+			}
+			else
+			{
+				PrintDebugLogAndOnScreen("Failed to convert completion JSON response to struct");
+				OnFailure.Broadcast(FListFineTuneEventsResponse(), TEXT(""));
+			}
+		}
+		else
+		{
+			PrintDebugLogAndOnScreen("Failed to complete completion request");
+			OnFailure.Broadcast(FListFineTuneEventsResponse(), TEXT(""));
+		}
+	}, [this]
+	{
+		PrintDebugLogAndOnScreen("Failed to complete completion request");
+			OnFailure.Broadcast(FListFineTuneEventsResponse(), TEXT(""));
+	});
+}
+
+UDeleteFineTuneModelProxy* UDeleteFineTuneModelProxy::DeleteFineTuneModel(UObject* WorldContextObject,
+	FString FineTuneID)
+{ 
+	UDeleteFineTuneModelProxy* Proxy = NewObject<UDeleteFineTuneModelProxy>();
+	Proxy->WorldContextObject = WorldContextObject;
+	Proxy->FineTuneID = FineTuneID;
+	return Proxy;
+}
+
+void UDeleteFineTuneModelProxy::Activate()
+{
+	Super::Activate();
+
+	if (!WorldContextObject)
+	{
+		PrintDebugLogAndOnScreen("WorldContextObject is null");
+		OnFailure.Broadcast(FDeleteResponse(), TEXT(""));
+		return;
+	}
+
+	SendPayload(FString::Printf(TEXT("models/%s"), *FineTuneID), TEXT(""), EHTTPMethod::EHP_DELETE, [this](FHttpRequestPtr, const FHttpResponsePtr Response, const bool bWasSuccessful)
+	{
+		if (bWasSuccessful)
+		{
+			FString ResponseString = Response->GetContentAsString();
+			ResponseString = SanitizeString(ResponseString);
+				
+			FDeleteResponse DeleteResponse;
+				
+			if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &DeleteResponse, 0, 0))
+			{
+				OnSuccess.Broadcast(DeleteResponse, Response->GetContentAsString());
+			}
+			else
+			{
+				PrintDebugLogAndOnScreen("Failed to convert completion JSON response to struct");
+				OnFailure.Broadcast(FDeleteResponse(), TEXT(""));
+			}
+		}
+		else
+		{
+			PrintDebugLogAndOnScreen("Failed to complete completion request");
+			OnFailure.Broadcast(FDeleteResponse(), TEXT(""));
+		}
+	}, [this]
+	{
+		PrintDebugLogAndOnScreen("Failed to complete completion request");
+			OnFailure.Broadcast(FDeleteResponse(), TEXT(""));
+	});
+}
 
 
 
