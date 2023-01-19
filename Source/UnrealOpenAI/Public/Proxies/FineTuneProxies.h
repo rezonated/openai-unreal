@@ -38,3 +38,52 @@ private:
 	FFineTune Response;
 	FString JSONString;	
 };
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FListFineTuneRequestCallbackSignature, FListFineTunesResponse, Response, FString, JSONString);
+UCLASS()
+class UNREALOPENAI_API UListFineTuneProxy : public UOnlineBlueprintCallProxyBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(BlueprintAssignable)
+	FListFineTuneRequestCallbackSignature OnSuccess;
+
+	UPROPERTY(BlueprintAssignable)
+	FListFineTuneRequestCallbackSignature OnFailure;
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "OpenAI|FineTune") static UListFineTuneProxy* ListFineTune(UObject* WorldContextObject);
+
+	virtual void Activate() override;
+
+private:
+	UObject* WorldContextObject;
+
+	FListFineTunesResponse Response;
+	FString JSONString;
+};
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRetrieveFineTuneRequestCallbackSignature, FFineTune, Response, FString, JSONString);
+UCLASS()
+class UNREALOPENAI_API URetrieveFineTuneProxy : public UOnlineBlueprintCallProxyBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(BlueprintAssignable)
+	FRetrieveFineTuneRequestCallbackSignature OnSuccess;
+
+	UPROPERTY(BlueprintAssignable)
+	FRetrieveFineTuneRequestCallbackSignature OnFailure;
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "OpenAI|FineTune") static URetrieveFineTuneProxy* RetrieveFineTune(UObject* WorldContextObject, FString FineTuneID);
+
+	virtual void Activate() override;
+
+private:
+	UObject* WorldContextObject;
+	FString FineTuneID;
+
+	FFineTune Response;
+	FString JSONString;
+};
