@@ -19,15 +19,12 @@ struct FCreateEditsRequest
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	FString instruction;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	float temperature = 0.f;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	float top_p = 1.f;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	int n = 1;
+	
+	TOptional<float> temperature = 0.f;
+	
+	TOptional<float> top_p = 1.f;
+	
+	TOptional<int> n = 1;
 };
 
 

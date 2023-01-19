@@ -21,22 +21,6 @@ struct FListFilesResponse
 
 
 USTRUCT(BlueprintType)
-struct FFileDeleteResponse
-{
-	GENERATED_BODY()
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	FString id;
-	
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	FString object;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	bool deleted;
-};
-
-
-USTRUCT(BlueprintType)
 struct FCreateFileRequest
 {
 	GENERATED_BODY()

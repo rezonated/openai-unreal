@@ -18,39 +18,29 @@ struct FCreateCompletionRequest
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	FString suffix;
+	
+	TOptional<int> max_tokens = 1000;
+	
+	TOptional<float> temperature = 0.f;
+	
+	TOptional<float> top_p = 1.f;
+	
+	TOptional<int> n = 1;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	int max_tokens = 1000;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	float temperature = 0.f;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	float top_p = 1.f;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	int n = 1;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	bool stream = false;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	int logprobs = 5;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	bool echo = false;
+	TOptional<bool> stream = false;
+	
+	TOptional<int> logprobs = 5;
+	
+	TOptional<bool> echo = false;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	FString stop;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	float presence_penalty = 0.f;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	float frequency_penalty = 0.f;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	int best_of = 1;
+	
+	TOptional<float> presence_penalty = 0.f;
+	
+	TOptional<float> frequency_penalty = 0.f;
+	
+	TOptional<int> best_of = 1;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	TMap<FString, FString> logit_bias;

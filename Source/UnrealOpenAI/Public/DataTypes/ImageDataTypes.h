@@ -11,9 +11,8 @@ USTRUCT(BlueprintType)
 struct FCreateImageRequestBase
 {
 	GENERATED_BODY()
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	uint8 n = 1;
+	
+	TOptional<int> n = 1;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	FString size = ImageSizes[static_cast<int>(EImageSize::EIS_1024)];

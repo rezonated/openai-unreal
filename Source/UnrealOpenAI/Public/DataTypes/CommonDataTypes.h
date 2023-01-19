@@ -11,12 +11,10 @@ struct FChoice
 	GENERATED_BODY()
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	FString text;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	int index;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	int logprobs;
+	
+	TOptional<int> index;
+	
+	TOptional<int> logprobs;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	FString finish_reason;
@@ -76,4 +74,19 @@ struct FFileToLoad
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	FString FileExtension;
+};
+
+USTRUCT(BlueprintType)
+struct FDeleteResponse
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	FString id;
+	
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	FString object;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	bool deleted;
 };

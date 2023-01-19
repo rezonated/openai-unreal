@@ -63,7 +63,7 @@ private:
 	FString JSONString;
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDeleteFileRequestCallbackSignature, FFileDeleteResponse, Response, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDeleteFileRequestCallbackSignature, FDeleteResponse, Response, FString, JSONString);
 UCLASS()
 class UNREALOPENAI_API UDeleteFileRequestProxy : public UOnlineBlueprintCallProxyBase
 {
@@ -85,7 +85,7 @@ private:
 	UObject* WorldContextObject;
 	FString FileID;
 
-	FFileDeleteResponse Response;
+	FDeleteResponse Response;
 	FString JSONString;
 	
 };

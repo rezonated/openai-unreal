@@ -146,7 +146,7 @@ void UDeleteFileRequestProxy::Activate()
 	if (!WorldContextObject)
 	{
 		PrintDebugLogAndOnScreen("WorldContextObject is null");
-		OnFailure.Broadcast(FFileDeleteResponse(), TEXT(""));
+		OnFailure.Broadcast(FDeleteResponse(), TEXT(""));
 		return;
 	}
 
@@ -157,7 +157,7 @@ void UDeleteFileRequestProxy::Activate()
 			FString ResponseString = Response->GetContentAsString();
 			ResponseString = SanitizeString(ResponseString);
 				
-			FFileDeleteResponse DeleteFileResponse;
+			FDeleteResponse DeleteFileResponse;
 				
 			if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &DeleteFileResponse, 0, 0))
 			{
@@ -166,18 +166,18 @@ void UDeleteFileRequestProxy::Activate()
 			else
 			{
 				PrintDebugLogAndOnScreen("Failed to convert completion JSON response to struct");
-				OnFailure.Broadcast(FFileDeleteResponse(), TEXT(""));
+				OnFailure.Broadcast(FDeleteResponse(), TEXT(""));
 			}
 		}
 		else
 		{
 			PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FFileDeleteResponse(), TEXT(""));
+			OnFailure.Broadcast(FDeleteResponse(), TEXT(""));
 		}
 	}, [this]
 	{
 		PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FFileDeleteResponse(), TEXT(""));
+			OnFailure.Broadcast(FDeleteResponse(), TEXT(""));
 	});
 }
 
