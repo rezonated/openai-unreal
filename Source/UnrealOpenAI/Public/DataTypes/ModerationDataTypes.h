@@ -13,7 +13,7 @@ struct FModerationResult
 	GENERATED_BODY()
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Moderation Result")
-	bool flagged;
+	bool flagged {false};
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Moderation Result")
 	TMap<FString, bool> categories;

@@ -70,13 +70,13 @@ struct FCreateCompletionResponse
 	FString object;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "OpenAI | Create Completion Response")
-	int32 created;
+	int32 created {0};
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "OpenAI | Create Completion Response")
 	FString model;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "OpenAI | Create Completion Response")
-	FChoice choices;
+	TArray<FChoice> choices;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "OpenAI | Create Completion Response")
 	FUsage usage;

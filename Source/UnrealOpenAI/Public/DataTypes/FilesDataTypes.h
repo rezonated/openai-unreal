@@ -44,10 +44,10 @@ struct FFileResponse
 	FString object;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | File Response")
-	int32 bytes;
+	int32 bytes {0};
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | File Response")
-	int32 created_at;
+	int32 created_at {0};
 	
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | File Response")
 	FString filename;

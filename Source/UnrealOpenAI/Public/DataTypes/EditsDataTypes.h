@@ -37,10 +37,10 @@ struct FCreateEditsResponse
 	FString object;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Edits Response")
-	int32 created;
+	int32 created {0};
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Edits Response")
-	FChoice choices;
+	TArray<FChoice> choices;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Edits Response")
 	FUsage usage;

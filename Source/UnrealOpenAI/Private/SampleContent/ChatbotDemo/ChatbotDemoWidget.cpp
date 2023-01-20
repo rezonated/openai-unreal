@@ -131,8 +131,8 @@ void UChatbotDemoWidget::SetInstruction(FString NewInstruction)
 
 void UChatbotDemoWidget::OnCompletionResponse(FCreateCompletionResponse Response, FString JSONString, FString Error)
 {
-	AddAIResponse(Response.choices.text);
-	Instruction += Response.choices.text + LINE_TERMINATOR + "Q: ";
+	AddAIResponse(Response.choices[0].text);
+	Instruction += Response.choices[0].text + LINE_TERMINATOR + "Q: ";
 	ToggleUserInput(true);
 }
 

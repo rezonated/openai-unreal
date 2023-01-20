@@ -30,6 +30,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "UnrealOpenAIUtils", meta=(ExpandBoolAsExecs="ReturnValue"))
 	static bool ConvertBase64ToTexture2D(FString Base64Data, UTexture2D*& OutTexture);
+
+	UFUNCTION(BlueprintCallable, Category = "UnrealOpenAIUtils", meta=(ExpandBoolAsExecs="ReturnValue"))
+	static bool ConvertBase64ToBytes(FString Base64Data, TArray<uint8>& OutBytes);
 };
 
 

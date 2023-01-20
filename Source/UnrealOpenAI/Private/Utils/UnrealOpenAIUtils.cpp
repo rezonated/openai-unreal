@@ -164,9 +164,19 @@ bool UUnrealOpenAIUtils::ConvertBase64ToTexture2D(FString Base64Data, UTexture2D
 	if(Base64Data.IsEmpty()) return false;
 
 	TArray<uint8> FileData;
-	if(!FBase64::Decode(Base64Data, FileData)) return false;
+
+	if (!ConvertBase64ToBytes(Base64Data, FileData))
+		return false;
 
 	return ConvertBytesToTexture2D(FileData, OutTexture);
+}
+
+bool UUnrealOpenAIUtils::ConvertBase64ToBytes(FString Base64Data, TArray<uint8>& OutBytes)
+{
+	OutBytes.Empty();
+	if(Base64Data.IsEmpty()) return false;
+
+	return FBase64::Decode(Base64Data, OutBytes);
 }
 
 void UUnrealOpenAIUtilsGetImageFromURL::OnProcessRequestComplete(

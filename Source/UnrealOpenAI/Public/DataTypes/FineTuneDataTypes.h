@@ -15,7 +15,7 @@ struct FFineTuneEvent
 	FString object;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune Event")
-	int32 created_at;
+	int32 created_at {0};
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune Event")
 	FString level;
@@ -36,10 +36,10 @@ struct FFineTune
 	FString object;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune")
-	int32 created_at;
+	int32 created_at {0};
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune")
-	int32 updated_at;
+	int32 updated_at {0};
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune")
 	FString model;
@@ -83,16 +83,16 @@ struct FCreateFineTuneRequest
 	FString model;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Create Fine Tune Request")
-	int n_epochs = 4;
+	int n_epochs {4};
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Create Fine Tune Request")
-	int batch_size;
+	int batch_size {0};
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Create Fine Tune Request")
-	float learning_rate_multiplier;
+	float learning_rate_multiplier {1.0f};
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Create Fine Tune Request")
-	float prompt_loss_weight;
+	float prompt_loss_weight {.01f};
 	
 	TOptional<bool> compute_classification_metrics = false;
 	

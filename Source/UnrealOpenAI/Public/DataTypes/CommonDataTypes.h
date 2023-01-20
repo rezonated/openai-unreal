@@ -6,6 +6,23 @@
 #include "CommonDataTypes.generated.h"
 
 USTRUCT(BlueprintType)
+struct FLogprobs
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Logprobs")
+	TArray<FString> tokens;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Logprobs")
+	TArray<float> token_logprobs;
+	
+	TArray<TMap<FString, float>> top_logprobs;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Logprobs")
+	TArray<int> text_offset;
+};
+
+USTRUCT(BlueprintType)
 struct FChoice
 {
 	GENERATED_BODY()
@@ -13,10 +30,10 @@ struct FChoice
 	FString text;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Choice")
-	int index;
+	int index {0};
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Choice")
-	int logprobs;
+	FLogprobs logprobs;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Choice")
 	FString finish_reason;
@@ -48,10 +65,10 @@ struct FOpenAIFile
 	FString object;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | File")
-	int32 bytes;
+	int32 bytes {0};
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | File")
-	int32 created_at;
+	int32 created_at {0};
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | File")
 	FString filename;
@@ -90,7 +107,7 @@ struct FDeleteResponse
 	FString object;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Delete Response")
-	bool deleted;
+	bool deleted {false};
 };
 
 USTRUCT(BlueprintType)

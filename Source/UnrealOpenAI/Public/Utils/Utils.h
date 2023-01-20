@@ -5,6 +5,7 @@
 #include "Engine/Classes/Engine/Texture2D.h"
 #include "Engine/Public/ImageUtils.h"
 #include "HttpModule.h"
+#include "JsonObjectConverter.h"
 #include "UnrealOpenAI.h"
 #include "Config/UnrealOpenAIConfig.h"
 #include "Constants/UtilsConstants.h"
@@ -21,7 +22,7 @@ static void PrintDebugOnScreen(const FString& Message, const float Duration = 2.
 
 static void PrintDebugLog(const FString& Message)
 {
-	UE_LOG(LogTypeOpenAI, Warning, TEXT("%s"), *Message);
+	UE_LOG(LogTypeOpenAI, Display, TEXT("%s"), *Message);
 }
 
 static void PrintDebugLogAndOnScreen(const FString& Message, const float Duration = 2.f, const FColor& Color = FColor::White)

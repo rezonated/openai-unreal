@@ -18,7 +18,7 @@ struct FEmbeddingData
 	TArray<float> embedding;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Embedding Data")
-	int index;
+	int index {0};
 };
 
 

@@ -63,7 +63,7 @@ void UCreateCompletionRequestProxy::Activate()
 					OnFailure.Broadcast(FCreateCompletionResponse(), ResponseString, ErrorMessage);
 					return;
 				}
-
+				
 				FCreateCompletionResponse CreateCompletionResponse;
 				if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &CreateCompletionResponse, 0, 0))
 				{

@@ -81,7 +81,7 @@ struct FCreateImageResponseURL
 	GENERATED_BODY()
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Image Response URL")
-	int32 created;
+	int32 created {0};
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Image Response URL")
 	TArray<FImageDataURL> data;
@@ -93,7 +93,7 @@ struct FCreateImageResponseBase64JSON
 	GENERATED_BODY()
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Image Response Base64 JSON")
-	int32 created;
+	int32 created {0};
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Image Response Base64 JSON")
 	TArray<FImageDataBase64JSON> data;	

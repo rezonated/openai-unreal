@@ -32,7 +32,6 @@ void UCreateEmbeddingsRequestProxy::Activate()
 		OnFailure.Broadcast(FCreateEmbeddingsResponse(), TEXT(""), TEXT("Input is empty"));
 		return;
 	}
-
 	FString JSONPayload;
 
 	FCreateEmbeddingsRequest RequestPayload;
