@@ -10,7 +10,7 @@
 
 #pragma region Create Image Proxies
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateImageRequestCallbackSignatureURL, FCreateImageResponseURL, Response, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FCreateImageRequestCallbackSignatureURL, FCreateImageResponseURL, Response, FString, JSONString, FString, Error);
 
 UCLASS()
 class UNREALOPENAI_API UCreateImageRequestURL : public UOnlineBlueprintCallProxyBase
@@ -32,12 +32,9 @@ private:
 	UObject* WorldContextObject;
 	FString Prompt;
 	EImageSize ImageSize;
-
-	FCreateImageResponseURL ResponseURL;
-	FString JSONString;
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateImageRequestCallbackSignatureBase64JSON, FCreateImageResponseBase64JSON, Response, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FCreateImageRequestCallbackSignatureBase64JSON, FCreateImageResponseBase64JSON, Response, FString, JSONString, FString, Error);
 
 UCLASS()
 class UNREALOPENAI_API UCreateImageRequestBase64JSON : public UOnlineBlueprintCallProxyBase
@@ -58,18 +55,14 @@ public:
 private:
 	UObject* WorldContextObject;
 	FString Prompt;
-	EImageSize ImageSize;
-
-	FCreateImageResponseBase64JSON ResponseBase64JSON;
-	FString JSONString;
-	
+	EImageSize ImageSize;	
 };
 
 #pragma endregion
 
 #pragma region Create Image Edit Proxies
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateImageEditRequestCallbackSignatureURL, FCreateImageResponseURL, ResponseURL, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FCreateImageEditRequestCallbackSignatureURL, FCreateImageResponseURL, ResponseURL, FString, JSONString, FString, Error);
 UCLASS()
 class UNREALOPENAI_API UCreateImageEditRequestURL : public UOnlineBlueprintCallProxyBase
 {
@@ -92,12 +85,9 @@ private:
 	FFileToLoad MaskImageFile;
 	FString Prompt;
 	EImageSize ImageSize;
-
-	FCreateImageResponseURL ResponseURL;
-	FString JSONString;
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateImageEditRequestCallbackSignatureBase64JSON, FCreateImageResponseBase64JSON, ResponseBase64JSON, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FCreateImageEditRequestCallbackSignatureBase64JSON, FCreateImageResponseBase64JSON, ResponseBase64JSON, FString, JSONString, FString, Error);
 UCLASS()
 class UNREALOPENAI_API UCreateImageEditRequestBase64JSON : public UOnlineBlueprintCallProxyBase
 {
@@ -120,16 +110,13 @@ private:
 	FFileToLoad MaskImageFile;
 	FString Prompt;
 	EImageSize ImageSize;
-	
-	FCreateImageResponseBase64JSON ResponseBase64JSON;
-	FString JSONString;
 };
 
 #pragma endregion
 
 #pragma region Create Image Variation Proxies
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateImageVariationRequestCallbackSignatureURL, FCreateImageResponseURL, ResponseURL, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FCreateImageVariationRequestCallbackSignatureURL, FCreateImageResponseURL, ResponseURL, FString, JSONString, FString, Error);
 UCLASS()
 class UNREALOPENAI_API UCreateImageVariationRequestURL : public UOnlineBlueprintCallProxyBase
 {
@@ -151,12 +138,9 @@ private:
 	UObject* WorldContextObject;
 	FFileToLoad ImageFile;
 	EImageSize ImageSize;
-
-	FCreateImageResponseURL ResponseURL;
-	FString JSONString;
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateImageVariationRequestCallbackSignatureBase64JSON, FCreateImageResponseBase64JSON, ResponseBase64JSON, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FCreateImageVariationRequestCallbackSignatureBase64JSON, FCreateImageResponseBase64JSON, ResponseBase64JSON, FString, JSONString, FString, Error);
 UCLASS()
 class UNREALOPENAI_API UCreateImageVariationRequestBase64JSON : public UOnlineBlueprintCallProxyBase
 {
@@ -177,9 +161,6 @@ private:
 	UObject* WorldContextObject;
 	FFileToLoad ImageFile;
 	EImageSize ImageSize;
-	
-	FCreateImageResponseBase64JSON ResponseBase64JSON;
-	FString JSONString;
 };
 
 

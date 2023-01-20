@@ -21,8 +21,7 @@ void UListFilesRequestProxy::Activate()
 
 	if (!WorldContextObject)
 	{
-		PrintDebugLogAndOnScreen("WorldContextObject is null");
-		OnFailure.Broadcast(FListFilesResponse(), TEXT(""));
+		OnFailure.Broadcast(FListFilesResponse(), TEXT(""), TEXT("WorldContextObject is null"));
 		return;
 	}
 
@@ -32,28 +31,30 @@ void UListFilesRequestProxy::Activate()
 		{
 			FString ResponseString = Response->GetContentAsString();
 			ResponseString = SanitizeString(ResponseString);
+			
+			if(FString ErrorMessage, ErrorType; CheckErrorResponse(ResponseString, ErrorMessage, ErrorType))
+			{
+				OnFailure.Broadcast(FListFilesResponse(), ResponseString, ErrorMessage);
+				return;
+			}
 				
 			FListFilesResponse ListFilesResponse;
-				
 			if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &ListFilesResponse, 0, 0))
 			{
-				OnSuccess.Broadcast(ListFilesResponse, Response->GetContentAsString());
+				OnSuccess.Broadcast(ListFilesResponse, Response->GetContentAsString(), TEXT(""));
 			}
 			else
 			{
-				PrintDebugLogAndOnScreen("Failed to convert completion JSON response to struct");
-				OnFailure.Broadcast(FListFilesResponse(), TEXT(""));
+				OnFailure.Broadcast(FListFilesResponse(), TEXT(""), TEXT("Failed to convert list files response to struct"));
 			}
 		}
 		else
 		{
-			PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FListFilesResponse(), TEXT(""));
+			OnFailure.Broadcast(FListFilesResponse(), TEXT(""), TEXT("List files request failed"));
 		}
 	}, [this]
 	{
-		PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FListFilesResponse(), TEXT(""));
+			OnFailure.Broadcast(FListFilesResponse(), TEXT(""), TEXT("Failed to send list files request"));
 	});
 }
 
@@ -73,17 +74,20 @@ void UUploadFileRequestProxy::Activate()
 
 	if (!WorldContextObject)
 	{
-		PrintDebugLogAndOnScreen("WorldContextObject is null");
-
-		OnFailure.Broadcast(FFileResponse(), TEXT(""));
+		OnFailure.Broadcast(FFileResponse(), TEXT(""), TEXT("WorldContextObject is null"));
 		return;
 	}
 
 	if (FileToLoad.FileData.Num() > 1024 * 1024 * 1024)
 	{
-		PrintDebugLogAndOnScreen("File is too big");
-		OnFailure.Broadcast(FFileResponse(), TEXT(""));
+		OnFailure.Broadcast(FFileResponse(), TEXT(""), TEXT("File size is too big"));
 		return;
+	}
+
+	if (Purpose.IsEmpty() || Purpose == TEXT("") || Purpose.Len() <= 0)
+	{
+		OnFailure.Broadcast(FFileResponse(), TEXT(""), TEXT("Purpose is empty"));
+		return;	
 	}
 
 	FCreateFileRequest RequestPayload;
@@ -103,31 +107,33 @@ void UUploadFileRequestProxy::Activate()
 
 	SendPayloadMultipartFormData("files", CombinedContent, EHTTPMethod::EHP_POST, [this] (FHttpRequestPtr Request, const FHttpResponsePtr Response, const bool bWasSuccessful)
 	{
-		if(bWasSuccessful)
+		if(!bWasSuccessful)
+		{
+			OnFailure.Broadcast(FFileResponse(), TEXT(""), TEXT("Upload file request failed"));
+		}
+		else
 		{
 			FString ResponseString = Response->GetContentAsString();
 			ResponseString = SanitizeString(ResponseString);
 
-			FFileResponse UploadFileResponse;
+			if(FString ErrorMessage, ErrorType; CheckErrorResponse(ResponseString, ErrorMessage, ErrorType))
+			{
+				OnFailure.Broadcast(FFileResponse(), ResponseString, ErrorMessage);
+				return;
+			}
 
+			FFileResponse UploadFileResponse;
 			if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &UploadFileResponse, 0, 0))
 			{
-				OnSuccess.Broadcast(UploadFileResponse, Response->GetContentAsString());
+				OnSuccess.Broadcast(UploadFileResponse, Response->GetContentAsString(), TEXT(""));
 			}else
 			{
-				PrintDebugLogAndOnScreen("Failed to parse response to JSON struct.");
-				OnFailure.Broadcast(FFileResponse(), TEXT(""));
+				OnFailure.Broadcast(FFileResponse(), TEXT(""), TEXT("Failed to parse upload file response to struct."));
 			}
-		}
-		else
-		{
-			PrintDebugLogAndOnScreen("Failed to complete image variation request");
-			OnFailure.Broadcast(FFileResponse(), TEXT(""));
 		}
 	}, [this]
 	{
-		PrintDebugLogAndOnScreen("Failed to process image variation request");
-		OnFailure.Broadcast(FFileResponse(), TEXT(""));
+		OnFailure.Broadcast(FFileResponse(), TEXT(""), TEXT("Failed to send upload file request"));
 	});
 }
 
@@ -145,8 +151,13 @@ void UDeleteFileRequestProxy::Activate()
 
 	if (!WorldContextObject)
 	{
-		PrintDebugLogAndOnScreen("WorldContextObject is null");
-		OnFailure.Broadcast(FDeleteResponse(), TEXT(""));
+		OnFailure.Broadcast(FDeleteResponse(), TEXT(""), TEXT("WorldContextObject is null"));
+		return;
+	}
+
+	if (FileID.IsEmpty() || FileID == TEXT("") || FileID.Len() <= 0)
+	{
+		OnFailure.Broadcast(FDeleteResponse(), TEXT(""), TEXT("FileID is empty"));
 		return;
 	}
 
@@ -156,28 +167,30 @@ void UDeleteFileRequestProxy::Activate()
 		{
 			FString ResponseString = Response->GetContentAsString();
 			ResponseString = SanitizeString(ResponseString);
-				
+
+			if(FString ErrorMessage, ErrorType; CheckErrorResponse(ResponseString, ErrorMessage, ErrorType))
+			{
+				OnFailure.Broadcast(FDeleteResponse(), ResponseString, ErrorMessage);
+				return;
+			}
+			
 			FDeleteResponse DeleteFileResponse;
-				
 			if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &DeleteFileResponse, 0, 0))
 			{
-				OnSuccess.Broadcast(DeleteFileResponse, Response->GetContentAsString());
+				OnSuccess.Broadcast(DeleteFileResponse, Response->GetContentAsString(), TEXT(""));
 			}
 			else
 			{
-				PrintDebugLogAndOnScreen("Failed to convert completion JSON response to struct");
-				OnFailure.Broadcast(FDeleteResponse(), TEXT(""));
+				OnFailure.Broadcast(FDeleteResponse(), TEXT(""), TEXT("Failed to convert delete file response to struct"));
 			}
 		}
 		else
 		{
-			PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FDeleteResponse(), TEXT(""));
+			OnFailure.Broadcast(FDeleteResponse(), TEXT(""), TEXT("Delete file request failed"));
 		}
 	}, [this]
 	{
-		PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FDeleteResponse(), TEXT(""));
+		OnFailure.Broadcast(FDeleteResponse(), TEXT(""), TEXT("Failed to send delete file request"));
 	});
 }
 
@@ -195,8 +208,13 @@ void URetrieveFileRequestProxy::Activate()
 
 	if (!WorldContextObject)
 	{
-		PrintDebugLogAndOnScreen("WorldContextObject is null");
-		OnFailure.Broadcast(FFileResponse(), TEXT(""));
+		OnFailure.Broadcast(FFileResponse(), TEXT(""), TEXT("WorldContextObject is null"));
+		return;
+	}
+
+	if(FileID.IsEmpty() || FileID == TEXT("") || FileID.Len() <= 0)
+	{
+		OnFailure.Broadcast(FFileResponse(), TEXT(""), TEXT("FileID is empty"));
 		return;
 	}
 
@@ -206,28 +224,30 @@ void URetrieveFileRequestProxy::Activate()
 		{
 			FString ResponseString = Response->GetContentAsString();
 			ResponseString = SanitizeString(ResponseString);
-				
+
+			if(FString ErrorMessage, ErrorType; CheckErrorResponse(ResponseString, ErrorMessage, ErrorType))
+			{
+				OnFailure.Broadcast(FFileResponse(), ResponseString, ErrorMessage);
+				return;
+			}
+			
 			FFileResponse RetrieveFileResponse;
-				
 			if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &RetrieveFileResponse, 0, 0))
 			{
-				OnSuccess.Broadcast(RetrieveFileResponse, Response->GetContentAsString());
+				OnSuccess.Broadcast(RetrieveFileResponse, Response->GetContentAsString(), TEXT(""));
 			}
 			else
 			{
-				PrintDebugLogAndOnScreen("Failed to convert completion JSON response to struct");
-				OnFailure.Broadcast(FFileResponse(), TEXT(""));
+				OnFailure.Broadcast(FFileResponse(), TEXT(""), TEXT("Failed to convert retrieve file response to struct"));
 			}
 		}
 		else
 		{
-			PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FFileResponse(), TEXT(""));
+			OnFailure.Broadcast(FFileResponse(), TEXT(""), TEXT("Retrieve file request failed"));
 		}
 	}, [this]
 	{
-		PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FFileResponse(), TEXT(""));
+		OnFailure.Broadcast(FFileResponse(), TEXT(""), TEXT("Failed to send delete file request"));
 	});
 }
 
@@ -246,8 +266,13 @@ void URetrieveFileContentRequestProxy::Activate()
 
 	if (!WorldContextObject)
 	{
-		PrintDebugLogAndOnScreen("WorldContextObject is null");
-		OnFailure.Broadcast(FFileToLoad());
+		OnFailure.Broadcast(FFileToLoad(), TEXT("WorldContextObject is null"));
+		return;
+	}
+
+	if (FileID.IsEmpty() || FileID == TEXT("") || FileID.Len() <= 0)
+	{
+		OnFailure.Broadcast(FFileToLoad(), TEXT("FileID is empty"));
 		return;
 	}
 
@@ -261,10 +286,10 @@ void URetrieveFileContentRequestProxy::Activate()
 
 void URetrieveFileContentRequestProxy::OnDownloadFileFromURLSuccess(FFileToLoad FileData)
 {
-	OnSuccess.Broadcast(FileData);
+	OnSuccess.Broadcast(FileData, TEXT(""));
 }
 
 void URetrieveFileContentRequestProxy::OnDownloadFileFromURLFailure(FFileToLoad FileData)
 {
-	OnFailure.Broadcast(FFileToLoad());
+	OnFailure.Broadcast(FFileToLoad(), TEXT("Failed to download file from URL"));
 }

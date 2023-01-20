@@ -14,13 +14,13 @@ struct FCreateImageRequestBase
 	
 	TOptional<int> n = 1;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Image Request Base")
 	FString size = ImageSizes[static_cast<int>(EImageSize::EIS_1024)];
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Image Request Base")
 	FString response_format = "b64_json";
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Image Request Base")
 	FString user;
 };
 
@@ -29,7 +29,7 @@ struct FCreateImageRequest : public FCreateImageRequestBase
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Image Request")
 	FString prompt;
 };
 
@@ -38,13 +38,13 @@ struct FCreateImageEditRequest : public FCreateImageRequestBase
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Image Edit Request")
 	TArray<uint8> image;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Image Edit Request")
 	TArray<uint8> mask;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Image Edit Request")
 	FString prompt;
 };
 
@@ -53,7 +53,7 @@ struct FCreateImageVariationRequest : public FCreateImageRequestBase
 {
 	GENERATED_BODY()
 	
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Image Variation Request")
 	TArray<uint8> image;
 };
 
@@ -62,7 +62,7 @@ struct FImageDataURL
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Image Data URL")
 	FString url;
 };
 
@@ -71,7 +71,7 @@ struct FImageDataBase64JSON
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Image Data Base64 JSON")
 	FString b64_json;
 };
 
@@ -80,10 +80,10 @@ struct FCreateImageResponseURL
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Image Response URL")
 	int32 created;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Image Response URL")
 	TArray<FImageDataURL> data;
 };
 
@@ -92,9 +92,9 @@ struct FCreateImageResponseBase64JSON
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Image Response Base64 JSON")
 	int32 created;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Image Response Base64 JSON")
 	TArray<FImageDataBase64JSON> data;	
 };

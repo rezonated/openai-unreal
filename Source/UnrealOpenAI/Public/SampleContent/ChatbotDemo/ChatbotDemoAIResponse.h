@@ -18,6 +18,6 @@ public:
 	virtual void SetResponse(FString Response) override;
 
 private:
-	UPROPERTY(meta = (BindWidget, AllowPrivateAccess = "true"), VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(meta = (BindWidget, AllowPrivateAccess = "true"), VisibleAnywhere, BlueprintReadOnly, Category="ChatbotDemoAIResponse")
 	class UTextBlock* TB_AI_Response;
 };

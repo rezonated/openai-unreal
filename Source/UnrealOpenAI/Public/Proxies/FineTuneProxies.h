@@ -12,7 +12,7 @@
  * 
  */
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateFineTuneRequestCallbackSignature, FFineTune, Response, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FCreateFineTuneRequestCallbackSignature, FFineTune, Response, FString, JSONString, FString, Error);
 UCLASS()
 class UNREALOPENAI_API UCreateFineTuneProxy : public UOnlineBlueprintCallProxyBase
 {
@@ -34,12 +34,9 @@ private:
 	FString TrainingFileID;
 	FString ValidationFileID;
 	EFineTuneModels Model;
-
-	FFineTune Response;
-	FString JSONString;	
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FListFineTuneRequestCallbackSignature, FListFineTunesResponse, Response, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FListFineTuneRequestCallbackSignature, FListFineTunesResponse, Response, FString, JSONString, FString, Error);
 UCLASS()
 class UNREALOPENAI_API UListFineTuneProxy : public UOnlineBlueprintCallProxyBase
 {
@@ -58,12 +55,9 @@ public:
 
 private:
 	UObject* WorldContextObject;
-
-	FListFineTunesResponse Response;
-	FString JSONString;
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRetrieveFineTuneRequestCallbackSignature, FFineTune, Response, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FRetrieveFineTuneRequestCallbackSignature, FFineTune, Response, FString, JSONString, FString, Error);
 UCLASS()
 class UNREALOPENAI_API URetrieveFineTuneProxy : public UOnlineBlueprintCallProxyBase
 {
@@ -83,12 +77,9 @@ public:
 private:
 	UObject* WorldContextObject;
 	FString FineTuneID;
-
-	FFineTune Response;
-	FString JSONString;
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCancelFineTuneRequestCallbackSignature, FFineTune, Response, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FCancelFineTuneRequestCallbackSignature, FFineTune, Response, FString, JSONString, FString, Error);
 UCLASS()
 class UNREALOPENAI_API UCancelFineTuneProxy : public UOnlineBlueprintCallProxyBase
 {
@@ -107,12 +98,9 @@ public:
 private:
 	UObject* WorldContextObject;
 	FString FineTuneID;
-
-	FFineTune Response;
-	FString JSONString;
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FListFineTuneEventsResultsRequestCallbackSignature, FListFineTuneEventsResponse, Response, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FListFineTuneEventsResultsRequestCallbackSignature, FListFineTuneEventsResponse, Response, FString, JSONString, FString, Error);
 UCLASS()
 class UNREALOPENAI_API UListFineTuneEventsProxy : public UOnlineBlueprintCallProxyBase
 {
@@ -131,16 +119,14 @@ public:
 private:
 	UObject* WorldContextObject;
 	FString FineTuneID;
-
-	FListFineTuneEventsResponse Response;
-	FString JSONString;
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDeleteFineTuneModelResultsRequestCallbackSignature, FDeleteResponse, Response, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDeleteFineTuneModelResultsRequestCallbackSignature, FDeleteResponse, Response, FString, JSONString, FString, Error);
 UCLASS()
 class UNREALOPENAI_API UDeleteFineTuneModelProxy : public UOnlineBlueprintCallProxyBase
 {
 	GENERATED_BODY()
+	
 public:
 	UPROPERTY(BlueprintAssignable)
 	FDeleteFineTuneModelResultsRequestCallbackSignature OnSuccess;
@@ -155,7 +141,4 @@ public:
 private:
 	UObject* WorldContextObject;
 	FString FineTuneID;
-
-	FDeleteResponse Response;
-	FString JSONString;
 };

@@ -18,27 +18,27 @@ public:
 	virtual void NativeConstruct() override;
 	
 private:
-	UPROPERTY(meta = (BindWidget, AllowPrivateAccess = "true"), VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(meta = (BindWidget, AllowPrivateAccess = "true"), VisibleAnywhere, BlueprintReadOnly, Category="CreateImageWidget")
 	class UButton* B_Send_Input;
 
-	UPROPERTY(meta = (BindWidget, AllowPrivateAccess = "true"), VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(meta = (BindWidget, AllowPrivateAccess = "true"), VisibleAnywhere, BlueprintReadOnly, Category="CreateImageWidget")
 	class UMultiLineEditableTextBox* MLETB_User_Input;
 
-	UPROPERTY(meta = (BindWidget, AllowPrivateAccess = "true"), VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(meta = (BindWidget, AllowPrivateAccess = "true"), VisibleAnywhere, BlueprintReadOnly, Category="CreateImageWidget")
 	class UImage* I_Response;
 
-	UPROPERTY(meta = (AllowPrivateAccess = "true"), EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(meta = (AllowPrivateAccess = "true"), EditAnywhere, BlueprintReadOnly, Category="CreateImageWidget")
 	EImageSize ImageSize = EImageSize::EIS_1024;
 
-	UFUNCTION()
+	UFUNCTION(Category="CreateImageWidget")
 	void OnUserInputChanged(const FText& Text);
 	
-	UFUNCTION()
+	UFUNCTION(Category="CreateImageWidget")
 	void OnSendInput();
 	
-	UFUNCTION()
-	void OnImageRequestCompleteURL(FCreateImageResponseURL Response, FString JSONString);
+	UFUNCTION(Category="CreateImageWidget")
+	void OnImageRequestCompleteURL(FCreateImageResponseURL Response, FString JSONString, FString Error);
 
-	UFUNCTION()
+	UFUNCTION(Category="CreateImageWidget")
 	void OnImageRequestComplete(UTexture2D* Texture2D);
 };

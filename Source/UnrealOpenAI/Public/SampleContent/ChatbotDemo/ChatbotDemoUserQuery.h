@@ -18,6 +18,6 @@ public:
 	virtual void SetResponse(FString Response) override;
 
 private:
-	UPROPERTY(meta = (BindWidget), VisibleAnywhere)
+	UPROPERTY(meta = (BindWidget), VisibleAnywhere, Category="ChatbotDemoUserQuery")
 	class UTextBlock* TB_User_Query;
 };

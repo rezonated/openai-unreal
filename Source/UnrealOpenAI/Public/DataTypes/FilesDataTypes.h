@@ -12,10 +12,10 @@ struct FListFilesResponse
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | List Files Response")
 	FString object;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | List Files Response")
 	TArray<FOpenAIFile> data;
 };
 
@@ -25,10 +25,10 @@ struct FCreateFileRequest
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create File Request")
 	FFileToLoad file;
 	
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create File Request")
 	FString purpose;
 };
 
@@ -37,21 +37,21 @@ struct FFileResponse
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | File Response")
 	FString id;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | File Response")
 	FString object;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | File Response")
 	int32 bytes;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | File Response")
 	int32 created_at;
 	
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | File Response")
 	FString filename;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | File Response")
 	FString purpose;
 };

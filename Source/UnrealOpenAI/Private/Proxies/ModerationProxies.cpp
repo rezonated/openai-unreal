@@ -24,9 +24,13 @@ void UCreateModerationRequestProxy::Activate()
 	
 	if (!WorldContextObject)
 	{
-		PrintDebugLogAndOnScreen("WorldContextObject is null");
-		OnFailure.Broadcast(FCreateModerationResponse(), TEXT(""));
+		OnFailure.Broadcast(FCreateModerationResponse(), TEXT(""), TEXT("WorldContextObject is null"));
 		return;
+	}
+
+	if (Input.IsEmpty() || Input.Len() <= 0 || Input == TEXT(""))
+	{
+		OnFailure.Broadcast(FCreateModerationResponse(), TEXT(""), TEXT("Input is empty"));
 	}
 
 	FString JSONPayload;
@@ -44,29 +48,31 @@ void UCreateModerationRequestProxy::Activate()
 			{
 				FString ResponseString = Response->GetContentAsString();
 				ResponseString = SanitizeString(ResponseString);
+
+				if(FString ErrorMessage, ErrorType; CheckErrorResponse(ResponseString, ErrorMessage, ErrorType))
+				{
+					OnFailure.Broadcast(FCreateModerationResponse(), ResponseString, ErrorMessage);
+					return;
+				}
 				
 				FCreateModerationResponse ModerationResponse;
-				
 				if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &ModerationResponse, 0, 0))
 				{
-					OnSuccess.Broadcast(ModerationResponse, Response->GetContentAsString());
+					OnSuccess.Broadcast(ModerationResponse, Response->GetContentAsString(), TEXT(""));
 				}
 				else
 				{
-					PrintDebugLogAndOnScreen("Failed to convert completion JSON response to struct");
-					OnFailure.Broadcast(FCreateModerationResponse(), TEXT(""));
+					OnFailure.Broadcast(FCreateModerationResponse(), TEXT(""), TEXT("Failed to convert create moderation response to struct"));
 				}
 			}
 			else
 			{
-				PrintDebugLogAndOnScreen("Failed to complete completion request");
-				OnFailure.Broadcast(FCreateModerationResponse(), TEXT(""));
+				OnFailure.Broadcast(FCreateModerationResponse(), TEXT(""), TEXT("Create moderation request failed"));
 			}
 	},
 	[this]
 	{
-			PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FCreateModerationResponse(), TEXT(""));
+			OnFailure.Broadcast(FCreateModerationResponse(), TEXT(""), TEXT("Failed to send create moderation request"));
 		}
 	);
 }

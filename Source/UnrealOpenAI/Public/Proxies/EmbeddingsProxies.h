@@ -13,7 +13,7 @@
 
 #pragma region Create Embedding Proxies
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateEmbeddingsRequestCallbackSignature, FCreateEmbeddingsResponse, Response, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FCreateEmbeddingsRequestCallbackSignature, FCreateEmbeddingsResponse, Response, FString, JSONString, FString, Error);
 UCLASS()
 class UNREALOPENAI_API UCreateEmbeddingsRequestProxy : public UOnlineBlueprintCallProxyBase
 {
@@ -34,9 +34,6 @@ public:
 private:
 	UObject* WorldContextObject;
 	FString Input;
-
-	FCreateEmbeddingsResponse Response;
-	FString JSONString;
 };
 
 #pragma endregion

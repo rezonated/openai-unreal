@@ -11,13 +11,13 @@ struct FCreateEditsRequest
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Edits Request")
 	FString model = "text-davinci-edit-001";
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Edits Request")
 	FString input;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Edits Request")
 	FString instruction;
 	
 	TOptional<float> temperature = 0.f;
@@ -33,16 +33,16 @@ struct FCreateEditsResponse
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Edits Response")
 	FString object;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Edits Response")
 	int32 created;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Edits Response")
 	FChoice choices;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Edits Response")
 	FUsage usage;
 	
 };

@@ -12,13 +12,13 @@ struct FModerationResult
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Moderation Result")
 	bool flagged;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Moderation Result")
 	TMap<FString, bool> categories;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Moderation Result")
 	TMap<FString, float> category_scores;
 };
 
@@ -28,10 +28,10 @@ struct FCreateModerationRequest
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Moderation Request")
 	FString input;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Moderation Request")
 	FString model = ModerationModels[static_cast<int>(EModerationModels::EMM_Stable)];
 };
 
@@ -41,13 +41,13 @@ struct FCreateModerationResponse
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Moderation Response")
 	FString id;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Moderation Response")
 	FString model;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Moderation Response")
 	TArray<FModerationResult> results;
 };
 

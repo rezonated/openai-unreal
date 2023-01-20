@@ -9,7 +9,7 @@
 
 #pragma region Create Completion Proxy
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateCompletionRequestCallbackSignature, FCreateCompletionResponse, Response, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FCreateCompletionRequestCallbackSignature, FCreateCompletionResponse, Response, FString, JSONString, FString, Error);
 UCLASS()
 class UNREALOPENAI_API UCreateCompletionRequestProxy : public UOnlineBlueprintCallProxyBase
 {
@@ -31,10 +31,6 @@ private:
 	UObject* WorldContextObject;
 	FString Prompt;
 	ECompletionModel CompletionModel;
-	
-	FCreateCompletionResponse Response;
-	FString JSONString;
-	
 };
 
 #pragma endregion

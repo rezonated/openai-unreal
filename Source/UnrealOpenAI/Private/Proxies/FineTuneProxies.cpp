@@ -26,9 +26,23 @@ void UCreateFineTuneProxy::Activate()
 
 	if (!WorldContextObject)
 	{
-		PrintDebugLogAndOnScreen("WorldContextObject is null");
-		OnFailure.Broadcast(FFineTune(), TEXT(""));
+		OnFailure.Broadcast(FFineTune(), TEXT(""), TEXT("WorldContextObject is null"));
 		return;
+	}
+
+	if (TrainingFileID.IsEmpty() || TrainingFileID == TEXT("") || TrainingFileID.Len() <= 0)
+	{
+		OnFailure.Broadcast(FFineTune(), TEXT(""), TEXT("TrainingFileID is empty"));
+	}
+
+	if (ValidationFileID.IsEmpty() || ValidationFileID == TEXT("") || ValidationFileID.Len() <= 0)
+	{
+		OnFailure.Broadcast(FFineTune(), TEXT(""), TEXT("ValidationFileID is empty"));
+	}
+
+	if (Model == EFineTuneModels::EFTM_MAX)
+	{
+		OnFailure.Broadcast(FFineTune(), TEXT(""), TEXT("Model is invalid"));
 	}
 
 	FString JSONPayload;
@@ -43,11 +57,7 @@ void UCreateFineTuneProxy::Activate()
 	RequestPayload.training_file = TrainingFileID;
 	RequestPayload.model = FineTuneModels[static_cast<int32>(Model)];
 
-	PrintDebugLogAndOnScreen(RequestPayload.training_file);
-
 	FJsonObjectConverter::UStructToJsonObjectString(RequestPayload, JSONPayload, 0, 0);
-
-	PrintDebugLogAndOnScreen(JSONPayload);
 
 	SendPayload(TEXT("fine-tunes"), JSONPayload, EHTTPMethod::EHP_POST, [this](FHttpRequestPtr, const FHttpResponsePtr Response, const bool bWasSuccessful)
 	{
@@ -55,28 +65,30 @@ void UCreateFineTuneProxy::Activate()
 		{
 			FString ResponseString = Response->GetContentAsString();
 			ResponseString = SanitizeString(ResponseString);
-				
+
+			if(FString ErrorMessage, ErrorType; CheckErrorResponse(ResponseString, ErrorMessage, ErrorType))
+			{
+				OnFailure.Broadcast(FFineTune(), ResponseString, ErrorMessage);
+				return;
+			}
+			
 			FFineTune FineTuneResponse;
-				
 			if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &FineTuneResponse, 0, 0))
 			{
-				OnSuccess.Broadcast(FineTuneResponse, Response->GetContentAsString());
+				OnSuccess.Broadcast(FineTuneResponse, Response->GetContentAsString(), TEXT(""));
 			}
 			else
 			{
-				PrintDebugLogAndOnScreen("Failed to convert completion JSON response to struct");
-				OnFailure.Broadcast(FFineTune(), TEXT(""));
+				OnFailure.Broadcast(FFineTune(), TEXT(""), TEXT("Failed to convert create fine tune response to struct"));
 			}
 		}
 		else
 		{
-			PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FFineTune(), TEXT(""));
+			OnFailure.Broadcast(FFineTune(), TEXT(""), TEXT("Create fine tune request failed"));
 		}
 	}, [this]
 	{
-		PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FFineTune(), TEXT(""));
+		OnFailure.Broadcast(FFineTune(), TEXT(""), TEXT("Failed to send create fine tune request"));
 	});
 }
 
@@ -93,8 +105,7 @@ void UListFineTuneProxy::Activate()
 	
 	if (!WorldContextObject)
 	{
-		PrintDebugLogAndOnScreen("WorldContextObject is null");
-		OnFailure.Broadcast(FListFineTunesResponse(), TEXT(""));
+		OnFailure.Broadcast(FListFineTunesResponse(), TEXT(""), TEXT("WorldContextObject is null"));
 		return;
 	}
 
@@ -104,28 +115,30 @@ void UListFineTuneProxy::Activate()
 		{
 			FString ResponseString = Response->GetContentAsString();
 			ResponseString = SanitizeString(ResponseString);
+
+			if(FString ErrorMessage, ErrorType; CheckErrorResponse(ResponseString, ErrorMessage, ErrorType))
+			{
+				OnFailure.Broadcast(FListFineTunesResponse(), ResponseString, ErrorMessage);
+				return;
+			}
 				
 			FListFineTunesResponse ListFineTunesResponse;
-				
 			if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &ListFineTunesResponse, 0, 0))
 			{
-				OnSuccess.Broadcast(ListFineTunesResponse, Response->GetContentAsString());
+				OnSuccess.Broadcast(ListFineTunesResponse, Response->GetContentAsString(), TEXT(""));
 			}
 			else
 			{
-				PrintDebugLogAndOnScreen("Failed to convert completion JSON response to struct");
-				OnFailure.Broadcast(FListFineTunesResponse(), TEXT(""));
+				OnFailure.Broadcast(FListFineTunesResponse(), TEXT(""), TEXT("Failed to convert list fine tune response to struct"));
 			}
 		}
 		else
 		{
-			PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FListFineTunesResponse(), TEXT(""));
+			OnFailure.Broadcast(FListFineTunesResponse(), TEXT(""), TEXT("List fine tune request failed"));
 		}
 	}, [this]
 	{
-		PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FListFineTunesResponse(), TEXT(""));
+		OnFailure.Broadcast(FListFineTunesResponse(), TEXT(""), TEXT("Failed to send list fine tune request"));
 	});
 }
 
@@ -143,9 +156,13 @@ void URetrieveFineTuneProxy::Activate()
 
 	if (!WorldContextObject)
 	{
-		PrintDebugLogAndOnScreen("WorldContextObject is null");
-		OnFailure.Broadcast(FFineTune(), TEXT(""));
+		OnFailure.Broadcast(FFineTune(), TEXT(""), TEXT("WorldContextObject is null"));
 		return;
+	}
+
+	if (FineTuneID.IsEmpty() || FineTuneID == TEXT("") || FineTuneID.Len() <= 0)
+	{
+		OnFailure.Broadcast(FFineTune(), TEXT(""), TEXT("FineTuneID is empty"));
 	}
 
 	SendPayload(FString::Printf(TEXT("fine-tunes/%s"), *FineTuneID), TEXT(""), EHTTPMethod::EHP_GET, [this](FHttpRequestPtr, const FHttpResponsePtr Response, const bool bWasSuccessful)
@@ -159,23 +176,20 @@ void URetrieveFineTuneProxy::Activate()
 				
 			if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &FineTuneResponse, 0, 0))
 			{
-				OnSuccess.Broadcast(FineTuneResponse, Response->GetContentAsString());
+				OnSuccess.Broadcast(FineTuneResponse, Response->GetContentAsString(), TEXT(""));
 			}
 			else
 			{
-				PrintDebugLogAndOnScreen("Failed to convert completion JSON response to struct");
-				OnFailure.Broadcast(FFineTune(), TEXT(""));
+				OnFailure.Broadcast(FFineTune(), TEXT(""), TEXT("Failed to convert retrieve fine tune response to struct"));
 			}
 		}
 		else
 		{
-			PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FFineTune(), TEXT(""));
+			OnFailure.Broadcast(FFineTune(), TEXT(""), TEXT("Retrieve fine tune request failed"));
 		}
 	}, [this]
 	{
-		PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FFineTune(), TEXT(""));
+		OnFailure.Broadcast(FFineTune(), TEXT(""), TEXT("Failed to send retrieve fine tune request"));
 	});
 }
 
@@ -193,9 +207,13 @@ void UCancelFineTuneProxy::Activate()
 
 	if (!WorldContextObject)
 	{
-		PrintDebugLogAndOnScreen("WorldContextObject is null");
-		OnFailure.Broadcast(FFineTune(), TEXT(""));
+		OnFailure.Broadcast(FFineTune(), TEXT(""), TEXT("WorldContextObject is null"));
 		return;
+	}
+
+	if (FineTuneID.IsEmpty() || FineTuneID == TEXT("") || FineTuneID.Len() <= 0)
+	{
+		OnFailure.Broadcast(FFineTune(), TEXT(""), TEXT("FineTuneID is empty"));
 	}
 
 	SendPayload(FString::Printf(TEXT("fine-tunes/%s/cancel"), *FineTuneID), TEXT(""), EHTTPMethod::EHP_POST, [this](FHttpRequestPtr, const FHttpResponsePtr Response, const bool bWasSuccessful)
@@ -204,28 +222,30 @@ void UCancelFineTuneProxy::Activate()
 		{
 			FString ResponseString = Response->GetContentAsString();
 			ResponseString = SanitizeString(ResponseString);
+
+			if(FString ErrorMessage, ErrorType; CheckErrorResponse(ResponseString, ErrorMessage, ErrorType))
+			{
+				OnFailure.Broadcast(FFineTune(), ResponseString, ErrorMessage);
+				return;
+			}
 				
 			FFineTune FineTuneResponse;
-				
 			if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &FineTuneResponse, 0, 0))
 			{
-				OnSuccess.Broadcast(FineTuneResponse, Response->GetContentAsString());
+				OnSuccess.Broadcast(FineTuneResponse, Response->GetContentAsString(), TEXT(""));
 			}
 			else
 			{
-				PrintDebugLogAndOnScreen("Failed to convert completion JSON response to struct");
-				OnFailure.Broadcast(FFineTune(), TEXT(""));
+				OnFailure.Broadcast(FFineTune(), TEXT(""), TEXT("Failed to convert cancel fine tune response to struct"));
 			}
 		}
 		else
 		{
-			PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FFineTune(), TEXT(""));
+			OnFailure.Broadcast(FFineTune(), TEXT(""), TEXT("Cancel fine tune request failed"));
 		}
 	}, [this]
 	{
-		PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FFineTune(), TEXT(""));
+		OnFailure.Broadcast(FFineTune(), TEXT(""), TEXT("Failed to send cancel fine tune request"));
 	});
 }
 
@@ -244,9 +264,13 @@ void UListFineTuneEventsProxy::Activate()
 
 	if (!WorldContextObject)
 	{
-		PrintDebugLogAndOnScreen("WorldContextObject is null");
-		OnFailure.Broadcast(FListFineTuneEventsResponse(), TEXT(""));
+		OnFailure.Broadcast(FListFineTuneEventsResponse(), TEXT(""), TEXT("WorldContextObject is null"));
 		return;
+	}
+
+	if (FineTuneID.IsEmpty() || FineTuneID == TEXT("") || FineTuneID.Len() <= 0)
+	{
+		OnFailure.Broadcast(FListFineTuneEventsResponse(), TEXT(""), TEXT("FineTuneID is empty"));
 	}
 
 	SendPayload(FString::Printf(TEXT("fine-tunes/%s/events?stream=false"), *FineTuneID), TEXT(""), EHTTPMethod::EHP_GET, [this](FHttpRequestPtr, const FHttpResponsePtr Response, const bool bWasSuccessful)
@@ -255,28 +279,30 @@ void UListFineTuneEventsProxy::Activate()
 		{
 			FString ResponseString = Response->GetContentAsString();
 			ResponseString = SanitizeString(ResponseString);
+
+			if(FString ErrorMessage, ErrorType; CheckErrorResponse(ResponseString, ErrorMessage, ErrorType))
+			{
+				OnFailure.Broadcast(FListFineTuneEventsResponse(), ResponseString, ErrorMessage);
+				return;
+			}
 				
 			FListFineTuneEventsResponse ListFineTuneEventsResponse;
-				
 			if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &ListFineTuneEventsResponse, 0, 0))
 			{
-				OnSuccess.Broadcast(ListFineTuneEventsResponse, Response->GetContentAsString());
+				OnSuccess.Broadcast(ListFineTuneEventsResponse, Response->GetContentAsString(), TEXT(""));
 			}
 			else
 			{
-				PrintDebugLogAndOnScreen("Failed to convert completion JSON response to struct");
-				OnFailure.Broadcast(FListFineTuneEventsResponse(), TEXT(""));
+				OnFailure.Broadcast(FListFineTuneEventsResponse(), TEXT(""), TEXT("Failed to convert fine tune events response to struct"));
 			}
 		}
 		else
 		{
-			PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FListFineTuneEventsResponse(), TEXT(""));
+			OnFailure.Broadcast(FListFineTuneEventsResponse(), TEXT(""), TEXT("Fine tune events request failed"));
 		}
 	}, [this]
 	{
-		PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FListFineTuneEventsResponse(), TEXT(""));
+		OnFailure.Broadcast(FListFineTuneEventsResponse(), TEXT(""), TEXT("List fine tune events request failed"));
 	});
 }
 
@@ -295,8 +321,7 @@ void UDeleteFineTuneModelProxy::Activate()
 
 	if (!WorldContextObject)
 	{
-		PrintDebugLogAndOnScreen("WorldContextObject is null");
-		OnFailure.Broadcast(FDeleteResponse(), TEXT(""));
+		OnFailure.Broadcast(FDeleteResponse(), TEXT(""), TEXT("WorldContextObject is null"));
 		return;
 	}
 
@@ -306,28 +331,30 @@ void UDeleteFineTuneModelProxy::Activate()
 		{
 			FString ResponseString = Response->GetContentAsString();
 			ResponseString = SanitizeString(ResponseString);
+
+			if(FString ErrorMessage, ErrorType; CheckErrorResponse(ResponseString, ErrorMessage, ErrorType))
+			{
+				OnFailure.Broadcast(FDeleteResponse(), ResponseString, ErrorMessage);
+				return;
+			}
 				
 			FDeleteResponse DeleteResponse;
-				
 			if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &DeleteResponse, 0, 0))
 			{
-				OnSuccess.Broadcast(DeleteResponse, Response->GetContentAsString());
+				OnSuccess.Broadcast(DeleteResponse, Response->GetContentAsString(), TEXT(""));
 			}
 			else
 			{
-				PrintDebugLogAndOnScreen("Failed to convert completion JSON response to struct");
-				OnFailure.Broadcast(FDeleteResponse(), TEXT(""));
+				OnFailure.Broadcast(FDeleteResponse(), TEXT(""), TEXT("Failed to convert delete fine tune model response to struct"));
 			}
 		}
 		else
 		{
-			PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FDeleteResponse(), TEXT(""));
+			OnFailure.Broadcast(FDeleteResponse(), TEXT(""), TEXT("Delete fine tune model request failed"));
 		}
 	}, [this]
 	{
-		PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FDeleteResponse(), TEXT(""));
+		OnFailure.Broadcast(FDeleteResponse(), TEXT(""), TEXT("Failed to send delete fine tune model request"));
 	});
 }
 

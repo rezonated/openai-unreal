@@ -12,7 +12,7 @@
  */
 #pragma region Create Moderation Proxies
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateModerationRequestCallbackSignature, FCreateModerationResponse, Response, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FCreateModerationRequestCallbackSignature, FCreateModerationResponse, Response, FString, JSONString, FString, Error);
 UCLASS()
 class UNREALOPENAI_API UCreateModerationRequestProxy : public UOnlineBlueprintCallProxyBase
 {
@@ -34,9 +34,6 @@ private:
 	UObject* WorldContextObject;
 	FString Input;
 	EModerationModels Model;
-
-	FCreateModerationResponse Response;
-	FString JSONString;
 };
 
 #pragma endregion

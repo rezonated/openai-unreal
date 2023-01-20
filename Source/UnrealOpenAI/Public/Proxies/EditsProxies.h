@@ -12,7 +12,7 @@
  */
 #pragma region Create Edits Proxies
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateEditsRequestCallbackSignature, FCreateEditsResponse, Response, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FCreateEditsRequestCallbackSignature, FCreateEditsResponse, Response, FString, JSONString, FString, Error);
 UCLASS()
 class UNREALOPENAI_API UCreateEditsRequestProxy : public UOnlineBlueprintCallProxyBase
 {
@@ -33,9 +33,6 @@ private:
 	UObject* WorldContextObject;
 	FString Input;
 	FString Instruction;
-
-	FCreateEditsResponse Response;
-	FString JSONString;	
 };
 
 #pragma endregion

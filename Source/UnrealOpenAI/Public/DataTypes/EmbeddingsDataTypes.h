@@ -11,13 +11,13 @@ struct FEmbeddingData
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Embedding Data")
 	FString object;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Embedding Data")
 	TArray<float> embedding;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Embedding Data")
 	int index;
 };
 
@@ -27,13 +27,13 @@ struct FCreateEmbeddingsRequest
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Embeddings Request")
 	FString model = "text-embedding-ada-002";
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Embeddings Request")
 	FString input;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Embeddings Request")
 	FString user;
 };
 
@@ -43,16 +43,16 @@ struct FCreateEmbeddingsResponse
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Embeddings Response")
 	FString object;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Embeddings Response")
 	TArray<FEmbeddingData> data;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Embeddings Response")
 	FString model;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Open AI | Create Embeddings Response")
 	FUsage usage;
 	
 };

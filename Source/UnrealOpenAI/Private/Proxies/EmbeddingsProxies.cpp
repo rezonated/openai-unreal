@@ -23,8 +23,13 @@ void UCreateEmbeddingsRequestProxy::Activate()
 
 	if (!WorldContextObject)
 	{
-		PrintDebugLogAndOnScreen("WorldContextObject is null");
-		OnFailure.Broadcast(FCreateEmbeddingsResponse(), TEXT(""));
+		OnFailure.Broadcast(FCreateEmbeddingsResponse(), TEXT(""), TEXT("WorldContextObject is null"));
+		return;
+	}
+
+	if (Input.IsEmpty() || Input == TEXT("") || Input.Len() <= 0)
+	{
+		OnFailure.Broadcast(FCreateEmbeddingsResponse(), TEXT(""), TEXT("Input is empty"));
 		return;
 	}
 
@@ -41,28 +46,31 @@ void UCreateEmbeddingsRequestProxy::Activate()
 		{
 			FString ResponseString = Response->GetContentAsString();
 			ResponseString = SanitizeString(ResponseString);
+
+			if(FString ErrorMessage, ErrorType; CheckErrorResponse(ResponseString, ErrorMessage, ErrorType))
+			{
+				OnFailure.Broadcast(FCreateEmbeddingsResponse(), ResponseString, ErrorMessage);
+				return;
+			}
 				
 			FCreateEmbeddingsResponse EmbeddingsResponse;
 				
 			if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &EmbeddingsResponse, 0, 0))
 			{
-				OnSuccess.Broadcast(EmbeddingsResponse, Response->GetContentAsString());
+				OnSuccess.Broadcast(EmbeddingsResponse, Response->GetContentAsString(), TEXT(""));
 			}
 			else
 			{
-				PrintDebugLogAndOnScreen("Failed to convert completion JSON response to struct");
-				OnFailure.Broadcast(FCreateEmbeddingsResponse(), TEXT(""));
+				OnFailure.Broadcast(FCreateEmbeddingsResponse(), TEXT(""), TEXT("Failed to convert create embeddings response to struct"));
 			}
 		}
 		else
 		{
-			PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FCreateEmbeddingsResponse(), TEXT(""));
+			OnFailure.Broadcast(FCreateEmbeddingsResponse(), TEXT(""), TEXT("Create embeddings request failed"));
 		}
 	}, [this]
 	{
-		PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FCreateEmbeddingsResponse(), TEXT(""));
+		OnFailure.Broadcast(FCreateEmbeddingsResponse(), TEXT(""), TEXT("Failed to send create embeddings request"));
 	});
 }
 

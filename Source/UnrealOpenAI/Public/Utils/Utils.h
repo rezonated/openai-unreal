@@ -2,8 +2,9 @@
 
 
 #pragma once
+#include "Engine/Classes/Engine/Texture2D.h"
+#include "Engine/Public/ImageUtils.h"
 #include "HttpModule.h"
-#include "ImageUtils.h"
 #include "UnrealOpenAI.h"
 #include "Config/UnrealOpenAIConfig.h"
 #include "Constants/UtilsConstants.h"
@@ -73,7 +74,7 @@ static bool ValidateImageForOpenAI(TArray<uint8> ImageData, FString& OutReasonIn
 		return false;
 	}
 	
-	if (const auto ImageBuffer = FImageUtils::ImportBufferAsTexture2D(ImageData); ImageBuffer->GetSizeX() != ImageBuffer->GetSizeY())
+	if (const UTexture2D* ImageBuffer = FImageUtils::ImportBufferAsTexture2D(ImageData); ImageBuffer->GetSizeX() != ImageBuffer->GetSizeY())
 	{
 		OutReasonInvalid = "Image is not square. Please use a square image.";
 		return false;
@@ -154,4 +155,20 @@ static void SendPayloadMultipartFormData(FString PayloadURL, TArray<uint8> Conte
 	{
 		OnFailed();
 	}
+}
+
+static bool CheckErrorResponse(FString JSONResponseString, FString& ErrorMessage, FString& ErrorType)
+{
+	FErrorResponse ErrorResponse;
+
+	FJsonObjectConverter::JsonObjectStringToUStruct(JSONResponseString, &ErrorResponse, 0, 0);
+
+	if (!ErrorResponse.error.message.IsEmpty() || !ErrorResponse.error.type.IsEmpty())
+	{
+		ErrorMessage = ErrorResponse.error.message;
+		ErrorType = ErrorResponse.error.type;
+		return true;
+	}
+
+	return false;
 }

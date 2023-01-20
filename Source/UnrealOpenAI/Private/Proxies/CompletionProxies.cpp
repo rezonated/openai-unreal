@@ -5,6 +5,7 @@
 
 #include "JsonObjectConverter.h"
 #include "Constants/CompletionConstants.h"
+#include "Enums/CompletionEnums.h"
 #include "Interfaces/IHttpResponse.h"
 #include "Utils/Utils.h"
 
@@ -25,17 +26,27 @@ void UCreateCompletionRequestProxy::Activate()
 
 	if (!WorldContextObject)
 	{
-		PrintDebugLogAndOnScreen("WorldContextObject is null");
-		OnFailure.Broadcast(FCreateCompletionResponse(), TEXT(""));
+		OnFailure.Broadcast(FCreateCompletionResponse(), TEXT(""), TEXT("WorldContextObject is null"));
 		return;
 	}
 
-	FString JSONPayload;
-	const FCreateCompletionRequest RequestPayload
+	if (Prompt.IsEmpty() || Prompt == TEXT("") || Prompt.Len() <= 0)
 	{
-		CompletionModels[static_cast<int>(CompletionModel)],
-		Prompt
-	};
+		OnFailure.Broadcast(FCreateCompletionResponse(), TEXT(""), TEXT("Prompt is empty"));
+		return;
+	}
+
+	if (CompletionModel == ECompletionModel::ECM_MAX)
+	{
+		OnFailure.Broadcast(FCreateCompletionResponse(), TEXT(""), TEXT("CompletionModel is invalid"));
+		return;	
+	}
+
+	FString JSONPayload;
+	FCreateCompletionRequest RequestPayload;
+	RequestPayload.model = CompletionModels[static_cast<int>(CompletionModel)];
+	RequestPayload.prompt = Prompt;
+	
 	FJsonObjectConverter::UStructToJsonObjectString(RequestPayload, JSONPayload, 0, 0);
 	
 	SendPayload(
@@ -47,28 +58,30 @@ void UCreateCompletionRequestProxy::Activate()
 				FString ResponseString = Response->GetContentAsString();
 				ResponseString = SanitizeString(ResponseString);
 				
-				FCreateCompletionResponse CompletionResponse;
-				
-				if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &CompletionResponse, 0, 0))
+				if(FString ErrorMessage, ErrorType; CheckErrorResponse(ResponseString, ErrorMessage, ErrorType))
 				{
-					OnSuccess.Broadcast(CompletionResponse, Response->GetContentAsString());
+					OnFailure.Broadcast(FCreateCompletionResponse(), ResponseString, ErrorMessage);
+					return;
+				}
+
+				FCreateCompletionResponse CreateCompletionResponse;
+				if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &CreateCompletionResponse, 0, 0))
+				{
+					OnSuccess.Broadcast(CreateCompletionResponse, Response->GetContentAsString(), TEXT(""));
 				}
 				else
 				{
-					PrintDebugLogAndOnScreen("Failed to convert completion JSON response to struct");
-					OnFailure.Broadcast(FCreateCompletionResponse(), TEXT(""));
+					OnFailure.Broadcast(FCreateCompletionResponse(), TEXT(""), TEXT("Failed to convert create completion response to struct"));
 				}
 			}
 			else
 			{
-				PrintDebugLogAndOnScreen("Failed to complete completion request");
-				OnFailure.Broadcast(FCreateCompletionResponse(), TEXT(""));
+				OnFailure.Broadcast(FCreateCompletionResponse(), TEXT(""), TEXT("Create completion request failed"));
 			}
 	},
 	[this]
 	{
-			PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FCreateCompletionResponse(), TEXT(""));
+			OnFailure.Broadcast(FCreateCompletionResponse(), TEXT(""), TEXT("Failed to send create completion request"));
 		}
 	);
 }

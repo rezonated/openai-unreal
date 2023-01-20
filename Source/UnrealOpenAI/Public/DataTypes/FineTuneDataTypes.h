@@ -11,16 +11,16 @@ struct FFineTuneEvent
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune Event")
 	FString object;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune Event")
 	int32 created_at;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune Event")
 	FString level;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune Event")
 	FString message;
 };
 
@@ -29,43 +29,43 @@ struct FFineTune
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune")
 	FString id;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune")
 	FString object;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune")
 	int32 created_at;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune")
 	int32 updated_at;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune")
 	FString model;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune")
 	FString fine_tuned_model;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune")
 	FString organization_id;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune")
 	FString status;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune")
 	TMap<FString, UObject*> hyperparams;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune")
 	TArray<FOpenAIFile> training_files;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune")
 	TArray<FOpenAIFile> validation_files;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune")
 	TArray<FOpenAIFile> result_files;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Fine Tune")
 	TArray<FFineTuneEvent> events;
 };
 
@@ -74,24 +74,24 @@ struct FCreateFineTuneRequest
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Create Fine Tune Request")
 	FString training_file;
 	
 	TOptional<FString> validation_file;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Create Fine Tune Request")
 	FString model;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Create Fine Tune Request")
 	int n_epochs = 4;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Create Fine Tune Request")
 	int batch_size;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Create Fine Tune Request")
 	float learning_rate_multiplier;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Create Fine Tune Request")
 	float prompt_loss_weight;
 	
 	TOptional<bool> compute_classification_metrics = false;
@@ -102,7 +102,7 @@ struct FCreateFineTuneRequest
 	
 	TOptional<TArray<float>> classification_betas;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | Create Fine Tune Request")
 	FString suffix;
 };
 
@@ -111,10 +111,10 @@ struct FListFineTunesResponse
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | List Fine Tunes Response")
 	FString object;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | List Fine Tunes Response")
 	TArray<FFineTune> data;
 };
 
@@ -123,9 +123,9 @@ struct FListFineTuneEventsResponse
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | List Fine Tune Events Response")
 	FString object;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Open AI | List Fine Tune Events Response")
 	TArray<FFineTuneEvent> data;
 };

@@ -1,10 +1,10 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "1.0",
+	"VersionName": "0.1",
 	"FriendlyName": "Open AI - Unreal",
 	"Description": "Open AI Plugin for Unreal Engine",
-	"Category": "Other",
+	"Category": "Open AI",
 	"CreatedBy": "Vanan A.",
 	"CreatedByURL": "github.com/rezonated",
 	"DocsURL": "",

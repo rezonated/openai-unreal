@@ -3,6 +3,7 @@
 
 #include "Utils/UnrealOpenAIUtils.h"
 
+#include "Core/Public/Misc/FileHelper.h"
 #include "HttpModule.h"
 #include "IImageWrapper.h"
 #include "IImageWrapperModule.h"
@@ -39,7 +40,7 @@ bool UUnrealOpenAIUtils::OpenLoadImageDialog(FString DialogTitle, int32 SizeLimi
 	
 	if (SizeLimitInMB > 0 && FileData.Num() > SizeLimitInMB * 1024 * 1024)
 	{
-		PrintDebugLogAndOnScreen("File size is too big. Max size is " + FString::FromInt(SizeLimitInMB) + " MB");
+		PrintDebugLogAndOnScreen("File size is too big. Max size is " + FString::FromInt(SizeLimitInMB) + " MB", 5, FColor::Red);
 		return false;
 	}
 
@@ -88,7 +89,7 @@ bool UUnrealOpenAIUtils::OpenLoadFileDialog(FString DialogTitle, FString FileExt
 	
 	if (SizeLimitInMB > 0 && FileData.Num() > SizeLimitInMB * 1024 * 1024)
 	{
-		PrintDebugLogAndOnScreen("File size is too big. Max size is " + FString::FromInt(SizeLimitInMB) + " MB");
+		PrintDebugLogAndOnScreen("File size is too big. Max size is " + FString::FromInt(SizeLimitInMB) + " MB", 5, FColor::Red);
 		return false;
 	}
 

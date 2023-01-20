@@ -11,7 +11,7 @@
  * 
  */
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FListFilesRequestCallbackSignature, FListFilesResponse, Response, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FListFilesRequestCallbackSignature, FListFilesResponse, Response, FString, JSONString, FString, Error);
 UCLASS()
 class UNREALOPENAI_API UListFilesRequestProxy : public UOnlineBlueprintCallProxyBase
 {
@@ -31,12 +31,9 @@ public:
 
 private:
 	UObject* WorldContextObject;
-
-	FListFilesResponse Response;
-	FString JSONString;
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCreateFileRequestCallbackSignature, FFileResponse, Response, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FCreateFileRequestCallbackSignature, FFileResponse, Response, FString, JSONString, FString, Error);
 UCLASS()
 class UNREALOPENAI_API UUploadFileRequestProxy : public UOnlineBlueprintCallProxyBase
 {
@@ -58,12 +55,9 @@ private:
 	UObject* WorldContextObject;
 	FFileToLoad FileToLoad;
 	FString Purpose;
-
-	FFileResponse Response;
-	FString JSONString;
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDeleteFileRequestCallbackSignature, FDeleteResponse, Response, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDeleteFileRequestCallbackSignature, FDeleteResponse, Response, FString, JSONString, FString, Error);
 UCLASS()
 class UNREALOPENAI_API UDeleteFileRequestProxy : public UOnlineBlueprintCallProxyBase
 {
@@ -84,13 +78,9 @@ public:
 private:
 	UObject* WorldContextObject;
 	FString FileID;
-
-	FDeleteResponse Response;
-	FString JSONString;
-	
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRetrieveFileRequestCallbackSignature, FFileResponse, Response, FString, JSONString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FRetrieveFileRequestCallbackSignature, FFileResponse, Response, FString, JSONString, FString, Error);
 UCLASS()
 class UNREALOPENAI_API URetrieveFileRequestProxy : public UOnlineBlueprintCallProxyBase
 {
@@ -110,12 +100,9 @@ public:
 private:
 	UObject* WorldContextObject;
 	FString FileID;
-
-	FFileResponse Response;
-	FString JSONString;
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUpdateFileRequestCallbackSignature, FFileToLoad, Response);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FUpdateFileRequestCallbackSignature, FFileToLoad, Response, FString, Error);
 UCLASS()
 class UNREALOPENAI_API URetrieveFileContentRequestProxy : public UOnlineBlueprintCallProxyBase
 {
@@ -142,6 +129,4 @@ public:
 private:
 	UObject* WorldContextObject;
 	FString FileID;
-
-	FFileToLoad Response;
 };

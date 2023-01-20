@@ -18,44 +18,44 @@ public:
 	virtual void NativeConstruct() override;
 	
 private:
-	UPROPERTY(meta = (BindWidget, AllowPrivateAccess = "true"), VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(meta = (BindWidget, AllowPrivateAccess = "true"), VisibleAnywhere, BlueprintReadOnly, Category="ChatbotDemoWidget")
 	class UButton* B_Send_Input;
 
-	UPROPERTY(meta = (BindWidget, AllowPrivateAccess = "true"), VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(meta = (BindWidget, AllowPrivateAccess = "true"), VisibleAnywhere, BlueprintReadOnly, Category="ChatbotDemoWidget")
 	class UMultiLineEditableTextBox* MLETB_User_Input;
 
-	UPROPERTY(meta = (BindWidget, AllowPrivateAccess = "true"), VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(meta = (BindWidget, AllowPrivateAccess = "true"), VisibleAnywhere, BlueprintReadOnly, Category="ChatbotDemoWidget")
 	class UScrollBox* SB_ChatLog;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(AllowPrivateAccess="true"))
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(AllowPrivateAccess="true"), Category="ChatbotDemoWidget")
 	const UClass* ChatbotUserQueryWidgetClass;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(AllowPrivateAccess="true"))
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(AllowPrivateAccess="true"), Category="ChatbotDemoWidget")
 	const UClass* ChatbotAIResponseWidgetClass;
 	
 	FString Instruction;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="ChatbotDemoWidget")
 	void SetInstruction(FString NewInstruction);
 
-	UFUNCTION()
-	void OnCompletionResponse(FCreateCompletionResponse Response, FString JSONString);
+	UFUNCTION(Category="ChatbotDemoWidget")
+	void OnCompletionResponse(FCreateCompletionResponse Response, FString JSONString, FString Error);
 
-	UFUNCTION()
-	void OnCompletionFailed(FCreateCompletionResponse Response, FString JSONString);
+	UFUNCTION(Category="ChatbotDemoWidget")
+	void OnCompletionFailed(FCreateCompletionResponse Response, FString JSONString, FString Error);
 	
-	UFUNCTION()
+	UFUNCTION(Category="ChatbotDemoWidget")
 	void OnSendInput();
 
-	UFUNCTION()
+	UFUNCTION(Category="ChatbotDemoWidget")
 	void OnUserInputChanged(const FText& Text);
 
-	UFUNCTION()
+	UFUNCTION(Category="ChatbotDemoWidget")
 	void AddAIResponse(FString AIResponse);
 
-	UFUNCTION()
+	UFUNCTION(Category="ChatbotDemoWidget")
 	void AddUserInput(FString UserInput);
 
-	UFUNCTION()
+	UFUNCTION(Category="ChatbotDemoWidget")
 	void ToggleUserInput(bool bFlag) const;
 };

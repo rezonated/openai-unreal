@@ -78,7 +78,9 @@ void UChatbotDemoWidget::AddAIResponse(FString AIResponse)
 			}
 			
 			ChatbotDemoAIResponse->SetResponse(AIResponse);
-		}	
+
+			SB_ChatLog->ScrollToEnd();
+		}
 	}
 }
 
@@ -99,6 +101,8 @@ void UChatbotDemoWidget::AddUserInput(FString UserInput)
 				ChatboxDemoQueryUserInputScrollBoxSlot->SetHorizontalAlignment(HAlign_Right);
 			}
 			ChatbotDemoQueryUserInput->SetResponse(UserInput);
+
+			SB_ChatLog->ScrollToEnd();
 		}
 	}
 }
@@ -120,26 +124,19 @@ void UChatbotDemoWidget::ToggleUserInput(const bool bFlag) const
 
 void UChatbotDemoWidget::SetInstruction(FString NewInstruction)
 {
-	Instruction = NewInstruction;
-
 	Instruction.Append(NewInstruction);
 	Instruction.Append(LINE_TERMINATOR);
 	Instruction.Append(TEXT("Q: "));
 }
 
-void UChatbotDemoWidget::OnCompletionResponse(FCreateCompletionResponse Response, FString JSONString)
+void UChatbotDemoWidget::OnCompletionResponse(FCreateCompletionResponse Response, FString JSONString, FString Error)
 {
 	AddAIResponse(Response.choices.text);
 	Instruction += Response.choices.text + LINE_TERMINATOR + "Q: ";
 	ToggleUserInput(true);
-
-	if (SB_ChatLog)
-	{
-		SB_ChatLog->ScrollToEnd();
-	}
 }
 
-void UChatbotDemoWidget::OnCompletionFailed(FCreateCompletionResponse Response, FString JSONString)
+void UChatbotDemoWidget::OnCompletionFailed(FCreateCompletionResponse Response, FString JSONString, FString Error)
 {
 	ToggleUserInput(true);
 }

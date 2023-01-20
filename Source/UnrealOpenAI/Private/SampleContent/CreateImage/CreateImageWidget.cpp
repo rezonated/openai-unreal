@@ -59,7 +59,7 @@ void UCreateImageWidget::OnSendInput()
 	}
 }
 
-void UCreateImageWidget::OnImageRequestCompleteURL(FCreateImageResponseURL Response, FString JSONString)
+void UCreateImageWidget::OnImageRequestCompleteURL(FCreateImageResponseURL Response, FString JSONString, FString Error)
 {
 	const auto GetImageFromURL = UUnrealOpenAIUtilsGetImageFromURL::GetImageFromURL(this, Response.data[0].url);
 	

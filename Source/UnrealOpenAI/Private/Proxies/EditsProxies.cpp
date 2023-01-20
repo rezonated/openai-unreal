@@ -24,8 +24,19 @@ void UCreateEditsRequestProxy::Activate()
 
 	if (!WorldContextObject)
 	{
-		PrintDebugLogAndOnScreen("WorldContextObject is null");
-		OnFailure.Broadcast(FCreateEditsResponse(), TEXT(""));
+		OnFailure.Broadcast(FCreateEditsResponse(), TEXT(""), TEXT("WorldContextObject is null"));
+		return;
+	}
+
+	if (Input.IsEmpty() || Input == TEXT("") || Input.Len() <= 0)
+	{
+		OnFailure.Broadcast(FCreateEditsResponse(), TEXT(""), TEXT("Input is empty"));
+		return;
+	}
+
+	if (Instruction.IsEmpty() || Instruction == TEXT("") || Instruction.Len() <= 0)
+	{
+		OnFailure.Broadcast(FCreateEditsResponse(), TEXT(""), TEXT("Instruction is empty"));
 		return;
 	}
 
@@ -42,28 +53,30 @@ void UCreateEditsRequestProxy::Activate()
 		{
 			FString ResponseString = Response->GetContentAsString();
 			ResponseString = SanitizeString(ResponseString);
-				
+
+			if(FString ErrorMessage, ErrorType; CheckErrorResponse(ResponseString, ErrorMessage, ErrorType))
+			{
+				OnFailure.Broadcast(FCreateEditsResponse(), ResponseString, ErrorMessage);
+				return;
+			}
+
 			FCreateEditsResponse EditsResponse;
-				
 			if (FJsonObjectConverter::JsonObjectStringToUStruct(ResponseString, &EditsResponse, 0, 0))
 			{
-				OnSuccess.Broadcast(EditsResponse, Response->GetContentAsString());
+				OnSuccess.Broadcast(EditsResponse, Response->GetContentAsString(), TEXT(""));
 			}
 			else
 			{
-				PrintDebugLogAndOnScreen("Failed to convert completion JSON response to struct");
-				OnFailure.Broadcast(FCreateEditsResponse(), TEXT(""));
+				OnFailure.Broadcast(FCreateEditsResponse(), TEXT(""), TEXT("Failed to convert create edits response to struct"));
 			}
 		}
 		else
 		{
-			PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FCreateEditsResponse(), TEXT(""));
+			OnFailure.Broadcast(FCreateEditsResponse(), TEXT(""), TEXT("Create edits request failed"));
 		}
 	}, [this]
 	{
-		PrintDebugLogAndOnScreen("Failed to complete completion request");
-			OnFailure.Broadcast(FCreateEditsResponse(), TEXT(""));
+			OnFailure.Broadcast(FCreateEditsResponse(), TEXT(""), TEXT("Failed to send create edits request"));
 	});
 }
 
