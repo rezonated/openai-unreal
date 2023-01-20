@@ -26,7 +26,10 @@ public:
 	static bool OpenSaveFileDialog(FString DialogTitle, TArray<uint8> FileData, FString FileName, FString FileExtension, FString& OutFilePath);
 	
 	UFUNCTION(BlueprintCallable, Category = "UnrealOpenAIUtils", meta=(ExpandBoolAsExecs="ReturnValue"))
-	static bool ConvertToTexture2D(TArray<uint8>FileData, UTexture2D*& OutTexture);
+	static bool ConvertBytesToTexture2D(TArray<uint8>FileData, UTexture2D*& OutTexture);
+
+	UFUNCTION(BlueprintCallable, Category = "UnrealOpenAIUtils", meta=(ExpandBoolAsExecs="ReturnValue"))
+	static bool ConvertBase64ToTexture2D(FString Base64Data, UTexture2D*& OutTexture);
 };
 
 

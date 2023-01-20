@@ -129,7 +129,7 @@ bool UUnrealOpenAIUtils::OpenSaveFileDialog(FString DialogTitle, TArray<uint8> F
 	return true;
 }
 
-bool UUnrealOpenAIUtils::ConvertToTexture2D(TArray<uint8> FileData, UTexture2D*& OutTexture)
+bool UUnrealOpenAIUtils::ConvertBytesToTexture2D(TArray<uint8> FileData, UTexture2D*& OutTexture)
 {
 	OutTexture = nullptr;
 	if(FileData.Num() == 0) return false;
@@ -158,6 +158,17 @@ bool UUnrealOpenAIUtils::ConvertToTexture2D(TArray<uint8> FileData, UTexture2D*&
 	return true;
 }
 
+bool UUnrealOpenAIUtils::ConvertBase64ToTexture2D(FString Base64Data, UTexture2D*& OutTexture)
+{
+	OutTexture = nullptr;
+	if(Base64Data.IsEmpty()) return false;
+
+	TArray<uint8> FileData;
+	if(!FBase64::Decode(Base64Data, FileData)) return false;
+
+	return ConvertBytesToTexture2D(FileData, OutTexture);
+}
+
 void UUnrealOpenAIUtilsGetImageFromURL::OnProcessRequestComplete(
 	TSharedPtr<IHttpRequest, ESPMode::ThreadSafe> HttpRequest,
 	TSharedPtr<IHttpResponse, ESPMode::ThreadSafe> HttpResponse, bool bSuccessful)
@@ -168,7 +179,7 @@ void UUnrealOpenAIUtilsGetImageFromURL::OnProcessRequestComplete(
 		return;
 	}
 
-	if (const TArray<uint8> ResponseData = HttpResponse->GetContent(); UUnrealOpenAIUtils::ConvertToTexture2D(ResponseData, Texture2D))
+	if (const TArray<uint8> ResponseData = HttpResponse->GetContent(); UUnrealOpenAIUtils::ConvertBytesToTexture2D(ResponseData, Texture2D))
 	{
 		OnSuccess.Broadcast(Texture2D);
 	}
