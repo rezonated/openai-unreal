@@ -6,12 +6,12 @@
 #include "Tests/Actors/FunctionalTestPawn.h"
 
 
-ACreateEmbeddingsFunctionalTest::ACreateEmbeddingsFunctionalTest()
+AEmbeddingsFunctionalTest::AEmbeddingsFunctionalTest()
 {
 	PrimaryActorTick.bCanEverTick = false;
 }
 
-void ACreateEmbeddingsFunctionalTest::OnTestStartHandler()
+void AEmbeddingsFunctionalTest::OnTestStartHandler()
 {
 	Super::OnTestStartHandler();
 
@@ -21,9 +21,9 @@ void ACreateEmbeddingsFunctionalTest::OnTestStartHandler()
 		return;
 	}
 
-	TestPawn->CreateEmbeddingsFunctionalTest = this;
+	TestPawn->EmbeddingsFunctionalTest = this;
 
-	TestPawn->StartCreateEmbeddingsTest(TEXT("The food was delicious and the waiter..."));
+	TestPawn->StartEmbeddingsTest(TEXT("The food was delicious and the waiter..."));
 }
 
 

@@ -121,14 +121,15 @@ UCLASS()
 class UNREALOPENAI_API UCreateImageVariationRequestURL : public UOnlineBlueprintCallProxyBase
 {
 	GENERATED_BODY()
+	
+
+public:
 
 	UPROPERTY(BlueprintAssignable)
 	FCreateImageVariationRequestCallbackSignatureURL OnSuccess;
 	UPROPERTY(BlueprintAssignable)
 	FCreateImageVariationRequestCallbackSignatureURL OnFailure;
 	
-
-public:
 	virtual void Activate() override;
 
 	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), Category = "UnrealOpenAI | Image")

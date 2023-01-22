@@ -5,12 +5,12 @@
 
 #include "Tests/Actors/FunctionalTestPawn.h"
 
-ACreateEditsFunctionalTest::ACreateEditsFunctionalTest()
+AEditsFunctionalTest::AEditsFunctionalTest()
 {
 	PrimaryActorTick.bCanEverTick = false;
 }
 
-void ACreateEditsFunctionalTest::OnTestStartHandler()
+void AEditsFunctionalTest::OnTestStartHandler()
 {
 	Super::OnTestStartHandler();
 
@@ -20,7 +20,7 @@ void ACreateEditsFunctionalTest::OnTestStartHandler()
 		return;
 	}
 
-	TestPawn->CreateEditsFunctionalTest = this;
+	TestPawn->EditsFunctionalTest = this;
 
-	TestPawn->StartCreateEditsTest("What day of the wek is it?", "Fix the spelling mistakes");
+	TestPawn->StartEditsTest("What day of the wek is it?", "Fix the spelling mistakes");
 }

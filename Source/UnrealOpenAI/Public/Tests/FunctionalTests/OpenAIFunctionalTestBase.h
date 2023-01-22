@@ -30,6 +30,8 @@ public:
 
 	virtual void StartTest() override;
 
+	virtual void FinishTest(EFunctionalTestResult TestResult, const FString& Message) override;
+
 	UFUNCTION()
 	virtual void FailTest(FString Message);
 

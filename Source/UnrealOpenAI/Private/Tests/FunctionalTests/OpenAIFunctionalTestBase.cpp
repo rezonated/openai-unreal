@@ -14,16 +14,12 @@ AOpenAIFunctionalTestBase::AOpenAIFunctionalTestBase()
 
 void AOpenAIFunctionalTestBase::OnTestPrepareHandler()
 {
-	PrintDebugLogAndOnScreen("OnTestPrepareHandler");
-
 	StartTest();
 }
 
 void AOpenAIFunctionalTestBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	PrintDebugLogAndOnScreen("BeginPlay");
 
 	OnTestPrepare.AddDynamic(this, &AOpenAIFunctionalTestBase::OnTestPrepareHandler);
 
@@ -32,14 +28,12 @@ void AOpenAIFunctionalTestBase::BeginPlay()
 
 void AOpenAIFunctionalTestBase::OnTestStartHandler()
 {
-	PrintDebugLogAndOnScreen("Test started");
+	
 }
 
 void AOpenAIFunctionalTestBase::PrepareTest()
 {
 	Super::PrepareTest();
-
-	PrintDebugLogAndOnScreen("PrepareTest");
 }
 
 bool AOpenAIFunctionalTestBase::IsReady_Implementation()
@@ -50,8 +44,16 @@ bool AOpenAIFunctionalTestBase::IsReady_Implementation()
 void AOpenAIFunctionalTestBase::StartTest()
 {
 	Super::StartTest();
+}
 
-	PrintDebugLogAndOnScreen("StartTest");
+void AOpenAIFunctionalTestBase::FinishTest(EFunctionalTestResult TestResult, const FString& Message)
+{
+	Super::FinishTest(TestResult, Message);
+
+	PrintDebugLogAndOnScreen(TestResult == EFunctionalTestResult::Succeeded ? "Test passed" : "Test failed");
+	PrintDebugLogAndOnScreen(Message);
+
+	Destroy();
 }
 
 void AOpenAIFunctionalTestBase::FailTest(FString Message)

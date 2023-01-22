@@ -5,12 +5,12 @@
 
 #include "Tests/Actors/FunctionalTestPawn.h"
 
-ACreateCompletionFunctionalTest::ACreateCompletionFunctionalTest()
+ACompletionsFunctionalTest::ACompletionsFunctionalTest()
 {
 	PrimaryActorTick.bCanEverTick = false;
 }
 
-void ACreateCompletionFunctionalTest::OnTestStartHandler()
+void ACompletionsFunctionalTest::OnTestStartHandler()
 {
 	Super::OnTestStartHandler();
 	if (!TestPawn)
@@ -19,7 +19,7 @@ void ACreateCompletionFunctionalTest::OnTestStartHandler()
 		return;
 	}
 
-	TestPawn->CreateCompletionFunctionalTest = this;
+	TestPawn->CompletionsFunctionalTest = this;
 
-	TestPawn->StartCreateCompletionTest("Say this is a test");
+	TestPawn->StartCompletionsTest("Say this is a test");
 }

@@ -8,12 +8,12 @@
 #include "EmbeddingsFunctionalTest.generated.h"
 
 UCLASS()
-class UNREALOPENAI_API ACreateEmbeddingsFunctionalTest : public AOpenAIFunctionalTestBase
+class UNREALOPENAI_API AEmbeddingsFunctionalTest : public AOpenAIFunctionalTestBase
 {
 	GENERATED_BODY()
 
 public:
-	ACreateEmbeddingsFunctionalTest();
+	AEmbeddingsFunctionalTest();
 
 	virtual void OnTestStartHandler() override;
 

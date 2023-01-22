@@ -4,22 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "OpenAIFunctionalTestBase.h"
-#include "CompletionFunctionalTest.generated.h"
+#include "ModerationsFunctionalTest.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class UNREALOPENAI_API ACompletionsFunctionalTest : public AOpenAIFunctionalTestBase
+class UNREALOPENAI_API AModerationsFunctionalTest : public AOpenAIFunctionalTestBase
 {
 	GENERATED_BODY()
-
 public:
-
-	ACompletionsFunctionalTest();
+	AModerationsFunctionalTest();
 
 	virtual void OnTestStartHandler() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Open AI - Completion")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Open AI - Moderation")
 	class AFunctionalTestPawn* TestPawn;
 };

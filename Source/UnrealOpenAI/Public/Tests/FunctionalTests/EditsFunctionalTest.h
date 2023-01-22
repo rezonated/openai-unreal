@@ -11,12 +11,12 @@
  * 
  */
 UCLASS()
-class UNREALOPENAI_API ACreateEditsFunctionalTest : public AOpenAIFunctionalTestBase
+class UNREALOPENAI_API AEditsFunctionalTest : public AOpenAIFunctionalTestBase
 {
 	GENERATED_BODY()
 
 public:
-	ACreateEditsFunctionalTest();
+	AEditsFunctionalTest();
 
 	virtual void OnTestStartHandler() override;
 
