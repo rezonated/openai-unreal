@@ -49,10 +49,6 @@ void AOpenAIFunctionalTestBase::StartTest()
 void AOpenAIFunctionalTestBase::FinishTest(EFunctionalTestResult TestResult, const FString& Message)
 {
 	Super::FinishTest(TestResult, Message);
-
-	PrintDebugLogAndOnScreen(TestResult == EFunctionalTestResult::Succeeded ? "Test passed" : "Test failed");
-	PrintDebugLogAndOnScreen(Message);
-
 	Destroy();
 }
 

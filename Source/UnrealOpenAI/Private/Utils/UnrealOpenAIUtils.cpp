@@ -9,6 +9,7 @@
 #include "IImageWrapperModule.h"
 #include "DataTypes/CommonDataTypes.h"
 #include "Developer/DesktopPlatform/Public/DesktopPlatformModule.h"
+#include "Core/Public/Misc/Base64.h"
 #include "Interfaces/IHttpResponse.h"
 #include "Utils/Utils.h"
 

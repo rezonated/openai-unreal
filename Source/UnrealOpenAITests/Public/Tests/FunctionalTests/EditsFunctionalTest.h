@@ -4,16 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "OpenAIFunctionalTestBase.h"
-#include "GameFramework/Actor.h"
-#include "EmbeddingsFunctionalTest.generated.h"
+#include "UObject/Object.h"
+#include "EditsFunctionalTest.generated.h"
 
+/**
+ * 
+ */
 UCLASS()
-class UNREALOPENAI_API AEmbeddingsFunctionalTest : public AOpenAIFunctionalTestBase
+class UNREALOPENAITESTS_API AEditsFunctionalTest : public AOpenAIFunctionalTestBase
 {
 	GENERATED_BODY()
 
 public:
-	AEmbeddingsFunctionalTest();
+	AEditsFunctionalTest();
 
 	virtual void OnTestStartHandler() override;
 

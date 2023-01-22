@@ -17,7 +17,7 @@
 #include "FunctionalTestPawn.generated.h"
 
 UCLASS()
-class UNREALOPENAI_API AFunctionalTestPawn : public APawn
+class UNREALOPENAITESTS_API AFunctionalTestPawn : public APawn
 {
 	GENERATED_BODY()
 

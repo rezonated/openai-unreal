@@ -5,6 +5,8 @@
 
 #include "Kismet/KismetSystemLibrary.h"
 #include "Tests/Actors/FunctionalTestPawn.h"
+#include "Runtime/Engine/Public/TimerManager.h"
+#include "Runtime/Engine/Classes/Engine/World.h"
 
 AFilesFunctionalTest::AFilesFunctionalTest()
 {
@@ -39,8 +41,14 @@ void AFilesFunctionalTest::OnListFilesTestComplete(FString ID)
 void AFilesFunctionalTest::OnRetrieveFileTestComplete(FString ID)
 {
 	// Skip retrieve file content test for now due to it being a paid feature
+	FTimerDelegate TimerDelegate;
+	TimerDelegate.BindLambda([&]
+	{
+		TestPawn->StartDeleteFileTest(ID);
+	});
 
-	TestPawn->StartDeleteFileTest(ID);
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, 10, false);
 }
 
 void AFilesFunctionalTest::OnDeleteFileTestComplete()

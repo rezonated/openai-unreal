@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class UnrealOpenAI : ModuleRules
+public class UnrealOpenAITests : ModuleRules
 {
-	public UnrealOpenAI(ReadOnlyTargetRules Target) : base(Target)
+	public UnrealOpenAITests(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
@@ -25,7 +25,7 @@ public class UnrealOpenAI : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core", "Engine", "Json", "JsonUtilities", "HTTP", "CoreUObject", "Sockets", "Networking", "UMG"
+				"Core", "Engine", "Json", "JsonUtilities", "HTTP", "CoreUObject", "Sockets", "Networking", "FunctionalTesting", "UnrealOpenAI"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -37,7 +37,8 @@ public class UnrealOpenAI : ModuleRules
 				"CoreUObject",
 				"Engine",
 				"Slate",
-				"SlateCore"
+				"SlateCore",
+				"UnrealOpenAI"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

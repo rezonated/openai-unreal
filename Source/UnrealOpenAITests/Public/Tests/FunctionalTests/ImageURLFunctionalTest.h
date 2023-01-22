@@ -5,18 +5,18 @@
 #include "CoreMinimal.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Tests/FunctionalTests/OpenAIFunctionalTestBase.h"
-#include "ImageBase64FunctionalTest.generated.h"
+#include "ImageURLFunctionalTest.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class UNREALOPENAI_API AImageBase64FunctionalTest : public AOpenAIFunctionalTestBase
+class UNREALOPENAITESTS_API AImageURLFunctionalTest : public AOpenAIFunctionalTestBase
 {
 	GENERATED_BODY()
 
 public:
-	AImageBase64FunctionalTest();
+	AImageURLFunctionalTest();
 
 	virtual void OnTestStartHandler() override;
 
@@ -26,11 +26,11 @@ public:
 	inline static const auto PluginTestDir = FString::Printf(TEXT("%sPlugins/UnrealOpenAI/Content/Test/"), *UKismetSystemLibrary::GetProjectDirectory());
 
 	UFUNCTION()
-	void OnCreateImageBase64TestComplete();
+	void OnCreateImageURLTestComplete();
 
 	UFUNCTION()
-	void OnCreateImageEditBase64TestComplete();
+	void OnCreateImageEditURLTestComplete();
 
 	UFUNCTION()
-	void OnCreateImageEditVariationBase64TestComplete();
+	void OnCreateImageEditVariationURLTestComplete();
 };

@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class UNREALOPENAI_API AFilesFunctionalTest : public AOpenAIFunctionalTestBase
+class UNREALOPENAITESTS_API AFilesFunctionalTest : public AOpenAIFunctionalTestBase
 {
 	GENERATED_BODY()
 public:

@@ -13,7 +13,8 @@
 #include "Tests/FunctionalTests/EditsFunctionalTest.h"
 #include "Tests/FunctionalTests/EmbeddingsFunctionalTest.h"
 #include "Utils/UnrealOpenAIUtils.h"
-#include "Utils/Utils.h"
+#include "Core/Public/Misc/FileHelper.h"
+#include "Runtime/Core/Public/Misc/Paths.h"
 
 
 AFunctionalTestPawn::AFunctionalTestPawn()
