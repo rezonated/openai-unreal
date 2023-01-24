@@ -6,6 +6,8 @@
 #include "CommonDataTypes.h"
 #include "CompletionDataTypes.generated.h"
 
+// Struct to construct create completion request as JSON, described in:
+// https://beta.openai.com/docs/api-reference/completions/create
 USTRUCT(BlueprintType)
 struct FCreateCompletionRequest
 {
@@ -59,6 +61,8 @@ struct FCreateCompletionRequest
 	FString user;
 };
 
+// Struct to construct create completion response as JSON, described in:
+// https://beta.openai.com/docs/api-reference/completions/create
 USTRUCT(BlueprintType)
 struct FCreateCompletionResponse
 {

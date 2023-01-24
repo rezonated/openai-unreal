@@ -13,14 +13,15 @@ class UResponse : public UInterface
 	GENERATED_BODY()
 };
 
-/**
- * 
- */
+// Simple interface to set the response from AI or User
 class UNREALOPENAI_API IResponse
 {
 	GENERATED_BODY()
 
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	/**
+	 * Should implement this to set the response 
+	 * @param Response Response to display
+	 */
 	virtual void SetResponse(FString Response);
 };

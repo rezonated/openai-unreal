@@ -307,11 +307,11 @@ void UListFineTuneEventsProxy::Activate()
 }
 
 UDeleteFineTuneModelProxy* UDeleteFineTuneModelProxy::DeleteFineTuneModel(UObject* WorldContextObject,
-	FString FineTuneID)
+	FString ModelFineTuneID)
 { 
 	UDeleteFineTuneModelProxy* Proxy = NewObject<UDeleteFineTuneModelProxy>();
 	Proxy->WorldContextObject = WorldContextObject;
-	Proxy->FineTuneID = FineTuneID;
+	Proxy->ModelFineTuneID = ModelFineTuneID;
 	return Proxy;
 }
 
@@ -325,7 +325,7 @@ void UDeleteFineTuneModelProxy::Activate()
 		return;
 	}
 
-	SendPayload(FString::Printf(TEXT("models/%s"), *FineTuneID), TEXT(""), EHTTPMethod::EHP_DELETE, [this](FHttpRequestPtr, const FHttpResponsePtr Response, const bool bWasSuccessful)
+	SendPayload(FString::Printf(TEXT("models/%s"), *ModelFineTuneID), TEXT(""), EHTTPMethod::EHP_DELETE, [this](FHttpRequestPtr, const FHttpResponsePtr Response, const bool bWasSuccessful)
 	{
 		if (bWasSuccessful)
 		{

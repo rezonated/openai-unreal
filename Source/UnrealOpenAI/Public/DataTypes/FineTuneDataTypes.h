@@ -6,6 +6,7 @@
 #include "CommonDataTypes.h"
 #include "FineTuneDataTypes.generated.h"
 
+// Struct to hold a single fine tune event
 USTRUCT(BlueprintType)
 struct FFineTuneEvent
 {
@@ -24,6 +25,8 @@ struct FFineTuneEvent
 	FString message;
 };
 
+// Struct to construct response for various fine tunes response, as described in:
+// https://beta.openai.com/docs/api-reference/fine-tunes
 USTRUCT(BlueprintType)
 struct FFineTune
 {
@@ -69,6 +72,8 @@ struct FFineTune
 	TArray<FFineTuneEvent> events;
 };
 
+// Struct to construct create fine tune request as JSON, described in:
+// https://beta.openai.com/docs/api-reference/fine-tunes/create
 USTRUCT(BlueprintType)
 struct FCreateFineTuneRequest
 {
@@ -106,6 +111,8 @@ struct FCreateFineTuneRequest
 	FString suffix;
 };
 
+// Struct to construct response for listing available fine tunes response as JSON,
+// described in: https://beta.openai.com/docs/api-reference/fine-tunes/list
 USTRUCT(BlueprintType)
 struct FListFineTunesResponse
 {
@@ -118,6 +125,8 @@ struct FListFineTunesResponse
 	TArray<FFineTune> data;
 };
 
+// Struct to construct response for listing available fine tune events response as JSON,
+// described in: https://beta.openai.com/docs/api-reference/fine-tunes/events
 USTRUCT(BlueprintType)
 struct FListFineTuneEventsResponse
 {

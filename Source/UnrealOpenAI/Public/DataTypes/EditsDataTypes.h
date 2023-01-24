@@ -6,6 +6,8 @@
 #include "CommonDataTypes.h"
 #include "EditsDataTypes.generated.h"
 
+// Struct to construct create edits request as JSON, described in:
+// https://beta.openai.com/docs/api-reference/edits/create
 USTRUCT(BlueprintType)
 struct FCreateEditsRequest
 {
@@ -27,7 +29,8 @@ struct FCreateEditsRequest
 	TOptional<int> n = 1;
 };
 
-
+// Struct to construct create edits response as JSON, described in:
+// https://beta.openai.com/docs/api-reference/edits/create
 USTRUCT(BlueprintType)
 struct FCreateEditsResponse
 {

@@ -6,7 +6,8 @@
 #include "CommonDataTypes.h"
 #include "FilesDataTypes.generated.h"
 
-
+// Struct to construct response for list files response, as described in:
+// https://beta.openai.com/docs/api-reference/files/list
 USTRUCT(BlueprintType)
 struct FListFilesResponse
 {
@@ -19,7 +20,8 @@ struct FListFilesResponse
 	TArray<FOpenAIFile> data;
 };
 
-
+// Struct to construct request for create file response as JSON, described in:
+// https://beta.openai.com/docs/api-reference/files/create
 USTRUCT(BlueprintType)
 struct FCreateFileRequest
 {
@@ -32,6 +34,8 @@ struct FCreateFileRequest
 	FString purpose;
 };
 
+// Struct to construct response for file operations responses as JSON, described in:
+// https://beta.openai.com/docs/api-reference/files
 USTRUCT(BlueprintType)
 struct FFileResponse
 {

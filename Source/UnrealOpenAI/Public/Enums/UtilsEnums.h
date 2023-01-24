@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "UtilsEnums.generated.h"
 
+// Enums for available HTTP methods, defined in:
+// https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
 UENUM(BlueprintType)
 enum class EHTTPMethod : uint8
 {

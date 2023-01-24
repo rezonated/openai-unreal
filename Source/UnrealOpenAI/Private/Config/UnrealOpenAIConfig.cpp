@@ -5,6 +5,7 @@
 
 UUnrealOpenAIConfig::UUnrealOpenAIConfig(const FObjectInitializer& ObjectInitializer)
 {
+	// By default, the API Key and Organization ID are empty
 	APIKey = TEXT("");
 	Organization = TEXT("");
 }

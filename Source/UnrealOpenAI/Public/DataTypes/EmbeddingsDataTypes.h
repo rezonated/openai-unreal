@@ -6,6 +6,7 @@
 #include "CommonDataTypes.h"
 #include "EmbeddingsDataTypes.generated.h"
 
+// Struct to hold the data for a single embedding
 USTRUCT(BlueprintType)
 struct FEmbeddingData
 {
@@ -21,7 +22,8 @@ struct FEmbeddingData
 	int index {0};
 };
 
-
+// Struct to construct a request to create embeddings as JSON, described in:
+// https://beta.openai.com/docs/api-reference/embeddings/create
 USTRUCT(BlueprintType)
 struct FCreateEmbeddingsRequest
 {
@@ -37,7 +39,8 @@ struct FCreateEmbeddingsRequest
 	FString user;
 };
 
-
+// Struct to construct a response to create embeddings as JSON, described in:
+// https://beta.openai.com/docs/api-reference/embeddings/create
 USTRUCT(BlueprintType)
 struct FCreateEmbeddingsResponse
 {

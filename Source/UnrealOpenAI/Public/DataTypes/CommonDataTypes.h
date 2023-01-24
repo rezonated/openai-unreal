@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "CommonDataTypes.generated.h"
 
+
+// Logprobs, used for completions requests:
+// https://beta.openai.com/docs/api-reference/completions/create#completions/create-logprobs
 USTRUCT(BlueprintType)
 struct FLogprobs
 {
@@ -22,6 +25,7 @@ struct FLogprobs
 	TArray<int> text_offset;
 };
 
+// Choice, used for completions, and edits requests
 USTRUCT(BlueprintType)
 struct FChoice
 {
@@ -39,6 +43,7 @@ struct FChoice
 	FString finish_reason;
 };
 
+// Usage, used for completions, edits, and embeddings requests
 USTRUCT(BlueprintType)
 struct FUsage
 {
@@ -53,6 +58,7 @@ struct FUsage
 	FString total_tokens;
 };
 
+// File struct, used for files and image requests
 USTRUCT(BlueprintType)
 struct FOpenAIFile
 {
@@ -80,6 +86,8 @@ struct FOpenAIFile
 	FString status_details;
 };
 
+// Custom helper struct to wrap the file data, name, and extension for uploading files
+// using multipart/form-data
 USTRUCT(BlueprintType)
 struct FFileToLoad
 {
@@ -95,6 +103,7 @@ struct FFileToLoad
 	FString FileExtension;
 };
 
+// Delete response, used for delete requests such as files, and fine-tunes
 USTRUCT(BlueprintType)
 struct FDeleteResponse
 {
@@ -110,6 +119,7 @@ struct FDeleteResponse
 	bool deleted {false};
 };
 
+// Error data used for handling errors from API 
 USTRUCT(BlueprintType)
 struct FErrorData
 {

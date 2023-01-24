@@ -7,6 +7,7 @@
 #include "Enums/ImageEnums.h"
 #include "ImageDataTypes.generated.h"
 
+// Base struct for all image requests
 USTRUCT(BlueprintType)
 struct FCreateImageRequestBase
 {
@@ -24,6 +25,8 @@ struct FCreateImageRequestBase
 	FString user;
 };
 
+// Struct to construct create image request as JSON, described in:
+// https://beta.openai.com/docs/api-reference/images/create
 USTRUCT(BlueprintType)
 struct FCreateImageRequest : public FCreateImageRequestBase
 {
@@ -33,6 +36,8 @@ struct FCreateImageRequest : public FCreateImageRequestBase
 	FString prompt;
 };
 
+// Struct to construct create image edit request as JSON, described in:
+// https://beta.openai.com/docs/api-reference/images/create-edit
 USTRUCT(BlueprintType)
 struct FCreateImageEditRequest : public FCreateImageRequestBase
 {
@@ -48,6 +53,8 @@ struct FCreateImageEditRequest : public FCreateImageRequestBase
 	FString prompt;
 };
 
+// Struct to construct create image variation request as JSON, described in:
+// https://beta.openai.com/docs/api-reference/images/create-variation
 USTRUCT(BlueprintType)
 struct FCreateImageVariationRequest : public FCreateImageRequestBase
 {
@@ -57,6 +64,7 @@ struct FCreateImageVariationRequest : public FCreateImageRequestBase
 	TArray<uint8> image;
 };
 
+// Struct to hold a single image data from URL response
 USTRUCT(BlueprintType)
 struct FImageDataURL
 {
@@ -66,6 +74,7 @@ struct FImageDataURL
 	FString url;
 };
 
+// Struct to hold a single image data from Base64 JSON response
 USTRUCT(BlueprintType)
 struct FImageDataBase64JSON
 {
@@ -75,6 +84,8 @@ struct FImageDataBase64JSON
 	FString b64_json;
 };
 
+// Struct to construct create image response URL as JSON, described in:
+// https://beta.openai.com/docs/api-reference/images/create
 USTRUCT(BlueprintType)
 struct FCreateImageResponseURL
 {
@@ -87,6 +98,8 @@ struct FCreateImageResponseURL
 	TArray<FImageDataURL> data;
 };
 
+// Struct to construct create image response Base64 as JSON, described in:
+// https://beta.openai.com/docs/api-reference/images/create
 USTRUCT(BlueprintType)
 struct FCreateImageResponseBase64JSON
 {

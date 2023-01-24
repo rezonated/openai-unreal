@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "CompletionEnums.generated.h"
 
+// Enums for available completion models, defined in:
+// https://beta.openai.com/docs/models/gpt-3
 UENUM(BlueprintType)
 enum class ECompletionModel : uint8
 {

@@ -5,6 +5,10 @@
 #include "CoreMinimal.h"
 #include "ImageEnums.generated.h"
 
+// Enums for available image sizes, defined in:
+// https://beta.openai.com/docs/api-reference/images/create#images/create-size
+// https://beta.openai.com/docs/api-reference/images/create-edit#images/create-edit-size
+// https://beta.openai.com/docs/api-reference/images/create-variation#images/create-variation-size
 UENUM(BlueprintType)
 enum class EImageSize : uint8
 {

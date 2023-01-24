@@ -7,6 +7,7 @@
 #include "Enums/ModerationEnums.h"
 #include "ModerationDataTypes.generated.h"
 
+// Struct to hold a single moderation result
 USTRUCT(BlueprintType)
 struct FModerationResult
 {
@@ -22,7 +23,8 @@ struct FModerationResult
 	TMap<FString, float> category_scores;
 };
 
-
+// Struct to construct create moderation request as JSON, described in:
+// https://beta.openai.com/docs/api-reference/moderation/create
 USTRUCT(BlueprintType)
 struct FCreateModerationRequest
 {
@@ -35,7 +37,8 @@ struct FCreateModerationRequest
 	FString model = ModerationModels[static_cast<int>(EModerationModels::EMM_Stable)];
 };
 
-
+// Struct to construct create moderation response as JSON, described in:
+// https://beta.openai.com/docs/api-reference/moderation/create
 USTRUCT(BlueprintType)
 struct FCreateModerationResponse
 {
