@@ -9,6 +9,11 @@
 
 // Image sizes accepted by OpenAI's Image API:
 // https://beta.openai.com/docs/api-reference/images/create#images/create-size
+
+/**
+ * Image sizes accepted by OpenAI's Image API:
+ * https://beta.openai.com/docs/api-reference/images/create#images/create-size
+ */
 static const TArray<FString> ImageSizes =
 {
 	"256x256",

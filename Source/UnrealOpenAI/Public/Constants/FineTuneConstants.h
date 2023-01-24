@@ -7,8 +7,10 @@
  *  Constants for the FineTune API
  */
 
-// Default models to use for fine-tuning, as defined by OpenAI:
-// https://beta.openai.com/docs/api-reference/fine-tunes/create#fine-tunes/create-model
+/**
+ * Default models to use for fine-tuning, as defined by OpenAI:
+ * https://beta.openai.com/docs/api-reference/fine-tunes/create#fine-tunes/create-model
+ */
 static const TArray<FString> FineTuneModels =
 {
 	"ada",
