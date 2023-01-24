@@ -84,3 +84,44 @@ It consists of example files for testing:
 - pool_empty.png -> for base image
 - pool_mask.png -> for image mask
 - training.jsonl -> containing training data for fine-tuning
+
+## Tests
+This plugin uses Unreal's functional testing for automated tests. The tests are separated into its own module called "UnrealOpenAITests"
+
+To enable the module:
+- Open UnrealOpenAI.uplugin file inside root directory of the plugin using any text editor you like
+- Paste the following inside "Modules" entry:
+```
+,
+  {
+   "Name": "UnrealOpenAITests",
+   "Type": "Runtime",
+   "LoadingPhase": "Default",
+   "AdditionalDependencies": [
+  "UnrealOpenAI"
+   ]
+  }
+```
+![Enable tests module](/Docs/enable_tests_module.png)
+- Open your solution and recompile the project. **You might need to regenerate your project files.**
+- Open the editor and head to Test folder inside this plugin's content folder, and open TestMap map.
+
+![Open test map](/Docs/open_test_map.png)
+
+- Open the Session Frontend window in your editor by going through Tools > Session Frontend
+- Go to Automation tab and search for "OpenAI", there will be 7 available functional tests to run through.
+
+![Running tests](/Docs/running_tests.png)
+
+## Contributing
+Contributions are welcome! Submit your issues, pull requests or whatever~
+
+## Versioning
+This plugin uses zerover versioning scheme, read more at: https://0ver.org/
+
+## Special thanks
+- srcnalt for inspiration 
+- benui and benui discord server
+- Unreal Slacker discord server
+- MF Habibie
+- F. Magdalena
