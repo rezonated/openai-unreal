@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "DataTypes/CompletionDataTypes.h"
 #include "ChatbotDemoWidget.generated.h"
 
 // Class to handle the widget for chatbot demo. Acts like a chatroom UI. User can type in the input and send it to the OpenAI's completion API.
