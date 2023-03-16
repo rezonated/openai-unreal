@@ -11,6 +11,7 @@
 #include "Constants/UtilsConstants.h"
 #include "Enums/UtilsEnums.h"
 #include "Interfaces/IHttpRequest.h"
+#include "DataTypes/CommonDataTypes.h"
 
 /**
  * Print a message on the screen
