@@ -9,7 +9,7 @@
  * Class used to hold the configuration .ini file for the UnrealOpenAI plugin
  * Consists of the API Key and Organization ID
  */
-UCLASS(Config = UnrealOpenAI, DefaultConfig)
+UCLASS(Config = Game, DefaultConfig)
 class UNREALOPENAI_API UUnrealOpenAIConfig : public UObject
 {
 	GENERATED_BODY()
